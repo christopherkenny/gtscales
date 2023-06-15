@@ -1,7 +1,7 @@
 if (FALSE) {
   library(gt)
 
-  exibble |>
+  tbl <- exibble |>
     gt() |>
     data_color(
       method = "numeric",
