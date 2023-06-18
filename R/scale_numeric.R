@@ -7,7 +7,10 @@
 #' @export
 #'
 #' @examples
-#' #TODO
+#' party_purple <- scales::col_numeric(
+#'   domain = c(0, 1),
+#'   palette = c('#A0442C', '#0063B1')
+#')
 gtscale_color_numeric <- function(data, fn) {
 
 }
