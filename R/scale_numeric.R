@@ -15,7 +15,7 @@ gtscale_color_continuous <- function(data, fn, direction = 'to right') {
   pltt <- get_palette(fn) |> paste0(collapse = ', ')
   clrs <- glue::glue(
     '<pre> <div style="background: linear-gradient({direction}, {pltt});" </div> </pre>'
-  )
+  ) # need pre tag to retain space. div = full width, span needs spaces
 
   data |>
     gt::tab_source_note(
