@@ -9,7 +9,7 @@ if (FALSE) {
     ) |>
     tab_source_note(html('<span style="background: #00CCCC;">text inside</span>: discrete')) |>
     tab_source_note(html('<pre><span style="background-color: #FD0E35;">     </span>: or as color</pre>')) |># pre tag to note lose spaces
-    tab_source_note(html('<pre> <span style="background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);"    </span>      </pre>')) |>
+    tab_source_note(html('<pre> <div style="background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);"    </div>      </pre>')) |>
     opt_css(
       ' #one .gt_table {
       overflow: hidden;
@@ -25,7 +25,7 @@ if (FALSE) {
       background-color: #FD0E35;
       }
       '
-    ) |>
-    tab_source_note(html('<div id ="right"> <pre> <span style="background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);"    </span>      </pre> </div>'))
+    ) #|>
+    #tab_source_note(html('<div id ="right"> <pre> <span style="background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);"    </span>      </pre> </div>'))
   tbl
 }

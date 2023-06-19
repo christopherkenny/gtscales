@@ -9,8 +9,16 @@
 #' @examples
 #' party_purple <- scales::col_numeric(
 #'   domain = c(0, 1),
-#'   palette = c('#A0442C', '#0063B1')
+#'   palette = c('#A0442C', 'white', '#0063B1')
 #')
-gtscale_color_numeric <- function(data, fn) {
+gtscale_color_continuous <- function(data, fn, direction = 'to right') {
+  pltt <- get_palette(fn) |> paste0(collapse = ', ')
+  clrs <- glue::glue(
+    '<pre> <div style="background: linear-gradient({direction}, {pltt});" </div> </pre>'
+  )
 
+  data |>
+    gt::tab_source_note(
+      source_note = gt::html(clrs)
+    )
 }
