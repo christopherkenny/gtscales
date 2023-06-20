@@ -12,7 +12,7 @@
 #'   palette = c('#A0442C', 'white', '#0063B1')
 #')
 gtscale_color_continuous <- function(data, fn, direction = 'to right') {
-  pltt <- get_palette(fn) |> paste0(collapse = ', ')
+  pltt <- paste0(get_palette(fn), collapse = ', ')
   clrs <- glue::glue(
     '<pre> <div style="background: linear-gradient({direction}, {pltt});" </div> </pre>'
   ) # need pre tag to retain space. div = full width, span needs spaces
@@ -21,4 +21,8 @@ gtscale_color_continuous <- function(data, fn, direction = 'to right') {
     gt::tab_source_note(
       source_note = gt::html(clrs)
     )
+}
+
+gtscale_color_discrete <- function(data, fn, direction) {
+
 }
