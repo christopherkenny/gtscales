@@ -4,12 +4,14 @@
 \alias{gtscale_color_continuous}
 \title{Add a scale for a numeric column}
 \usage{
-gtscale_color_continuous(data, fn)
+gtscale_color_continuous(data, fn, direction = "to right")
 }
 \arguments{
 \item{data}{A \code{gt} table with class \code{gt_tbl}}
 
 \item{fn}{a function from \code{scales}}
+
+\item{direction}{orientation of the scale. Default is \code{'to right'}.}
 }
 \value{
 A \link[gt:gt]{gt::gt}
@@ -20,6 +22,6 @@ Add a scale for a numeric column
 \examples{
 party_purple <- scales::col_numeric(
   domain = c(0, 1),
-  palette = c('#A0442C', '#0063B1')
+  palette = c('#A0442C', 'white', '#0063B1')
 )
 }
