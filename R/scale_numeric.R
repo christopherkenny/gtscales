@@ -2,6 +2,7 @@
 #'
 #' @param data A `gt` table with class `gt_tbl`
 #' @param fn a function from `scales`
+#' @param direction orientation of the scale. Default is `'to right'`.
 #'
 #' @return A [gt::gt]
 #' @export
