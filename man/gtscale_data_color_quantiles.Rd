@@ -17,6 +17,7 @@ gtscale_data_color_quantiles(
   na_color = NULL,
   alpha = NULL,
   reverse = FALSE,
+  accessibility = c("none", "warn"),
   autocolor_text = TRUE,
   contrast_algo = c("apca", "wcag"),
   autocolor_light = "#FFFFFF",
@@ -50,6 +51,9 @@ boundaries before interval labels are constructed.}
 \item{alpha}{Alpha applied by \code{\link[gt:data_color]{gt::data_color()}}.}
 
 \item{reverse}{Whether to reverse the color mapping.}
+
+\item{accessibility}{Whether to warn about low-contrast adjacent legend
+colors.}
 
 \item{autocolor_text}{Whether to automatically adjust text color.}
 

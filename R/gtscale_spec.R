@@ -46,6 +46,58 @@ gtscale_spec_continuous <- function(
   )
 }
 
+#' Create a diverging `gtscales` spec
+#'
+#' @param column A column or shared set of columns to target.
+#' @param palette Two endpoint colors or three diverging colors.
+#' @param domain Optional numeric limits. If omitted, these can be inferred when
+#'   the spec is applied to a `gt` table.
+#' @param midpoint Numeric midpoint used to anchor the diverging scale.
+#' @param breaks Optional numeric break values for the legend.
+#' @param labels A labeling function or character vector for the legend.
+#' @param title Optional legend title.
+#' @param direction CSS gradient direction. Defaults to `"to right"`.
+#' @param width Width of the legend bar.
+#' @param height Height of the legend bar.
+#' @param mid_color Midpoint color when `palette` supplies only two endpoint
+#'   colors.
+#'
+#' @return A `gtscale_spec`.
+#' @export
+gtscale_spec_diverging <- function(
+  column,
+  palette,
+  domain = NULL,
+  midpoint = 0,
+  breaks = NULL,
+  labels = scales::label_comma(),
+  title = NULL,
+  direction = 'to right',
+  width = '160px',
+  height = '14px',
+  mid_color = '#FFFFFF'
+) {
+  column <- capture_spec_column(substitute(column), parent.frame())
+
+  new_gtscale_spec(
+    scale_type = 'diverging',
+    color_method = 'numeric',
+    column = column,
+    palette = palette,
+    domain = domain,
+    midpoint = midpoint,
+    breaks = breaks,
+    labels = labels,
+    title = title,
+    style = list(
+      direction = direction,
+      width = width,
+      height = height,
+      mid_color = mid_color
+    )
+  )
+}
+
 #' Create a binned `gtscales` spec
 #'
 #' @param column A column to target.
@@ -169,6 +221,8 @@ gtscale_spec_discrete <- function(
 #'
 #' @inheritParams gtscale_data_color_continuous
 #' @param spec A `gtscale_spec`.
+#' @param accessibility Whether to warn about low-contrast adjacent legend
+#'   colors.
 #'
 #' @return A modified `gtscale_spec`.
 #' @export
@@ -178,6 +232,7 @@ gtscale_spec_set_application <- function(
   na_color = NULL,
   alpha = NULL,
   reverse = FALSE,
+  accessibility = c('none', 'warn'),
   autocolor_text = TRUE,
   contrast_algo = c('apca', 'wcag'),
   autocolor_light = '#FFFFFF',
@@ -189,6 +244,7 @@ gtscale_spec_set_application <- function(
     na_color = na_color,
     alpha = alpha,
     reverse = reverse,
+    accessibility = accessibility,
     autocolor_text = autocolor_text,
     contrast_algo = contrast_algo,
     autocolor_light = autocolor_light,
@@ -202,20 +258,30 @@ gtscale_spec_set_application <- function(
 #' @param output Output target for the legend. Use `"contextual"` for
 #'   `gt`-managed HTML/LaTeX source notes, or choose a specific output like
 #'   `"html"`, `"latex"`, or `"typst"`.
-#' @param placement Legend placement target. Currently only `"source_note"` is
-#'   implemented.
+#' @param placement Legend placement target. `"source_note"` and `"subtitle"`
+#'   are currently implemented.
+#' @param show_na Whether to include an explicit missing-value legend entry.
+#' @param na_label Label to use for missing values in the legend.
+#' @param na_color Optional legend swatch color for missing values. When
+#'   omitted and `show_na = TRUE`, a neutral gray swatch is used.
 #'
 #' @return A modified `gtscale_spec`.
 #' @export
 gtscale_spec_set_legend <- function(
   spec,
   output = 'html',
-  placement = 'source_note'
+  placement = 'source_note',
+  show_na = FALSE,
+  na_label = 'Missing',
+  na_color = NULL
 ) {
   set_scale_legend(
     spec = spec,
     output = output,
-    placement = placement
+    placement = placement,
+    show_na = show_na,
+    na_label = na_label,
+    na_color = na_color
   )
 }
 

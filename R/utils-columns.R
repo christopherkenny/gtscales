@@ -1,20 +1,53 @@
 resolve_column_name <- function(column) {
-  if (is.null(column) || identical(column, quote(NULL))) {
-    return(NULL)
+  column_names <- resolve_column_names(column)
+
+  if (length(column_names) != 1) {
+    rlang::abort('`column` must resolve to exactly one column name here.')
   }
 
-  if (is.character(column) && length(column) == 1) {
-    return(column)
+  column_names[[1]]
+}
+
+resolve_column_names <- function(column) {
+  if (is.null(column) || identical(column, quote(NULL))) {
+    return(character(0))
+  }
+
+  if (is.character(column)) {
+    if (length(column) == 0 || anyNA(column) || any(column == '')) {
+      rlang::abort('`column` names must be non-missing strings.')
+    }
+
+    return(unname(column))
   }
 
   if (is.symbol(column)) {
     return(as.character(column))
   }
 
-  rlang::abort('`column` must be supplied as a bare column name or a single string.')
+  if (rlang::is_call(column, 'c')) {
+    column_parts <- as.list(column)[-1]
+
+    if (length(column_parts) == 0) {
+      rlang::abort('`column` must contain at least one column name.')
+    }
+
+    return(vapply(column_parts, resolve_column_name, character(1)))
+  }
+
+  rlang::abort(
+    paste(
+      '`column` must be supplied as a bare column name, a character vector,',
+      'or `c(col1, col2, ...)` for shared scales.'
+    )
+  )
 }
 
 capture_spec_column <- function(column_expr, env = parent.frame()) {
+  if (rlang::is_call(column_expr, 'c')) {
+    return(as.call(c(list(quote(c)), lapply(as.list(column_expr)[-1], capture_spec_column, env = env))))
+  }
+
   if (is.symbol(column_expr)) {
     column_name <- as.character(column_expr)
 
@@ -41,11 +74,23 @@ resolve_column_data <- function(data, column) {
     return(NULL)
   }
 
-  column_name <- resolve_column_name(column)
+  column_names <- resolve_column_names(column)
 
-  if (!column_name %in% names(table_data)) {
-    rlang::abort(paste0('Column `', column_name, '` was not found in the `gt` data.'))
+  missing_names <- setdiff(column_names, names(table_data))
+
+  if (length(missing_names) > 0) {
+    rlang::abort(
+      paste0(
+        'Column `',
+        missing_names[[1]],
+        '` was not found in the `gt` data.'
+      )
+    )
   }
 
-  table_data[[column_name]]
+  if (length(column_names) == 1) {
+    return(table_data[[column_names[[1]]]])
+  }
+
+  unlist(table_data[column_names], use.names = FALSE)
 }

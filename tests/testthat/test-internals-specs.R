@@ -69,6 +69,24 @@ test_that('unimplemented html placements fail explicitly', {
   )
 })
 
+test_that('subtitle placement stores contextual legend content in table heading', {
+  spec <- gtscale_spec_bins(
+    num,
+    palette = c('#f7fbff', '#08306b'),
+    bins = c(0, 1, 2, 3, 4),
+    domain = c(0, 4),
+    title = 'Legend'
+  ) |>
+    gtscale_spec_set_legend(output = 'contextual', placement = 'subtitle')
+
+  tbl <- gtscale_legend(gt::gt(data.frame(num = 1:4)), spec)
+
+  expect_length(tbl[['_source_notes']], 0)
+  expect_type(tbl[['_heading']]$subtitle, 'list')
+  expect_match(tbl[['_heading']]$subtitle$html, 'Legend')
+  expect_match(tbl[['_heading']]$subtitle$latex, 'Legend')
+})
+
 test_that('public spec workflow can color and legendize a table', {
   spec <- gtscale_spec_bins(
     currency,
@@ -85,6 +103,81 @@ test_that('public spec workflow can color and legendize a table', {
   expect_match(tbl[['_source_notes']][[1]]$latex, 'Currency bins')
   expect_match(tbl[['_source_notes']][[1]]$word, '![](', fixed = TRUE)
   expect_match(gt::as_word(tbl), 'w:drawing', fixed = TRUE)
+})
+
+test_that('diverging specs apply midpoint-aware legends', {
+  spec <- gtscale_spec_diverging(
+    net,
+    palette = c('#2166AC', '#B2182B'),
+    domain = c(-10, 10),
+    midpoint = 0,
+    title = 'Net'
+  )
+
+  tbl <- gt::gt(data.frame(net = c(-10, 0, 10))) |>
+    gtscale_apply_legend(spec)
+
+  note <- tbl[['_source_notes']][[1]]
+
+  expect_match(note$html, '#2166AC', ignore.case = TRUE)
+  expect_match(note$html, '#FFFFFF', ignore.case = TRUE)
+  expect_match(note$html, '#B2182B', ignore.case = TRUE)
+  expect_match(note$html, '>0<', perl = TRUE)
+})
+
+test_that('shared-column specs infer domains across multiple columns', {
+  spec <- gtscale_spec_continuous(
+    c(a, b),
+    palette = c('#f7fbff', '#08306b'),
+    title = 'Shared'
+  )
+
+  tbl <- gt::gt(data.frame(a = c(0, 5), b = c(10, 15))) |>
+    gtscale_apply_legend(spec)
+
+  note <- tbl[['_source_notes']][[1]]
+
+  expect_match(note$html, '>0<', perl = TRUE)
+  expect_match(note$html, '>15<', perl = TRUE)
+})
+
+test_that('legend specs can show explicit missing-value entries', {
+  spec <- gtscale_spec_discrete(
+    status,
+    values = c('#2166ac', '#b2182b'),
+    labels = c('Safe D', 'Safe R'),
+    title = 'Race rating'
+  ) |>
+    gtscale_spec_set_legend(
+      output = 'contextual',
+      show_na = TRUE,
+      na_label = 'No rating',
+      na_color = '#BBBBBB'
+    )
+
+  tbl <- gt::gt(data.frame(status = c('Safe D', 'Safe R', NA))) |>
+    gtscale_legend(spec)
+
+  note <- tbl[['_source_notes']][[1]]
+
+  expect_match(note$html, 'No rating')
+  expect_match(note$html, '#BBBBBB', ignore.case = TRUE)
+  expect_match(note$latex, 'No rating')
+  expect_match(note$latex, 'BBBBBB', fixed = TRUE)
+})
+
+test_that('accessibility warnings can be requested from specs', {
+  spec <- gtscale_spec_continuous(
+    num,
+    palette = c('#FFFFFF', '#FEFEFE'),
+    title = 'Low contrast'
+  ) |>
+    gtscale_spec_set_application(accessibility = 'warn')
+
+  expect_warning(
+    finalize_scale_spec(spec, gt::gt(data.frame(num = c(0, 1)))),
+    'low contrast'
+  )
 })
 
 test_that('public spec workflow can render typst legends', {

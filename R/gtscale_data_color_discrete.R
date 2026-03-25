@@ -13,6 +13,8 @@
 #' @param na_color Color used for missing values.
 #' @param alpha Alpha applied by [gt::data_color()].
 #' @param reverse Whether to reverse the color mapping.
+#' @param accessibility Whether to warn about low-contrast adjacent legend
+#'   colors.
 #' @param apply_to Whether colors should be applied to cell fill or text.
 #' @param autocolor_text Whether to automatically adjust text color.
 #' @param contrast_algo Contrast algorithm passed to [gt::data_color()].
@@ -48,6 +50,7 @@ gtscale_data_color_discrete <- function(
   na_color = NULL,
   alpha = NULL,
   reverse = FALSE,
+  accessibility = c('none', 'warn'),
   apply_to = c('fill', 'text'),
   autocolor_text = TRUE,
   contrast_algo = c('apca', 'wcag'),
@@ -69,6 +72,7 @@ gtscale_data_color_discrete <- function(
       na_color = na_color,
       alpha = alpha,
       reverse = reverse,
+      accessibility = accessibility,
       autocolor_text = autocolor_text,
       contrast_algo = contrast_algo,
       autocolor_light = autocolor_light,

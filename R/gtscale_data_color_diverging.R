@@ -1,19 +1,21 @@
-#' Color a numeric `gt` column and add a matching binned legend
+#' Color a numeric `gt` column with a diverging scale and add a matching legend
 #'
-#' This is the primary interface for binned scales in `gtscales`.
+#' This is the primary interface for midpoint-aware diverging scales in
+#' `gtscales`.
 #'
 #' @param data A `gt_tbl` created by [gt::gt()].
-#' @param column A numeric column to color and legendize.
-#' @param palette A vector of colors or palette endpoints used for the bins.
-#' @param bins A numeric vector of bin boundaries.
+#' @param column A numeric column or shared set of numeric columns to color and
+#'   legendize.
+#' @param palette Two endpoint colors or three diverging colors.
 #' @param domain A numeric vector of length 2 giving the scale limits. When
 #'   omitted, the limits are inferred from `column`.
-#' @param labels A labeling function or a character vector for the bins. When a
-#'   function is supplied, it is applied to the bin boundaries before interval
-#'   labels are constructed.
+#' @param midpoint Numeric midpoint used to anchor the diverging scale.
+#' @param breaks Optional numeric break values to display below the gradient.
+#' @param labels A labeling function or a character vector for the breaks.
 #' @param title Optional legend title.
-#' @param width Width of the legend.
-#' @param height Height of the swatches.
+#' @param direction CSS gradient direction. Defaults to `"to right"`.
+#' @param width Width of the legend bar.
+#' @param height Height of the legend bar.
 #' @param apply_to Whether colors should be applied to cell fill or text.
 #' @param na_color Color used for missing values.
 #' @param alpha Alpha applied by [gt::data_color()].
@@ -24,30 +26,22 @@
 #' @param contrast_algo Contrast algorithm passed to [gt::data_color()].
 #' @param autocolor_light Light text color used by [gt::data_color()].
 #' @param autocolor_dark Dark text color used by [gt::data_color()].
+#' @param mid_color Midpoint color when `palette` supplies only two endpoint
+#'   colors.
 #'
 #' @return A modified [gt::gt] table.
 #' @export
-#'
-#' @examples
-#' library(gt)
-#'
-#' exibble |>
-#'   gt() |>
-#'   gtscale_data_color_bins(
-#'     column = currency,
-#'     palette = c('#f7fbff', '#08306b'),
-#'     bins = c(0, 10, 100, 1000, 10000, 70000),
-#'     title = 'Currency bins'
-#'   )
-gtscale_data_color_bins <- function(
+gtscale_data_color_diverging <- function(
   data,
   column,
   palette,
-  bins,
   domain = NULL,
-  labels = NULL,
+  midpoint = 0,
+  breaks = NULL,
+  labels = scales::label_comma(),
   title = NULL,
-  width = '180px',
+  direction = 'to right',
+  width = '160px',
   height = '14px',
   apply_to = c('fill', 'text'),
   na_color = NULL,
@@ -57,18 +51,22 @@ gtscale_data_color_bins <- function(
   autocolor_text = TRUE,
   contrast_algo = c('apca', 'wcag'),
   autocolor_light = '#FFFFFF',
-  autocolor_dark = '#000000'
+  autocolor_dark = '#000000',
+  mid_color = '#FFFFFF'
 ) {
   column <- substitute(column)
-  spec <- gtscale_spec_bins(
+  spec <- gtscale_spec_diverging(
     column = column,
     palette = palette,
-    bins = bins,
     domain = domain,
+    midpoint = midpoint,
+    breaks = breaks,
     labels = labels,
     title = title,
+    direction = direction,
     width = width,
-    height = height
+    height = height,
+    mid_color = mid_color
   ) |>
     gtscale_spec_set_application(
       apply_to = apply_to,

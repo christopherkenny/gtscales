@@ -16,6 +16,7 @@ gtscale_data_color_discrete(
   na_color = NULL,
   alpha = NULL,
   reverse = FALSE,
+  accessibility = c("none", "warn"),
   apply_to = c("fill", "text"),
   autocolor_text = TRUE,
   contrast_algo = c("apca", "wcag"),
@@ -45,6 +46,9 @@ gtscale_data_color_discrete(
 \item{alpha}{Alpha applied by \code{\link[gt:data_color]{gt::data_color()}}.}
 
 \item{reverse}{Whether to reverse the color mapping.}
+
+\item{accessibility}{Whether to warn about low-contrast adjacent legend
+colors.}
 
 \item{apply_to}{Whether colors should be applied to cell fill or text.}
 

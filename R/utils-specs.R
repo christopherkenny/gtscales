@@ -4,6 +4,7 @@ new_gtscale_spec <- function(
   column = NULL,
   palette = NULL,
   domain = NULL,
+  midpoint = NULL,
   bins = NULL,
   quantiles = NULL,
   breaks = NULL,
@@ -22,6 +23,7 @@ new_gtscale_spec <- function(
       column = column,
       palette = palette,
       domain = domain,
+      midpoint = midpoint,
       bins = bins,
       quantiles = quantiles,
       breaks = breaks,
@@ -36,6 +38,7 @@ new_gtscale_spec <- function(
           na_color = NULL,
           alpha = NULL,
           reverse = FALSE,
+          accessibility = 'none',
           autocolor_text = TRUE,
           contrast_algo = 'apca',
           autocolor_light = '#FFFFFF',
@@ -46,7 +49,10 @@ new_gtscale_spec <- function(
       legend = modifyList(
         list(
           output = 'contextual',
-          placement = 'source_note'
+          placement = 'source_note',
+          show_na = FALSE,
+          na_label = 'Missing',
+          na_color = NULL
         ),
         legend
       )
@@ -88,6 +94,88 @@ build_continuous_spec <- function(
     column = column,
     palette = palette,
     domain = domain,
+    breaks = breaks,
+    labels = resolve_labels(breaks, labels),
+    title = title,
+    fn = fn,
+    style = list(
+      direction = direction,
+      width = width,
+      height = height
+    )
+  )
+}
+
+build_diverging_spec <- function(
+  data,
+  column,
+  palette,
+  domain = NULL,
+  midpoint = 0,
+  breaks = NULL,
+  labels = scales::label_comma(),
+  title = NULL,
+  direction = 'to right',
+  width = '160px',
+  height = '14px',
+  mid_color = '#FFFFFF',
+  reverse = FALSE,
+  na_color = '#00000000'
+) {
+  domain <- resolve_domain(data = data, column = column, domain = domain)
+
+  if (!is.numeric(midpoint) || length(midpoint) != 1 || is.na(midpoint)) {
+    rlang::abort('`midpoint` must be a single finite number.')
+  }
+
+  if (midpoint < domain[[1]] || midpoint > domain[[2]]) {
+    rlang::abort('`midpoint` must fall inside the scale `domain`.')
+  }
+
+  palette <- as.character(palette)
+
+  if (length(palette) == 2) {
+    palette <- c(palette[[1]], mid_color, palette[[2]])
+  } else if (length(palette) != 3) {
+    rlang::abort('`palette` must contain two endpoint colors or three diverging colors.')
+  }
+
+  if (isTRUE(reverse)) {
+    palette <- rev(palette)
+  }
+
+  if (is.null(breaks)) {
+    breaks <- sort(unique(c(domain[[1]], midpoint, domain[[2]])))
+  } else {
+    breaks <- sort(unique(as.numeric(breaks)))
+  }
+
+  breaks <- breaks[breaks >= domain[[1]] & breaks <= domain[[2]]]
+
+  if (!midpoint %in% breaks) {
+    breaks <- sort(unique(c(breaks, midpoint)))
+  }
+
+  values <- scales::rescale(
+    c(domain[[1]], midpoint, domain[[2]]),
+    to = c(0, 1),
+    from = domain
+  )
+  fn <- function(x) {
+    out <- scales::gradient_n_pal(colours = palette, values = values)(
+      scales::rescale(x, to = c(0, 1), from = domain)
+    )
+    out[is.na(x)] <- na_color
+    out
+  }
+
+  new_gtscale_spec(
+    scale_type = 'diverging',
+    color_method = 'numeric',
+    column = column,
+    palette = palette,
+    domain = domain,
+    midpoint = midpoint,
     breaks = breaks,
     labels = resolve_labels(breaks, labels),
     title = title,
@@ -258,6 +346,7 @@ set_scale_application <- function(
   na_color = NULL,
   alpha = NULL,
   reverse = FALSE,
+  accessibility = c('none', 'warn'),
   autocolor_text = TRUE,
   contrast_algo = c('apca', 'wcag'),
   autocolor_light = '#FFFFFF',
@@ -270,6 +359,7 @@ set_scale_application <- function(
       na_color = na_color,
       alpha = alpha,
       reverse = reverse,
+      accessibility = match.arg(accessibility),
       autocolor_text = autocolor_text,
       contrast_algo = match.arg(contrast_algo),
       autocolor_light = autocolor_light,
@@ -280,17 +370,35 @@ set_scale_application <- function(
   spec
 }
 
-set_scale_legend <- function(spec, output = 'contextual', placement = 'source_note') {
+set_scale_legend <- function(
+  spec,
+  output = 'contextual',
+  placement = 'source_note',
+  show_na = FALSE,
+  na_label = 'Missing',
+  na_color = NULL
+) {
   validate_gtscale_spec(spec)
   spec$legend <- modifyList(
     spec$legend,
     list(
       output = output,
-      placement = placement
+      placement = placement,
+      show_na = show_na,
+      na_label = na_label,
+      na_color = na_color
     )
   )
 
   spec
+}
+
+finalize_spec_metadata <- function(spec) {
+  if (isTRUE(spec$legend$show_na) && is.null(spec$application$na_color) && is.null(spec$legend$na_color)) {
+    spec$legend$na_color <- '#D9D9D9'
+  }
+
+  warn_on_accessibility_risks(spec)
 }
 
 finalize_scale_spec <- function(spec, data = NULL) {
@@ -321,7 +429,36 @@ finalize_scale_spec <- function(spec, data = NULL) {
       modify_gtscale_spec(
         application = spec$application,
         legend = spec$legend
-      ))
+      ) |>
+      finalize_spec_metadata())
+  }
+
+  if (identical(spec$scale_type, 'diverging')) {
+    if (is.null(data) && is.null(spec$domain)) {
+      rlang::abort('Diverging specs need `data` or an explicit `domain` to be finalized.')
+    }
+
+    return(build_diverging_spec(
+      data = data,
+      column = spec$column,
+      palette = spec$palette,
+      domain = spec$domain,
+      midpoint = spec$midpoint,
+      breaks = spec$breaks,
+      labels = spec$labels,
+      title = spec$title,
+      direction = spec$style$direction,
+      width = spec$style$width,
+      height = spec$style$height,
+      mid_color = spec$style$mid_color %||% '#FFFFFF',
+      reverse = spec$application$reverse,
+      na_color = spec$application$na_color %||% '#00000000'
+    ) |>
+      modify_gtscale_spec(
+        application = spec$application,
+        legend = spec$legend
+      ) |>
+      finalize_spec_metadata())
   }
 
   if (identical(spec$scale_type, 'bins')) {
@@ -343,7 +480,8 @@ finalize_scale_spec <- function(spec, data = NULL) {
       modify_gtscale_spec(
         application = spec$application,
         legend = spec$legend
-      ))
+      ) |>
+      finalize_spec_metadata())
   }
 
   if (identical(spec$scale_type, 'quantiles')) {
@@ -364,7 +502,8 @@ finalize_scale_spec <- function(spec, data = NULL) {
       modify_gtscale_spec(
         application = spec$application,
         legend = spec$legend
-      ))
+      ) |>
+      finalize_spec_metadata())
   }
 
   if (identical(spec$scale_type, 'discrete')) {
@@ -380,7 +519,8 @@ finalize_scale_spec <- function(spec, data = NULL) {
       modify_gtscale_spec(
         application = spec$application,
         legend = spec$legend
-      ))
+      ) |>
+      finalize_spec_metadata())
   }
 
   rlang::abort(paste0('Unsupported scale type `', spec$scale_type, '`.'))

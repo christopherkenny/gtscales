@@ -32,6 +32,10 @@ resolve_domain <- function(data, column, domain = NULL) {
   domain
 }
 
+resolve_na_legend_color <- function(spec, default = '#D9D9D9') {
+  spec$legend$na_color %||% spec$application$na_color %||% default
+}
+
 resolve_palette <- function(palette = NULL, fn = NULL) {
   if (!is.null(palette)) {
     return(as.character(palette))
@@ -139,4 +143,64 @@ describe_color <- function(color) {
   )
 
   paste0(nearest_name, ' (', hex, ')')
+}
+
+relative_luminance <- function(color) {
+  rgb <- grDevices::col2rgb(normalize_color_hex(color)) / 255
+  rgb <- ifelse(rgb <= 0.03928, rgb / 12.92, ((rgb + 0.055) / 1.055)^2.4)
+  0.2126 * rgb[1, ] + 0.7152 * rgb[2, ] + 0.0722 * rgb[3, ]
+}
+
+contrast_ratio <- function(color_1, color_2) {
+  lum_1 <- relative_luminance(color_1)
+  lum_2 <- relative_luminance(color_2)
+  lighter <- pmax(lum_1, lum_2)
+  darker <- pmin(lum_1, lum_2)
+  (lighter + 0.05) / (darker + 0.05)
+}
+
+spec_legend_colors <- function(spec) {
+  legend_colors <- switch(spec$scale_type,
+    continuous = spec$palette,
+    diverging = spec$palette,
+    bins = spec$values,
+    quantiles = spec$values,
+    discrete = spec$values,
+    character(0)
+  )
+
+  if (isTRUE(spec$legend$show_na)) {
+    c(legend_colors, resolve_na_legend_color(spec))
+  } else {
+    legend_colors
+  }
+}
+
+warn_on_accessibility_risks <- function(spec) {
+  if (!identical(spec$application$accessibility, 'warn')) {
+    return(spec)
+  }
+
+  legend_colors <- normalize_color_hex(spec_legend_colors(spec))
+
+  if (length(legend_colors) < 2) {
+    return(spec)
+  }
+
+  pairwise_contrast <- vapply(
+    seq_len(length(legend_colors) - 1),
+    function(i) contrast_ratio(legend_colors[[i]], legend_colors[[i + 1]]),
+    numeric(1)
+  )
+
+  if (any(pairwise_contrast < 1.25, na.rm = TRUE)) {
+    rlang::warn(
+      paste(
+        'Some adjacent legend colors have very low contrast.',
+        'Consider a more distinct palette for accessibility.'
+      )
+    )
+  }
+
+  spec
 }

@@ -55,7 +55,7 @@ render_scale_legend_contextual <- function(spec) {
 }
 
 render_scale_legend <- function(spec, output = NULL) {
-  output <- rlang::`%||%`(output, spec$legend$output)
+  output <- output %||% spec$legend$output
   output <- match.arg(output, choices = c('contextual', 'html', 'latex', 'word', 'typst'))
 
   switch(output,
@@ -70,6 +70,7 @@ render_scale_legend <- function(spec, output = NULL) {
 render_scale_legend_html <- function(spec) {
   switch(spec$scale_type,
     continuous = render_continuous_legend_html(spec),
+    diverging = render_continuous_legend_html(spec),
     bins = render_bins_legend_html(spec),
     quantiles = render_bins_legend_html(spec),
     discrete = render_discrete_legend_html(spec),
@@ -79,6 +80,7 @@ render_scale_legend_html <- function(spec) {
 
 render_continuous_legend_html <- function(spec) {
   break_positions <- scales::rescale(spec$breaks, to = c(0, 100), from = spec$domain)
+  na_entry <- render_na_legend_html(spec)
 
   paste0(
     '<div style="width:', spec$style$width, ';">',
@@ -103,6 +105,7 @@ render_continuous_legend_html <- function(spec) {
       collapse = ''
     ),
     '</div>',
+    na_entry,
     '</div>'
   )
 }
@@ -110,6 +113,7 @@ render_continuous_legend_html <- function(spec) {
 render_bins_legend_html <- function(spec) {
   n_intervals <- length(spec$bins) - 1
   swatch_width <- 100 / n_intervals
+  na_entry <- render_na_legend_html(spec)
 
   paste0(
     '<div style="width:', spec$style$width, ';">',
@@ -146,11 +150,14 @@ render_bins_legend_html <- function(spec) {
       collapse = ''
     ),
     '</div>',
+    na_entry,
     '</div>'
   )
 }
 
 render_discrete_legend_html <- function(spec) {
+  na_entry <- render_na_legend_html(spec)
+
   paste0(
     '<div>',
     legend_title_html(spec$title),
@@ -172,6 +179,26 @@ render_discrete_legend_html <- function(spec) {
       collapse = ''
     ),
     '</div>',
+    na_entry,
+    '</div>'
+  )
+}
+
+render_na_legend_html <- function(spec) {
+  if (!isTRUE(spec$legend$show_na)) {
+    return('')
+  }
+
+  paste0(
+    '<div style="margin-top:6px; font-size:11px; color:#57606a;">',
+    '<span style="display:inline-flex; align-items:center; gap:6px;">',
+    '<span style="display:inline-block; width:12px; height:12px; border-radius:3px; border:1px solid #d0d7de; background:',
+    resolve_na_legend_color(spec),
+    ';"></span>',
+    '<span>',
+    spec$legend$na_label,
+    '</span>',
+    '</span>',
     '</div>'
   )
 }
@@ -179,6 +206,7 @@ render_discrete_legend_html <- function(spec) {
 render_scale_legend_latex <- function(spec) {
   switch(spec$scale_type,
     continuous = render_continuous_legend_latex(spec),
+    diverging = render_continuous_legend_latex(spec),
     bins = render_bins_legend_latex(spec),
     quantiles = render_bins_legend_latex(spec),
     discrete = render_discrete_legend_latex(spec),
@@ -190,12 +218,14 @@ render_continuous_legend_latex <- function(spec) {
   title <- if (is.null(spec$title)) '' else paste0('\\textbf{', latex_escape_text(spec$title), '}\\\\')
   swatches <- paste(vapply(spec$palette, latex_color_box, character(1)), collapse = '\\,')
   labels <- paste(latex_escape_text(spec$labels), collapse = ' \\quad ')
+  na_entry <- render_na_legend_latex(spec)
 
   paste0(
     title,
     swatches,
     '\\\\',
-    labels
+    labels,
+    na_entry
   )
 }
 
@@ -215,8 +245,9 @@ render_bins_legend_latex <- function(spec) {
     ),
     collapse = '\\quad '
   )
+  na_entry <- render_na_legend_latex(spec)
 
-  paste0(title, entries)
+  paste0(title, entries, na_entry)
 }
 
 render_discrete_legend_latex <- function(spec) {
@@ -235,13 +266,28 @@ render_discrete_legend_latex <- function(spec) {
     ),
     collapse = '\\quad '
   )
+  na_entry <- render_na_legend_latex(spec)
 
-  paste0(title, entries)
+  paste0(title, entries, na_entry)
+}
+
+render_na_legend_latex <- function(spec) {
+  if (!isTRUE(spec$legend$show_na)) {
+    return('')
+  }
+
+  paste0(
+    '\\\\',
+    latex_color_box(resolve_na_legend_color(spec)),
+    '\\ ',
+    latex_escape_text(spec$legend$na_label)
+  )
 }
 
 render_scale_legend_word <- function(spec) {
   switch(spec$scale_type,
     continuous = render_continuous_legend_word(spec),
+    diverging = render_continuous_legend_word(spec),
     bins = render_bins_legend_word(spec),
     quantiles = render_bins_legend_word(spec),
     discrete = render_discrete_legend_word(spec),
@@ -263,6 +309,7 @@ write_word_legend_image <- function(spec, width = 480, height = 120) {
 
   switch(spec$scale_type,
     continuous = draw_continuous_legend_word(spec),
+    diverging = draw_continuous_legend_word(spec),
     bins = draw_bins_legend_word(spec),
     quantiles = draw_bins_legend_word(spec),
     discrete = draw_discrete_legend_word(spec),
@@ -412,6 +459,7 @@ draw_discrete_legend_word <- function(spec) {
 render_scale_legend_typst <- function(spec) {
   switch(spec$scale_type,
     continuous = render_continuous_legend_typst(spec),
+    diverging = render_continuous_legend_typst(spec),
     bins = render_bins_legend_typst(spec),
     quantiles = render_bins_legend_typst(spec),
     discrete = render_discrete_legend_typst(spec),
@@ -431,6 +479,7 @@ render_continuous_legend_typst <- function(spec) {
     collapse = ', '
   )
   gradient_stops <- paste(vapply(spec$palette, typst_color, character(1)), collapse = ', ')
+  na_entry <- render_na_legend_typst(spec)
 
   paste0(
     '#stack(dir: ttb, spacing: 0.35em, ',
@@ -442,7 +491,9 @@ render_continuous_legend_typst <- function(spec) {
     'stroke: 0.5pt + rgb("#D0D7DE"), ',
     'fill: gradient.linear(', gradient_stops, ', relative: "self")',
     '),',
-    'box(width: 14em, stack(dir: ltr, spacing: 1fr, ', labels, ')))'
+    'box(width: 14em, stack(dir: ltr, spacing: 1fr, ', labels, '))',
+    na_entry,
+    ')'
   )
 }
 
@@ -466,11 +517,14 @@ render_bins_legend_typst <- function(spec) {
     ),
     collapse = ', '
   )
+  na_entry <- render_na_legend_typst(spec)
 
   paste0(
     '#stack(dir: ttb, spacing: 0.35em, ',
     title,
-    'stack(dir: ltr, spacing: 0.9em, ', entries, '))'
+    'stack(dir: ltr, spacing: 0.9em, ', entries, ')',
+    na_entry,
+    ')'
   )
 }
 
@@ -494,61 +548,91 @@ render_discrete_legend_typst <- function(spec) {
     ),
     collapse = ', '
   )
+  na_entry <- render_na_legend_typst(spec)
 
   paste0(
     '#stack(dir: ttb, spacing: 0.35em, ',
     title,
-    'stack(dir: ltr, spacing: 0.9em, ', entries, '))'
+    'stack(dir: ltr, spacing: 0.9em, ', entries, ')',
+    na_entry,
+    ')'
+  )
+}
+
+render_na_legend_typst <- function(spec) {
+  if (!isTRUE(spec$legend$show_na)) {
+    return('')
+  }
+
+  paste0(
+    ', stack(dir: ltr, spacing: 0.35em, ',
+    typst_color_box(resolve_na_legend_color(spec)),
+    ', [',
+    typst_escape_text(spec$legend$na_label),
+    '])'
   )
 }
 
 attach_scale_legend <- function(data, spec, output = NULL, placement = NULL) {
-  output <- rlang::`%||%`(output, spec$legend$output)
-  placement <- rlang::`%||%`(placement, spec$legend$placement)
+  output <- output %||% spec$legend$output
+  placement <- placement %||% spec$legend$placement
   rendered <- render_scale_legend(spec = spec, output = output)
 
   if (identical(placement, 'source_note')) {
     return(attach_legend_note(data, rendered))
   }
 
+  if (identical(placement, 'subtitle')) {
+    return(attach_legend_subtitle(data, rendered))
+  }
+
   rlang::abort(paste0('Legend placement `', placement, '` is not implemented yet.'))
 }
 
 apply_scale_color <- function(data, spec) {
-  column_name <- resolve_column_name(spec$column)
+  column_names <- resolve_column_names(spec$column)
 
-  data_color_args <- list(
-    data = data,
-    columns = rlang::sym(column_name),
-    method = spec$color_method,
-    na_color = spec$application$na_color,
-    alpha = spec$application$alpha,
-    reverse = spec$application$reverse,
-    apply_to = spec$application$apply_to,
-    autocolor_text = spec$application$autocolor_text,
-    contrast_algo = spec$application$contrast_algo,
-    autocolor_light = spec$application$autocolor_light,
-    autocolor_dark = spec$application$autocolor_dark
+  Reduce(
+    f = function(tbl, column_name) {
+      data_color_args <- list(
+        data = tbl,
+        columns = rlang::sym(column_name),
+        method = spec$color_method,
+        na_color = spec$application$na_color,
+        alpha = spec$application$alpha,
+        apply_to = spec$application$apply_to,
+        autocolor_text = spec$application$autocolor_text,
+        contrast_algo = spec$application$contrast_algo,
+        autocolor_light = spec$application$autocolor_light,
+        autocolor_dark = spec$application$autocolor_dark
+      )
+
+      if (!identical(spec$scale_type, 'diverging')) {
+        data_color_args$reverse <- spec$application$reverse
+      }
+
+      if (identical(spec$color_method, 'numeric')) {
+        data_color_args$palette <- spec$palette
+        data_color_args$domain <- spec$domain
+        data_color_args$fn <- spec$fn
+      } else if (identical(spec$color_method, 'bin')) {
+        data_color_args$palette <- spec$palette
+        data_color_args$domain <- spec$domain
+        data_color_args$bins <- spec$bins
+      } else if (identical(spec$color_method, 'quantile')) {
+        data_color_args$palette <- spec$palette
+        data_color_args$quantiles <- spec$quantiles
+      } else if (identical(spec$color_method, 'factor')) {
+        data_color_args$palette <- spec$values
+        data_color_args$levels <- spec$bins
+        data_color_args$ordered <- spec$breaks
+      }
+
+      do.call(gt::data_color, data_color_args)
+    },
+    x = column_names,
+    init = data
   )
-
-  if (identical(spec$color_method, 'numeric')) {
-    data_color_args$palette <- spec$palette
-    data_color_args$domain <- spec$domain
-    data_color_args$fn <- spec$fn
-  } else if (identical(spec$color_method, 'bin')) {
-    data_color_args$palette <- spec$palette
-    data_color_args$domain <- spec$domain
-    data_color_args$bins <- spec$bins
-  } else if (identical(spec$color_method, 'quantile')) {
-    data_color_args$palette <- spec$palette
-    data_color_args$quantiles <- spec$quantiles
-  } else if (identical(spec$color_method, 'factor')) {
-    data_color_args$palette <- spec$values
-    data_color_args$levels <- spec$bins
-    data_color_args$ordered <- spec$breaks
-  }
-
-  do.call(gt::data_color, data_color_args)
 }
 
 apply_scale_with_legend <- function(data, spec) {

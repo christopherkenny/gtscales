@@ -4,7 +4,14 @@
 \alias{gtscale_spec_set_legend}
 \title{Set how a \code{gtscales} legend should be rendered}
 \usage{
-gtscale_spec_set_legend(spec, output = "html", placement = "source_note")
+gtscale_spec_set_legend(
+  spec,
+  output = "html",
+  placement = "source_note",
+  show_na = FALSE,
+  na_label = "Missing",
+  na_color = NULL
+)
 }
 \arguments{
 \item{spec}{A \code{gtscale_spec}.}
@@ -13,8 +20,15 @@ gtscale_spec_set_legend(spec, output = "html", placement = "source_note")
 \code{gt}-managed HTML/LaTeX source notes, or choose a specific output like
 \code{"html"}, \code{"latex"}, or \code{"typst"}.}
 
-\item{placement}{Legend placement target. Currently only \code{"source_note"} is
-implemented.}
+\item{placement}{Legend placement target. \code{"source_note"} and \code{"subtitle"}
+are currently implemented.}
+
+\item{show_na}{Whether to include an explicit missing-value legend entry.}
+
+\item{na_label}{Label to use for missing values in the legend.}
+
+\item{na_color}{Optional legend swatch color for missing values. When
+omitted and \code{show_na = TRUE}, a neutral gray swatch is used.}
 }
 \value{
 A modified \code{gtscale_spec}.
