@@ -1,0 +1,114 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# gtscales
+
+<!-- badges: start -->
+
+<!-- badges: end -->
+
+The goal of gtscales is to make color-encoded `gt` tables easier to read
+by adding compact legends directly to the table output.
+
+The main interface is a set of `gtscale_data_color_*()` helpers that
+color a column and add the matching legend in one call.
+
+The package currently focuses on three common legend types:
+
+- continuous gradients for numeric color scales
+- stepped legends for binned values
+- discrete swatches for categorical encodings
+
+## Overview
+
+`gtscales` currently provides a small family of helpers for explaining
+color encodings in `gt` tables:
+
+| Function | Description |
+|----|----|
+| `gtscale_data_color_continuous()` | Color a numeric column and add a matching continuous legend in one call |
+| `gtscale_data_color_bins()` | Color a numeric column with bins and add the matching legend |
+| `gtscale_data_color_discrete()` | Color a categorical column and add the matching discrete legend |
+| `gtscale_color_continuous()` | Add only the legend for an already-colored continuous scale |
+| `gtscale_color_bins()` | Add only the legend for an already-colored binned scale |
+| `gtscale_color_discrete()` | Add only the legend for an already-colored discrete scale |
+
+## Installation
+
+You can install the development version of gtscales from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("christopherkenny/gtscales")
+```
+
+## Example
+
+These examples use the primary one-call wrappers. The README uses saved
+images so the page stays lightweight on GitHub.
+
+### Continuous
+
+`gtscale_data_color_continuous()` colors the column and adds a matching
+gradient legend.
+
+``` r
+exibble |>
+  gt() |>
+  gtscale_data_color_continuous(
+    column = num,
+    palette = c("#A0442C", "white", "#0063B1"),
+    title = "Numeric scale"
+  )
+```
+
+<img src="man/figures/README-continuous.png" alt="" width="100%" />
+
+### Bins
+
+`gtscale_data_color_bins()` is useful when the color mapping is
+interval-based.
+
+``` r
+exibble |>
+  gt() |>
+  gtscale_data_color_bins(
+    column = currency,
+    palette = c("#f7fbff", "#08306b"),
+    bins = c(0, 10, 100, 1000, 10000, 70000),
+    title = "Currency bins"
+  )
+```
+
+<img src="man/figures/README-bins.png" alt="" width="100%" />
+
+### Discrete
+
+`gtscale_data_color_discrete()` is more useful when colors encode a
+compact status or class variable that benefits from a legend.
+
+``` r
+data.frame(
+  district = c("A", "B", "C", "D"),
+  status = c("Safe D", "Toss-up", "Lean R", "Safe R"),
+  margin = c(18, 2, -6, -21)
+) |>
+  gt() |>
+  gtscale_data_color_discrete(
+    column = status,
+    values = c("#2166ac", "#f7f7f7", "#ef8a62", "#b2182b"),
+    labels = c("Safe D", "Toss-up", "Lean R", "Safe R"),
+    title = "Race rating"
+  )
+```
+
+<img src="man/figures/README-discrete.png" alt="" width="100%" />
+
+## Note
+
+At the moment, legends are attached as source notes, which keeps them
+easy to add to existing `gt` pipelines. For most usage, the
+`gtscale_data_color_*()` wrappers should be the default choice, while
+the lower-level `gtscale_color_*()` functions are there for cases where
+the table coloring is already handled elsewhere.

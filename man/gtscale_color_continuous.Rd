@@ -2,26 +2,69 @@
 % Please edit documentation in R/scale_numeric.R
 \name{gtscale_color_continuous}
 \alias{gtscale_color_continuous}
-\title{Add a scale for a numeric column}
+\title{Add only a continuous color legend to a \code{gt} table}
 \usage{
-gtscale_color_continuous(data, fn, direction = "to right")
+gtscale_color_continuous(
+  data,
+  column = NULL,
+  palette = NULL,
+  domain = NULL,
+  breaks = NULL,
+  labels = scales::label_comma(),
+  title = NULL,
+  direction = "to right",
+  width = "160px",
+  height = "14px",
+  fn = NULL
+)
 }
 \arguments{
-\item{data}{A \code{gt} table with class \code{gt_tbl}}
+\item{data}{A \code{gt_tbl} created by \code{\link[gt:gt]{gt::gt()}}.}
 
-\item{fn}{a function from \code{scales}}
+\item{column}{An optional numeric column in the underlying table used to infer
+\code{domain}.}
 
-\item{direction}{orientation of the scale. Default is \code{'to right'}.}
+\item{palette}{A vector of colors used in the legend gradient.}
+
+\item{domain}{A numeric vector of length 2 giving the scale limits. When
+omitted, the limits are inferred from \code{column}.}
+
+\item{breaks}{Optional numeric break values to display below the gradient.}
+
+\item{labels}{A labeling function or a character vector for the breaks.}
+
+\item{title}{Optional legend title.}
+
+\item{direction}{CSS gradient direction. Defaults to \code{"to right"}.}
+
+\item{width}{Width of the legend bar.}
+
+\item{height}{Height of the legend bar.}
+
+\item{fn}{Backward-compatible fallback for passing a \code{scales} palette
+function. \code{palette} is preferred.}
 }
 \value{
-A \link[gt:gt]{gt::gt}
+A modified \link[gt:gt]{gt::gt} table.
 }
 \description{
-Add a scale for a numeric column
+This is a lower-level helper for cases where table coloring is already
+handled elsewhere. For the usual "color and legendize" workflow, prefer
+\code{\link[=gtscale_data_color_continuous]{gtscale_data_color_continuous()}}.
 }
 \examples{
-party_purple <- scales::col_numeric(
-  domain = c(0, 1),
-  palette = c('#A0442C', 'white', '#0063B1')
-)
+library(gt)
+
+exibble |>
+  gt() |>
+  data_color(
+    columns = num,
+    method = "numeric",
+    palette = c("#A0442C", "white", "#0063B1")
+  ) |>
+  gtscale_color_continuous(
+    column = num,
+    palette = c("#A0442C", "white", "#0063B1"),
+    title = "Value"
+  )
 }
