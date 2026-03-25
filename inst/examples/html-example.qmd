@@ -1,0 +1,37 @@
+---
+title: "gtscales HTML Example"
+format:
+  html: default
+---
+
+```{r}
+devtools::load_all(".")
+library(gt)
+```
+
+This example shows the supported HTML workflow for `gtscales`.
+
+```{r}
+gt::exibble |>
+  gt() |>
+  gtscale_data_color_continuous(
+    column = num,
+    palette = c("#A0442C", "white", "#0063B1"),
+    title = "Numeric scale"
+  )
+```
+
+```{r}
+data.frame(
+  district = c("A", "B", "C", "D"),
+  status = c("Safe D", "Toss-up", "Lean R", "Safe R"),
+  margin = c(18, 2, -6, -21)
+) |>
+  gt() |>
+  gtscale_data_color_discrete(
+    column = status,
+    values = c("#2166AC", "#F7F7F7", "#EF8A62", "#B2182B"),
+    labels = c("Safe D", "Toss-up", "Lean R", "Safe R"),
+    title = "Race rating"
+  )
+```

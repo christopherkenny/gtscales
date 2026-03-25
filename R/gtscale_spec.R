@@ -194,8 +194,9 @@ gtscale_spec_set_application <- function(
 #' Set how a `gtscales` legend should be rendered
 #'
 #' @param spec A `gtscale_spec`.
-#' @param output Output target for the legend. Currently only `"html"` is
-#'   implemented.
+#' @param output Output target for the legend. Use `"contextual"` for
+#'   `gt`-managed HTML/LaTeX source notes, or choose a specific output like
+#'   `"html"`, `"latex"`, or `"typst"`.
 #' @param placement Legend placement target. Currently only `"source_note"` is
 #'   implemented.
 #'

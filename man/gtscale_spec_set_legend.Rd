@@ -9,8 +9,9 @@ gtscale_spec_set_legend(spec, output = "html", placement = "source_note")
 \arguments{
 \item{spec}{A \code{gtscale_spec}.}
 
-\item{output}{Output target for the legend. Currently only \code{"html"} is
-implemented.}
+\item{output}{Output target for the legend. Use \code{"contextual"} for
+\code{gt}-managed HTML/LaTeX source notes, or choose a specific output like
+\code{"html"}, \code{"latex"}, or \code{"typst"}.}
 
 \item{placement}{Legend placement target. Currently only \code{"source_note"} is
 implemented.}

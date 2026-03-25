@@ -23,6 +23,12 @@ The package currently focuses on three common legend types:
 - quantile-based legends for ranked values
 - discrete swatches for categorical encodings
 
+The currently validated workflows are:
+
+- HTML rendering through `gt`
+- LaTeX/PDF rendering through `gt` and Quarto
+- Typst rendering through the Quarto example workflow
+
 ## Overview
 
 `gtscales` currently provides a small family of helpers for explaining
@@ -148,8 +154,40 @@ exibble |>
   gtscale_apply_legend(spec)
 ```
 
-This spec workflow is the foundation for future backend support beyond
-HTML, including formats like LaTeX and Typst.
+This spec workflow is the foundation for backend support beyond HTML,
+including LaTeX and Typst.
+
+You can also render a legend directly for another backend:
+
+``` r
+spec <- gtscale_spec_quantiles(
+  num,
+  palette = c("#fdd49e", "#fdbb84", "#ef6548", "#990000"),
+  quantiles = 4,
+  title = "Quartiles"
+)
+
+gtscale_render_legend(
+  spec = spec,
+  data = gt::gt(gt::exibble),
+  output = "typst"
+)
+```
+
+That returns Typst markup generated from the same scale spec used for
+HTML and LaTeX rendering.
+
+## Backend Examples
+
+The repository also includes small backend-specific Quarto examples in
+`inst/examples`:
+
+- `html-example.qmd`
+- `latex-example.qmd`
+- `typst-example.qmd`
+
+The LaTeX and Typst examples also have rendered PDFs in that folder for
+quick inspection.
 
 ## Note
 
@@ -157,4 +195,5 @@ At the moment, legends are attached as source notes, which keeps them
 easy to add to existing `gt` pipelines. For most usage, the
 `gtscale_data_color_*()` wrappers should be the default choice, while
 the lower-level `gtscale_color_*()` functions and `gtscale_spec_*()`
-constructors are there for cases where you want more control.
+constructors are there for cases where you want more control. Word/docx
+is not currently supported.

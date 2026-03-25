@@ -111,8 +111,32 @@ resolve_quantile_colors <- function(palette, n_intervals) {
 
 normalize_color_hex <- function(color) {
   rgb <- grDevices::col2rgb(color)
-  paste0(
-    "#",
-    toupper(sprintf("%02X%02X%02X", rgb[1, 1], rgb[2, 1], rgb[3, 1]))
+  vapply(
+    seq_len(ncol(rgb)),
+    function(i) {
+      paste0(
+        "#",
+        toupper(sprintf("%02X%02X%02X", rgb[1, i], rgb[2, i], rgb[3, i]))
+      )
+    },
+    character(1)
   )
+}
+
+describe_color <- function(color) {
+  hex <- normalize_color_hex(color)
+  named_colors <- grDevices::colors()
+  named_rgb <- grDevices::col2rgb(named_colors)
+  target_rgb <- grDevices::col2rgb(hex)
+
+  nearest_name <- vapply(
+    seq_len(ncol(target_rgb)),
+    function(i) {
+      distances <- colSums((named_rgb - target_rgb[, i])^2)
+      named_colors[[which.min(distances)]]
+    },
+    character(1)
+  )
+
+  paste0(nearest_name, " (", hex, ")")
 }

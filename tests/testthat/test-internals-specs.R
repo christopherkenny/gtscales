@@ -38,6 +38,22 @@ test_that("contextual source-note legends render in latex", {
   expect_match(latex, "FFFFFF", fixed = TRUE)
 })
 
+test_that("contextual source-note legends render in word xml", {
+  spec <- gtscale_spec_continuous(
+    num,
+    palette = c("#A0442C", "white", "#0063B1"),
+    title = "Value"
+  ) |>
+    gtscale_spec_set_legend(output = "contextual")
+
+  tbl <- gtscale_legend(gt::gt(gt::exibble), spec)
+  word_note <- as.character(tbl[["_source_notes"]][[1]]$word)
+  word <- gt::as_word(tbl)
+
+  expect_match(word_note, "![](", fixed = TRUE)
+  expect_match(word, "w:drawing", fixed = TRUE)
+})
+
 test_that("unimplemented html placements fail explicitly", {
   spec <- gtscale_spec_discrete(
     status,
@@ -67,4 +83,28 @@ test_that("public spec workflow can color and legendize a table", {
   expect_s3_class(tbl, "gt_tbl")
   expect_match(tbl[["_source_notes"]][[1]]$html, "Currency bins")
   expect_match(tbl[["_source_notes"]][[1]]$latex, "Currency bins")
+  expect_match(tbl[["_source_notes"]][[1]]$word, "![](", fixed = TRUE)
+  expect_match(gt::as_word(tbl), "w:drawing", fixed = TRUE)
+})
+
+test_that("public spec workflow can render typst legends", {
+  spec <- gtscale_spec_continuous(
+    num,
+    palette = c("#fdd49e", "#fdbb84", "#ef6548", "#990000"),
+    breaks = c(0, 18, 444, 8880000),
+    title = "Quartiles"
+  )
+
+  typst <- gtscale_render_legend(
+    spec = spec,
+    data = gt::gt(gt::exibble),
+    output = "typst"
+  )
+
+  expect_match(typst, "#stack\\(dir: ttb", perl = TRUE)
+  expect_match(typst, "\\[\\*Quartiles\\*\\]", perl = TRUE)
+  expect_match(typst, "gradient\\.linear\\(", perl = TRUE)
+  expect_match(typst, "relative: \"self\"", fixed = TRUE)
+  expect_match(typst, "rgb\\(\"#FDD49E\"\\)", perl = TRUE)
+  expect_match(typst, "rgb\\(\"#990000\"\\)", perl = TRUE)
 })

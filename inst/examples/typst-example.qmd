@@ -1,0 +1,64 @@
+---
+title: "gtscales Typst Example"
+format:
+  typst: default
+---
+
+```{r}
+#| echo: false
+devtools::load_all(".")
+library(gt)
+```
+
+This example shows the current Typst workflow for standalone legend rendering.
+
+It includes both:
+
+- a continuous legend rendered as a true gradient bar
+- a stepped legend rendered as labeled swatches
+
+## Continuous Gradient
+
+```{r}
+#| echo: false
+#| results: asis
+continuous_spec <- gtscale_spec_continuous(
+  num,
+  palette = c("#fdd49e", "#fdbb84", "#ef6548", "#990000"),
+  breaks = c(0, 18, 444, 8880000),
+  title = "Continuous gradient"
+)
+
+continuous_legend <- gtscale_render_legend(
+  spec = continuous_spec,
+  data = gt::gt(gt::exibble),
+  output = "typst"
+)
+
+cat("```{=typst}\n")
+cat(continuous_legend)
+cat("\n```\n")
+```
+
+## Stepped Quantiles
+
+```{r}
+#| echo: false
+#| results: asis
+quantile_spec <- gtscale_spec_quantiles(
+  num,
+  palette = c("#fdd49e", "#fdbb84", "#ef6548", "#990000"),
+  quantiles = 4,
+  title = "Stepped quantiles"
+)
+
+quantile_legend <- gtscale_render_legend(
+  spec = quantile_spec,
+  data = gt::gt(gt::exibble),
+  output = "typst"
+)
+
+cat("```{=typst}\n")
+cat(quantile_legend)
+cat("\n```\n")
+```
