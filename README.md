@@ -10,44 +10,8 @@
 coverage](https://codecov.io/gh/christopherkenny/gtscales/graph/badge.svg)](https://app.codecov.io/gh/christopherkenny/gtscales)
 <!-- badges: end -->
 
-The goal of gtscales is to make color-encoded `gt` tables easier to read
-by adding matched legends directly to the rendered output.
-
-The main interface is a set of `gtscale_data_color_*()` helpers that
-color a column and add the matching legend in one call.
-
-There is also a reusable spec workflow for cases where you want to
-define a scale once, then apply it, legendize it, or render it
-separately.
-
-The package currently focuses on three common legend types:
-
-- continuous gradients for numeric color scales
-- stepped legends for binned values
-- quantile-based legends for ranked values
-- discrete swatches for categorical encodings
-
-The currently validated workflows are:
-
-- HTML rendering through `gt`
-- LaTeX/PDF rendering through `gt` and Quarto
-- Typst standalone legend rendering through the Quarto example workflow
-
-## Overview
-
-`gtscales` currently provides a small family of helpers for explaining
-color encodings in `gt` tables:
-
-| Function | Description |
-|----|----|
-| `gtscale_data_color_continuous()` | Color a numeric column and add a matching continuous legend in one call |
-| `gtscale_data_color_bins()` | Color a numeric column with bins and add the matching legend |
-| `gtscale_data_color_quantiles()` | Color a numeric column by quantile and add the matching legend |
-| `gtscale_data_color_discrete()` | Color a categorical column and add the matching discrete legend |
-| `gtscale_color_continuous()` | Add only the legend for an already-colored continuous scale |
-| `gtscale_color_bins()` | Add only the legend for an already-colored binned scale |
-| `gtscale_color_quantiles()` | Add only the legend for an already-colored quantile scale |
-| `gtscale_color_discrete()` | Add only the legend for an already-colored discrete scale |
+The goal of `gtscales` is to make color-encoded `gt` tables easier to
+read by adding matched legends directly to the rendered output.
 
 ## Installation
 
@@ -59,10 +23,7 @@ You can install the development version of gtscales from
 pak::pak("christopherkenny/gtscales")
 ```
 
-## Example
-
-These examples use the primary one-call wrappers. The README uses saved
-images so the page stays lightweight on GitHub.
+## Examples
 
 ### Continuous
 
@@ -138,66 +99,3 @@ exibble |>
 ```
 
 <img src="man/figures/README-quantiles.png" alt="" width="100%" />
-
-## Spec Workflow
-
-If you want a more composable workflow, you can build a `gtscale_spec`
-first and then apply it, render only the legend, or do both together.
-
-``` r
-spec <- gtscale_spec_continuous(
-  num,
-  palette = c('#A0442C', 'white', '#0063B1'),
-  title = 'Numeric scale'
-) |>
-  gtscale_spec_set_application(apply_to = 'fill') |>
-  gtscale_spec_set_legend(output = 'html', placement = 'source_note')
-
-exibble |>
-  gt() |>
-  gtscale_apply_legend(spec)
-```
-
-This spec workflow is the foundation for rendering beyond the default
-HTML case, including LaTeX and Typst workflows.
-
-You can also render a legend directly for another backend:
-
-``` r
-spec <- gtscale_spec_quantiles(
-  num,
-  palette = c('#fdd49e', '#fdbb84', '#ef6548', '#990000'),
-  quantiles = 4,
-  title = 'Quartiles'
-)
-
-gtscale_render_legend(
-  spec = spec,
-  data = gt::gt(gt::exibble),
-  output = 'typst'
-)
-```
-
-That returns Typst markup generated from the same scale spec used for
-the HTML and LaTeX paths.
-
-## Backend Examples
-
-The repository also includes small backend-specific Quarto examples in
-`inst/examples`:
-
-- `html-example.qmd`
-- `latex-example.qmd`
-- `typst-example.qmd`
-
-The LaTeX and Typst examples also have rendered PDFs in that folder for
-quick inspection.
-
-## Note
-
-At the moment, legends are attached as source notes, which keeps them
-easy to add to existing `gt` pipelines. For most usage, the
-`gtscale_data_color_*()` wrappers should be the default choice, while
-the lower-level `gtscale_color_*()` functions and `gtscale_spec_*()`
-constructors are there for cases where you want more control. Word/docx
-is not currently supported.
