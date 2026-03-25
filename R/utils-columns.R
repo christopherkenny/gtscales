@@ -11,7 +11,7 @@ resolve_column_name <- function(column) {
     return(as.character(column))
   }
 
-  rlang::abort("`column` must be supplied as a bare column name or a single string.")
+  rlang::abort('`column` must be supplied as a bare column name or a single string.')
 }
 
 capture_spec_column <- function(column_expr, env = parent.frame()) {
@@ -23,8 +23,8 @@ capture_spec_column <- function(column_expr, env = parent.frame()) {
 
       if (
         is.null(column_value) ||
-        is.symbol(column_value) ||
-        (is.character(column_value) && length(column_value) == 1)
+          is.symbol(column_value) ||
+          (is.character(column_value) && length(column_value) == 1)
       ) {
         return(column_value)
       }
@@ -44,7 +44,7 @@ resolve_column_data <- function(data, column) {
   column_name <- resolve_column_name(column)
 
   if (!column_name %in% names(table_data)) {
-    rlang::abort(paste0("Column `", column_name, "` was not found in the `gt` data."))
+    rlang::abort(paste0('Column `', column_name, '` was not found in the `gt` data.'))
   }
 
   table_data[[column_name]]

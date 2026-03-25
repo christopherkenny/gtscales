@@ -17,26 +17,27 @@
 #' library(gt)
 #'
 #' data.frame(
-#'   category = c("Low", "Medium", "High"),
+#'   category = c('Low', 'Medium', 'High'),
 #'   value = c(12, 47, 83)
 #' ) |>
 #'   gt() |>
 #'   data_color(
 #'     columns = category,
-#'     method = "factor",
-#'     palette = c("#1b9e77", "#d95f02", "#7570b3")
+#'     method = 'factor',
+#'     palette = c('#1b9e77', '#d95f02', '#7570b3')
 #'   ) |>
 #'   gtscale_color_discrete(
-#'     values = c("#1b9e77", "#d95f02", "#7570b3"),
-#'     labels = c("Low", "Medium", "High"),
-#'     title = "Category"
+#'     values = c('#1b9e77', '#d95f02', '#7570b3'),
+#'     labels = c('Low', 'Medium', 'High'),
+#'     title = 'Category'
 #'   )
 gtscale_color_discrete <- function(
-    data,
-    values,
-    labels = values,
-    title = NULL,
-    swatch_size = "12px") {
+  data,
+  values,
+  labels = values,
+  title = NULL,
+  swatch_size = '12px'
+) {
   spec <- gtscale_spec_discrete(
     column = NULL,
     values = values,
@@ -44,7 +45,7 @@ gtscale_color_discrete <- function(
     title = title,
     swatch_size = swatch_size
   ) |>
-    gtscale_spec_set_legend(output = "contextual", placement = "source_note")
+    gtscale_spec_set_legend(output = 'contextual', placement = 'source_note')
 
   gtscale_legend(data = data, spec = spec)
 }

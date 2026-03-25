@@ -26,33 +26,34 @@
 #' library(gt)
 #'
 #' data.frame(
-#'   category = c("Low", "Medium", "High"),
+#'   category = c('Low', 'Medium', 'High'),
 #'   value = c(12, 47, 83)
 #' ) |>
 #'   gt() |>
 #'   gtscale_data_color_discrete(
 #'     column = category,
-#'     values = c("#1b9e77", "#d95f02", "#7570b3"),
-#'     labels = c("Low", "Medium", "High"),
-#'     title = "Category"
+#'     values = c('#1b9e77', '#d95f02', '#7570b3'),
+#'     labels = c('Low', 'Medium', 'High'),
+#'     title = 'Category'
 #'   )
 gtscale_data_color_discrete <- function(
-    data,
-    column,
-    values,
-    labels = values,
-    title = NULL,
-    swatch_size = "12px",
-    levels = NULL,
-    ordered = FALSE,
-    na_color = NULL,
-    alpha = NULL,
-    reverse = FALSE,
-    apply_to = c("fill", "text"),
-    autocolor_text = TRUE,
-    contrast_algo = c("apca", "wcag"),
-    autocolor_light = "#FFFFFF",
-    autocolor_dark = "#000000") {
+  data,
+  column,
+  values,
+  labels = values,
+  title = NULL,
+  swatch_size = '12px',
+  levels = NULL,
+  ordered = FALSE,
+  na_color = NULL,
+  alpha = NULL,
+  reverse = FALSE,
+  apply_to = c('fill', 'text'),
+  autocolor_text = TRUE,
+  contrast_algo = c('apca', 'wcag'),
+  autocolor_light = '#FFFFFF',
+  autocolor_dark = '#000000'
+) {
   column <- substitute(column)
   spec <- gtscale_spec_discrete(
     column = column,
@@ -73,7 +74,7 @@ gtscale_data_color_discrete <- function(
       autocolor_light = autocolor_light,
       autocolor_dark = autocolor_dark
     ) |>
-    gtscale_spec_set_legend(output = "contextual", placement = "source_note")
+    gtscale_spec_set_legend(output = 'contextual', placement = 'source_note')
 
   gtscale_apply_legend(data = data, spec = spec)
 }

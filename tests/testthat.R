@@ -9,4 +9,4 @@
 library(testthat)
 library(gtscales)
 
-test_check("gtscales")
+test_check('gtscales')

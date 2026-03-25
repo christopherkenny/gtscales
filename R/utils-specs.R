@@ -1,19 +1,20 @@
 new_gtscale_spec <- function(
-    scale_type,
-    color_method,
-    column = NULL,
-    palette = NULL,
-    domain = NULL,
-    bins = NULL,
-    quantiles = NULL,
-    breaks = NULL,
-    values = NULL,
-    labels = NULL,
-    title = NULL,
-    fn = NULL,
-    style = list(),
-    application = list(),
-    legend = list()) {
+  scale_type,
+  color_method,
+  column = NULL,
+  palette = NULL,
+  domain = NULL,
+  bins = NULL,
+  quantiles = NULL,
+  breaks = NULL,
+  values = NULL,
+  labels = NULL,
+  title = NULL,
+  fn = NULL,
+  style = list(),
+  application = list(),
+  legend = list()
+) {
   structure(
     list(
       scale_type = scale_type,
@@ -31,41 +32,42 @@ new_gtscale_spec <- function(
       style = style,
       application = modifyList(
         list(
-          apply_to = "fill",
+          apply_to = 'fill',
           na_color = NULL,
           alpha = NULL,
           reverse = FALSE,
           autocolor_text = TRUE,
-          contrast_algo = "apca",
-          autocolor_light = "#FFFFFF",
-          autocolor_dark = "#000000"
+          contrast_algo = 'apca',
+          autocolor_light = '#FFFFFF',
+          autocolor_dark = '#000000'
         ),
         application
       ),
       legend = modifyList(
         list(
-          output = "contextual",
-          placement = "source_note"
+          output = 'contextual',
+          placement = 'source_note'
         ),
         legend
       )
     ),
-    class = "gtscale_spec"
+    class = 'gtscale_spec'
   )
 }
 
 build_continuous_spec <- function(
-    data,
-    column,
-    palette = NULL,
-    domain = NULL,
-    breaks = NULL,
-    labels = scales::label_comma(),
-    title = NULL,
-    direction = "to right",
-    width = "160px",
-    height = "14px",
-    fn = NULL) {
+  data,
+  column,
+  palette = NULL,
+  domain = NULL,
+  breaks = NULL,
+  labels = scales::label_comma(),
+  title = NULL,
+  direction = 'to right',
+  width = '160px',
+  height = '14px',
+  fn = NULL
+) {
   palette <- resolve_palette(palette = palette, fn = fn)
   domain <- resolve_domain(data = data, column = column, domain = domain)
 
@@ -81,8 +83,8 @@ build_continuous_spec <- function(
   }
 
   new_gtscale_spec(
-    scale_type = "continuous",
-    color_method = "numeric",
+    scale_type = 'continuous',
+    color_method = 'numeric',
     column = column,
     palette = palette,
     domain = domain,
@@ -99,29 +101,30 @@ build_continuous_spec <- function(
 }
 
 build_bins_spec <- function(
-    data,
-    column,
-    palette,
-    domain = NULL,
-    bins,
-    labels = NULL,
-    title = NULL,
-    width = "180px",
-    height = "14px") {
+  data,
+  column,
+  palette,
+  domain = NULL,
+  bins,
+  labels = NULL,
+  title = NULL,
+  width = '180px',
+  height = '14px'
+) {
   domain <- resolve_domain(data = data, column = column, domain = domain)
 
   if (missing(bins)) {
-    rlang::abort("`bins` must be supplied for binned scales.")
+    rlang::abort('`bins` must be supplied for binned scales.')
   }
 
   bins <- sort(unique(as.numeric(bins)))
 
   if (length(bins) < 2) {
-    rlang::abort("`bins` must contain at least two boundary values.")
+    rlang::abort('`bins` must contain at least two boundary values.')
   }
 
   if (bins[[1]] > domain[[1]] || bins[[length(bins)]] < domain[[2]]) {
-    rlang::abort("`bins` must span the full `domain`.")
+    rlang::abort('`bins` must span the full `domain`.')
   }
 
   n_intervals <- length(bins) - 1
@@ -142,14 +145,14 @@ build_bins_spec <- function(
     label_fn <- scales::label_comma()
     paste0(
       label_fn(bins[-length(bins)]),
-      " - ",
+      ' - ',
       label_fn(bins[-1])
     )
   } else if (is.function(labels)) {
     boundary_labels <- as.character(labels(bins))
     paste0(
       boundary_labels[-length(boundary_labels)],
-      " - ",
+      ' - ',
       boundary_labels[-1]
     )
   } else {
@@ -157,8 +160,8 @@ build_bins_spec <- function(
   }
 
   new_gtscale_spec(
-    scale_type = "bins",
-    color_method = "bin",
+    scale_type = 'bins',
+    color_method = 'bin',
     column = column,
     palette = as.character(palette),
     domain = domain,
@@ -174,14 +177,15 @@ build_bins_spec <- function(
 }
 
 build_quantiles_spec <- function(
-    data,
-    column,
-    palette,
-    quantiles = 4,
-    labels = NULL,
-    title = NULL,
-    width = "180px",
-    height = "14px") {
+  data,
+  column,
+  palette,
+  quantiles = 4,
+  labels = NULL,
+  title = NULL,
+  width = '180px',
+  height = '14px'
+) {
   breaks <- resolve_quantile_breaks(data = data, column = column, quantiles = quantiles)
   colors <- resolve_quantile_colors(palette = palette, n_intervals = length(breaks) - 1)
 
@@ -197,30 +201,31 @@ build_quantiles_spec <- function(
     height = height
   ) |>
     modify_gtscale_spec(
-      scale_type = "quantiles",
-      color_method = "quantile",
+      scale_type = 'quantiles',
+      color_method = 'quantile',
       palette = as.character(palette),
       quantiles = quantiles
     )
 }
 
 build_discrete_spec <- function(
-    column,
-    values,
-    labels = values,
-    title = NULL,
-    swatch_size = "12px",
-    levels = NULL,
-    ordered = FALSE) {
+  column,
+  values,
+  labels = values,
+  title = NULL,
+  swatch_size = '12px',
+  levels = NULL,
+  ordered = FALSE
+) {
   if (missing(values) || length(values) == 0) {
-    rlang::abort("`values` must contain at least one color.")
+    rlang::abort('`values` must contain at least one color.')
   }
 
   values <- as.character(values)
 
   new_gtscale_spec(
-    scale_type = "discrete",
-    color_method = "factor",
+    scale_type = 'discrete',
+    color_method = 'factor',
     column = column,
     values = values,
     labels = resolve_labels(values, labels),
@@ -240,23 +245,24 @@ modify_gtscale_spec <- function(spec, ...) {
 }
 
 validate_gtscale_spec <- function(spec) {
-  if (!inherits(spec, "gtscale_spec")) {
-    rlang::abort("`spec` must be a `gtscale_spec`.")
+  if (!inherits(spec, 'gtscale_spec')) {
+    rlang::abort('`spec` must be a `gtscale_spec`.')
   }
 
   spec
 }
 
 set_scale_application <- function(
-    spec,
-    apply_to = c("fill", "text"),
-    na_color = NULL,
-    alpha = NULL,
-    reverse = FALSE,
-    autocolor_text = TRUE,
-    contrast_algo = c("apca", "wcag"),
-    autocolor_light = "#FFFFFF",
-    autocolor_dark = "#000000") {
+  spec,
+  apply_to = c('fill', 'text'),
+  na_color = NULL,
+  alpha = NULL,
+  reverse = FALSE,
+  autocolor_text = TRUE,
+  contrast_algo = c('apca', 'wcag'),
+  autocolor_light = '#FFFFFF',
+  autocolor_dark = '#000000'
+) {
   spec$application <- modifyList(
     spec$application,
     list(
@@ -274,7 +280,7 @@ set_scale_application <- function(
   spec
 }
 
-set_scale_legend <- function(spec, output = "contextual", placement = "source_note") {
+set_scale_legend <- function(spec, output = 'contextual', placement = 'source_note') {
   validate_gtscale_spec(spec)
   spec$legend <- modifyList(
     spec$legend,
@@ -294,9 +300,9 @@ finalize_scale_spec <- function(spec, data = NULL) {
     validate_gt_tbl(data)
   }
 
-  if (identical(spec$scale_type, "continuous")) {
+  if (identical(spec$scale_type, 'continuous')) {
     if (is.null(data) && is.null(spec$domain)) {
-      rlang::abort("Continuous specs need `data` or an explicit `domain` to be finalized.")
+      rlang::abort('Continuous specs need `data` or an explicit `domain` to be finalized.')
     }
 
     return(build_continuous_spec(
@@ -318,9 +324,9 @@ finalize_scale_spec <- function(spec, data = NULL) {
       ))
   }
 
-  if (identical(spec$scale_type, "bins")) {
+  if (identical(spec$scale_type, 'bins')) {
     if (is.null(data) && is.null(spec$domain)) {
-      rlang::abort("Binned specs need `data` or an explicit `domain` to be finalized.")
+      rlang::abort('Binned specs need `data` or an explicit `domain` to be finalized.')
     }
 
     return(build_bins_spec(
@@ -340,9 +346,9 @@ finalize_scale_spec <- function(spec, data = NULL) {
       ))
   }
 
-  if (identical(spec$scale_type, "quantiles")) {
+  if (identical(spec$scale_type, 'quantiles')) {
     if (is.null(data)) {
-      rlang::abort("Quantile specs need `data` to be finalized.")
+      rlang::abort('Quantile specs need `data` to be finalized.')
     }
 
     return(build_quantiles_spec(
@@ -361,7 +367,7 @@ finalize_scale_spec <- function(spec, data = NULL) {
       ))
   }
 
-  if (identical(spec$scale_type, "discrete")) {
+  if (identical(spec$scale_type, 'discrete')) {
     return(build_discrete_spec(
       column = spec$column,
       values = spec$values,
@@ -377,5 +383,5 @@ finalize_scale_spec <- function(spec, data = NULL) {
       ))
   }
 
-  rlang::abort(paste0("Unsupported scale type `", spec$scale_type, "`."))
+  rlang::abort(paste0('Unsupported scale type `', spec$scale_type, '`.'))
 }

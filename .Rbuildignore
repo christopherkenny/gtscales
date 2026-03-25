@@ -4,3 +4,8 @@
 ^README\.Rmd$
 ^inst/examples$
 ^inst/examples/.*
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
+^codecov\.yml$

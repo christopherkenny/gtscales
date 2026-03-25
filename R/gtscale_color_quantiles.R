@@ -27,25 +27,26 @@
 #'   gt() |>
 #'   data_color(
 #'     columns = num,
-#'     method = "quantile",
-#'     palette = c("#fdd49e", "#fdbb84", "#ef6548", "#990000"),
+#'     method = 'quantile',
+#'     palette = c('#fdd49e', '#fdbb84', '#ef6548', '#990000'),
 #'     quantiles = 4
 #'   ) |>
 #'   gtscale_color_quantiles(
 #'     column = num,
-#'     palette = c("#fdd49e", "#fdbb84", "#ef6548", "#990000"),
+#'     palette = c('#fdd49e', '#fdbb84', '#ef6548', '#990000'),
 #'     quantiles = 4,
-#'     title = "Quantile bins"
+#'     title = 'Quantile bins'
 #'   )
 gtscale_color_quantiles <- function(
-    data,
-    column,
-    palette,
-    quantiles = 4,
-    labels = NULL,
-    title = NULL,
-    width = "180px",
-    height = "14px") {
+  data,
+  column,
+  palette,
+  quantiles = 4,
+  labels = NULL,
+  title = NULL,
+  width = '180px',
+  height = '14px'
+) {
   column <- substitute(column)
   spec <- gtscale_spec_quantiles(
     column = column,
@@ -56,7 +57,7 @@ gtscale_color_quantiles <- function(
     width = width,
     height = height
   ) |>
-    gtscale_spec_set_legend(output = "contextual", placement = "source_note")
+    gtscale_spec_set_legend(output = 'contextual', placement = 'source_note')
 
   gtscale_legend(data = data, spec = spec)
 }

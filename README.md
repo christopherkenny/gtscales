@@ -5,6 +5,9 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/christopherkenny/gtscales/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/christopherkenny/gtscales/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/christopherkenny/gtscales/graph/badge.svg)](https://app.codecov.io/gh/christopherkenny/gtscales)
 <!-- badges: end -->
 
 The goal of gtscales is to make color-encoded `gt` tables easier to read
@@ -70,8 +73,8 @@ exibble |>
   gt() |>
   gtscale_data_color_continuous(
     column = num,
-    palette = c("#A0442C", "white", "#0063B1"),
-    title = "Numeric scale"
+    palette = c('#A0442C', 'white', '#0063B1'),
+    title = 'Numeric scale'
   )
 ```
 
@@ -87,9 +90,9 @@ exibble |>
   gt() |>
   gtscale_data_color_bins(
     column = currency,
-    palette = c("#f7fbff", "#08306b"),
+    palette = c('#f7fbff', '#08306b'),
     bins = c(0, 10, 100, 1000, 10000, 70000),
-    title = "Currency bins"
+    title = 'Currency bins'
   )
 ```
 
@@ -102,16 +105,16 @@ compact status or class variable that benefits from a legend.
 
 ``` r
 data.frame(
-  district = c("A", "B", "C", "D"),
-  status = c("Safe D", "Toss-up", "Lean R", "Safe R"),
+  district = c('A', 'B', 'C', 'D'),
+  status = c('Safe D', 'Toss-up', 'Lean R', 'Safe R'),
   margin = c(18, 2, -6, -21)
 ) |>
   gt() |>
   gtscale_data_color_discrete(
     column = status,
-    values = c("#2166ac", "#f7f7f7", "#ef8a62", "#b2182b"),
-    labels = c("Safe D", "Toss-up", "Lean R", "Safe R"),
-    title = "Race rating"
+    values = c('#2166ac', '#f7f7f7', '#ef8a62', '#b2182b'),
+    labels = c('Safe D', 'Toss-up', 'Lean R', 'Safe R'),
+    title = 'Race rating'
   )
 ```
 
@@ -127,9 +130,9 @@ exibble |>
   gt() |>
   gtscale_data_color_quantiles(
     column = num,
-    palette = c("#fdd49e", "#fdbb84", "#ef6548", "#990000"),
+    palette = c('#fdd49e', '#fdbb84', '#ef6548', '#990000'),
     quantiles = 4,
-    title = "Quartiles"
+    title = 'Quartiles'
   )
 ```
 
@@ -143,11 +146,11 @@ first and then apply it, render only the legend, or do both together.
 ``` r
 spec <- gtscale_spec_continuous(
   num,
-  palette = c("#A0442C", "white", "#0063B1"),
-  title = "Numeric scale"
+  palette = c('#A0442C', 'white', '#0063B1'),
+  title = 'Numeric scale'
 ) |>
-  gtscale_spec_set_application(apply_to = "fill") |>
-  gtscale_spec_set_legend(output = "html", placement = "source_note")
+  gtscale_spec_set_application(apply_to = 'fill') |>
+  gtscale_spec_set_legend(output = 'html', placement = 'source_note')
 
 exibble |>
   gt() |>
@@ -162,15 +165,15 @@ You can also render a legend directly for another backend:
 ``` r
 spec <- gtscale_spec_quantiles(
   num,
-  palette = c("#fdd49e", "#fdbb84", "#ef6548", "#990000"),
+  palette = c('#fdd49e', '#fdbb84', '#ef6548', '#990000'),
   quantiles = 4,
-  title = "Quartiles"
+  title = 'Quartiles'
 )
 
 gtscale_render_legend(
   spec = spec,
   data = gt::gt(gt::exibble),
-  output = "typst"
+  output = 'typst'
 )
 ```
 

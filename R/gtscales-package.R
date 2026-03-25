@@ -13,4 +13,4 @@
 #' including formats such as LaTeX and Typst.
 #'
 #' @keywords internal
-"_PACKAGE"
+'_PACKAGE'

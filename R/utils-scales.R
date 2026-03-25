@@ -1,13 +1,13 @@
 resolve_domain <- function(data, column, domain = NULL) {
   if (!is.null(domain)) {
     if (!is.numeric(domain) || length(domain) != 2) {
-      rlang::abort("`domain` must be a numeric vector of length 2.")
+      rlang::abort('`domain` must be a numeric vector of length 2.')
     }
 
     domain <- sort(as.numeric(domain))
 
     if (anyNA(domain)) {
-      rlang::abort("`domain` cannot contain missing values.")
+      rlang::abort('`domain` cannot contain missing values.')
     }
 
     return(domain)
@@ -16,17 +16,17 @@ resolve_domain <- function(data, column, domain = NULL) {
   column_data <- resolve_column_data(data, column)
 
   if (is.null(column_data)) {
-    rlang::abort("Supply `domain` or provide a numeric `column` to infer the range.")
+    rlang::abort('Supply `domain` or provide a numeric `column` to infer the range.')
   }
 
   if (!is.numeric(column_data)) {
-    rlang::abort("`column` must be numeric when `domain` is inferred from the `gt` data.")
+    rlang::abort('`column` must be numeric when `domain` is inferred from the `gt` data.')
   }
 
   domain <- range(column_data, na.rm = TRUE, finite = TRUE)
 
   if (any(!is.finite(domain))) {
-    rlang::abort("Could not infer a finite numeric domain from `column`.")
+    rlang::abort('Could not infer a finite numeric domain from `column`.')
   }
 
   domain
@@ -38,21 +38,21 @@ resolve_palette <- function(palette = NULL, fn = NULL) {
   }
 
   if (is.null(fn)) {
-    rlang::abort("Supply either `palette` or `fn`.")
+    rlang::abort('Supply either `palette` or `fn`.')
   }
 
   if (!is.function(fn)) {
-    rlang::abort("`fn` must be a function, typically from `scales`.")
+    rlang::abort('`fn` must be a function, typically from `scales`.')
   }
 
   fn_env <- rlang::get_env(fn)
   env_names <- rlang::env_names(fn_env)
 
-  if (!"palette" %in% env_names) {
-    rlang::abort("Could not discover a `palette` value in `fn`; supply `palette` directly.")
+  if (!'palette' %in% env_names) {
+    rlang::abort('Could not discover a `palette` value in `fn`; supply `palette` directly.')
   }
 
-  as.character(rlang::env_get(fn_env, "palette"))
+  as.character(rlang::env_get(fn_env, 'palette'))
 }
 
 resolve_labels <- function(values, labels) {
@@ -61,7 +61,7 @@ resolve_labels <- function(values, labels) {
   }
 
   if (length(labels) != length(values)) {
-    rlang::abort("`labels` must have the same length as the values being labeled.")
+    rlang::abort('`labels` must have the same length as the values being labeled.')
   }
 
   as.character(labels)
@@ -82,11 +82,11 @@ resolve_quantile_breaks <- function(data, column, quantiles) {
   column_data <- resolve_column_data(data, column)
 
   if (is.null(column_data) || !is.numeric(column_data)) {
-    rlang::abort("`column` must be numeric for quantile scales.")
+    rlang::abort('`column` must be numeric for quantile scales.')
   }
 
   if (!is.numeric(quantiles) || length(quantiles) != 1 || is.na(quantiles) || quantiles < 1) {
-    rlang::abort("`quantiles` must be a single positive number.")
+    rlang::abort('`quantiles` must be a single positive number.')
   }
 
   stats::quantile(
@@ -115,8 +115,8 @@ normalize_color_hex <- function(color) {
     seq_len(ncol(rgb)),
     function(i) {
       paste0(
-        "#",
-        toupper(sprintf("%02X%02X%02X", rgb[1, i], rgb[2, i], rgb[3, i]))
+        '#',
+        toupper(sprintf('%02X%02X%02X', rgb[1, i], rgb[2, i], rgb[3, i]))
       )
     },
     character(1)
@@ -138,5 +138,5 @@ describe_color <- function(color) {
     character(1)
   )
 
-  paste0(nearest_name, " (", hex, ")")
+  paste0(nearest_name, ' (', hex, ')')
 }

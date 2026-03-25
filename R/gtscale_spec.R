@@ -15,21 +15,22 @@
 #' @return A `gtscale_spec`.
 #' @export
 gtscale_spec_continuous <- function(
-    column,
-    palette = NULL,
-    domain = NULL,
-    breaks = NULL,
-    labels = scales::label_comma(),
-    title = NULL,
-    direction = "to right",
-    width = "160px",
-    height = "14px",
-    fn = NULL) {
+  column,
+  palette = NULL,
+  domain = NULL,
+  breaks = NULL,
+  labels = scales::label_comma(),
+  title = NULL,
+  direction = 'to right',
+  width = '160px',
+  height = '14px',
+  fn = NULL
+) {
   column <- capture_spec_column(substitute(column), parent.frame())
 
   new_gtscale_spec(
-    scale_type = "continuous",
-    color_method = "numeric",
+    scale_type = 'continuous',
+    color_method = 'numeric',
     column = column,
     palette = palette,
     domain = domain,
@@ -60,19 +61,20 @@ gtscale_spec_continuous <- function(
 #' @return A `gtscale_spec`.
 #' @export
 gtscale_spec_bins <- function(
-    column,
-    palette,
-    bins,
-    domain = NULL,
-    labels = NULL,
-    title = NULL,
-    width = "180px",
-    height = "14px") {
+  column,
+  palette,
+  bins,
+  domain = NULL,
+  labels = NULL,
+  title = NULL,
+  width = '180px',
+  height = '14px'
+) {
   column <- capture_spec_column(substitute(column), parent.frame())
 
   new_gtscale_spec(
-    scale_type = "bins",
-    color_method = "bin",
+    scale_type = 'bins',
+    color_method = 'bin',
     column = column,
     palette = palette,
     domain = domain,
@@ -100,18 +102,19 @@ gtscale_spec_bins <- function(
 #' @return A `gtscale_spec`.
 #' @export
 gtscale_spec_quantiles <- function(
-    column,
-    palette,
-    quantiles = 4,
-    labels = NULL,
-    title = NULL,
-    width = "180px",
-    height = "14px") {
+  column,
+  palette,
+  quantiles = 4,
+  labels = NULL,
+  title = NULL,
+  width = '180px',
+  height = '14px'
+) {
   column <- capture_spec_column(substitute(column), parent.frame())
 
   new_gtscale_spec(
-    scale_type = "quantiles",
-    color_method = "quantile",
+    scale_type = 'quantiles',
+    color_method = 'quantile',
     column = column,
     palette = palette,
     quantiles = quantiles,
@@ -137,18 +140,19 @@ gtscale_spec_quantiles <- function(
 #' @return A `gtscale_spec`.
 #' @export
 gtscale_spec_discrete <- function(
-    column,
-    values,
-    labels = values,
-    title = NULL,
-    swatch_size = "12px",
-    levels = NULL,
-    ordered = FALSE) {
+  column,
+  values,
+  labels = values,
+  title = NULL,
+  swatch_size = '12px',
+  levels = NULL,
+  ordered = FALSE
+) {
   column <- capture_spec_column(substitute(column), parent.frame())
 
   new_gtscale_spec(
-    scale_type = "discrete",
-    color_method = "factor",
+    scale_type = 'discrete',
+    color_method = 'factor',
     column = column,
     values = values,
     labels = labels,
@@ -169,15 +173,16 @@ gtscale_spec_discrete <- function(
 #' @return A modified `gtscale_spec`.
 #' @export
 gtscale_spec_set_application <- function(
-    spec,
-    apply_to = c("fill", "text"),
-    na_color = NULL,
-    alpha = NULL,
-    reverse = FALSE,
-    autocolor_text = TRUE,
-    contrast_algo = c("apca", "wcag"),
-    autocolor_light = "#FFFFFF",
-    autocolor_dark = "#000000") {
+  spec,
+  apply_to = c('fill', 'text'),
+  na_color = NULL,
+  alpha = NULL,
+  reverse = FALSE,
+  autocolor_text = TRUE,
+  contrast_algo = c('apca', 'wcag'),
+  autocolor_light = '#FFFFFF',
+  autocolor_dark = '#000000'
+) {
   set_scale_application(
     spec = spec,
     apply_to = apply_to,
@@ -203,9 +208,10 @@ gtscale_spec_set_application <- function(
 #' @return A modified `gtscale_spec`.
 #' @export
 gtscale_spec_set_legend <- function(
-    spec,
-    output = "html",
-    placement = "source_note") {
+  spec,
+  output = 'html',
+  placement = 'source_note'
+) {
   set_scale_legend(
     spec = spec,
     output = output,
@@ -250,8 +256,8 @@ gtscale_legend <- function(data, spec) {
 #'
 #' spec <- gtscale_spec_continuous(
 #'   num,
-#'   palette = c("#A0442C", "white", "#0063B1"),
-#'   title = "Value"
+#'   palette = c('#A0442C', 'white', '#0063B1'),
+#'   title = 'Value'
 #' )
 #'
 #' exibble |>

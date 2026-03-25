@@ -33,28 +33,29 @@
 #'   gt() |>
 #'   gtscale_data_color_bins(
 #'     column = currency,
-#'     palette = c("#f7fbff", "#08306b"),
+#'     palette = c('#f7fbff', '#08306b'),
 #'     bins = c(0, 10, 100, 1000, 10000, 70000),
-#'     title = "Currency bins"
+#'     title = 'Currency bins'
 #'   )
 gtscale_data_color_bins <- function(
-    data,
-    column,
-    palette,
-    bins,
-    domain = NULL,
-    labels = NULL,
-    title = NULL,
-    width = "180px",
-    height = "14px",
-    apply_to = c("fill", "text"),
-    na_color = NULL,
-    alpha = NULL,
-    reverse = FALSE,
-    autocolor_text = TRUE,
-    contrast_algo = c("apca", "wcag"),
-    autocolor_light = "#FFFFFF",
-    autocolor_dark = "#000000") {
+  data,
+  column,
+  palette,
+  bins,
+  domain = NULL,
+  labels = NULL,
+  title = NULL,
+  width = '180px',
+  height = '14px',
+  apply_to = c('fill', 'text'),
+  na_color = NULL,
+  alpha = NULL,
+  reverse = FALSE,
+  autocolor_text = TRUE,
+  contrast_algo = c('apca', 'wcag'),
+  autocolor_light = '#FFFFFF',
+  autocolor_dark = '#000000'
+) {
   column <- substitute(column)
   spec <- gtscale_spec_bins(
     column = column,
@@ -76,7 +77,7 @@ gtscale_data_color_bins <- function(
       autocolor_light = autocolor_light,
       autocolor_dark = autocolor_dark
     ) |>
-    gtscale_spec_set_legend(output = "contextual", placement = "source_note")
+    gtscale_spec_set_legend(output = 'contextual', placement = 'source_note')
 
   gtscale_apply_legend(data = data, spec = spec)
 }

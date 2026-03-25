@@ -29,26 +29,27 @@
 #'   gt() |>
 #'   data_color(
 #'     columns = num,
-#'     method = "numeric",
-#'     palette = c("#A0442C", "white", "#0063B1")
+#'     method = 'numeric',
+#'     palette = c('#A0442C', 'white', '#0063B1')
 #'   ) |>
 #'   gtscale_color_continuous(
 #'     column = num,
-#'     palette = c("#A0442C", "white", "#0063B1"),
-#'     title = "Value"
+#'     palette = c('#A0442C', 'white', '#0063B1'),
+#'     title = 'Value'
 #'   )
 gtscale_color_continuous <- function(
-    data,
-    column = NULL,
-    palette = NULL,
-    domain = NULL,
-    breaks = NULL,
-    labels = scales::label_comma(),
-    title = NULL,
-    direction = "to right",
-    width = "160px",
-    height = "14px",
-    fn = NULL) {
+  data,
+  column = NULL,
+  palette = NULL,
+  domain = NULL,
+  breaks = NULL,
+  labels = scales::label_comma(),
+  title = NULL,
+  direction = 'to right',
+  width = '160px',
+  height = '14px',
+  fn = NULL
+) {
   column <- substitute(column)
   spec <- gtscale_spec_continuous(
     column = column,
@@ -62,7 +63,7 @@ gtscale_color_continuous <- function(
     height = height,
     fn = fn
   ) |>
-    gtscale_spec_set_legend(output = "contextual", placement = "source_note")
+    gtscale_spec_set_legend(output = 'contextual', placement = 'source_note')
 
   gtscale_legend(data = data, spec = spec)
 }
