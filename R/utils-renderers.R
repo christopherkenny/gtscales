@@ -10,14 +10,35 @@ legend_title_html <- function(title) {
   )
 }
 
+latex_escape_text <- function(text) {
+  text <- gsub("\\\\", "\\\\textbackslash{}", text)
+  text <- gsub("([#$%&_{}])", "\\\\\\1", text, perl = TRUE)
+  text <- gsub("~", "\\\\textasciitilde{}", text, fixed = TRUE)
+  text <- gsub("\\^", "\\\\textasciicircum{}", text)
+  text
+}
+
+latex_color_box <- function(color, width = "1.4em", height = "0.9ex") {
+  color <- toupper(gsub("^#", "", normalize_color_hex(color)))
+  paste0("\\textcolor[HTML]{", color, "}{\\rule{", width, "}{", height, "}}")
+}
+
+render_scale_legend_contextual <- function(spec) {
+  list(
+    html = gt::html(render_scale_legend_html(spec)),
+    latex = gt::latex(render_scale_legend_latex(spec))
+  )
+}
+
 render_scale_legend <- function(spec, output = NULL) {
   output <- rlang::`%||%`(output, spec$legend$output)
-  output <- match.arg(output, choices = c("html", "latex", "typst"))
+  output <- match.arg(output, choices = c("contextual", "html", "latex", "typst"))
 
   switch(
     output,
+    contextual = render_scale_legend_contextual(spec),
     html = render_scale_legend_html(spec),
-    latex = rlang::abort("Legend rendering for LaTeX is not implemented yet."),
+    latex = render_scale_legend_latex(spec),
     typst = rlang::abort("Legend rendering for Typst is not implemented yet.")
   )
 }
@@ -132,17 +153,77 @@ render_discrete_legend_html <- function(spec) {
   )
 }
 
+render_scale_legend_latex <- function(spec) {
+  switch(
+    spec$scale_type,
+    continuous = render_continuous_legend_latex(spec),
+    bins = render_bins_legend_latex(spec),
+    quantiles = render_bins_legend_latex(spec),
+    discrete = render_discrete_legend_latex(spec),
+    rlang::abort(paste0("Unsupported scale type `", spec$scale_type, "` for LaTeX legends."))
+  )
+}
+
+render_continuous_legend_latex <- function(spec) {
+  title <- if (is.null(spec$title)) "" else paste0("\\textbf{", latex_escape_text(spec$title), "}\\\\")
+  swatches <- paste(vapply(spec$palette, latex_color_box, character(1)), collapse = "\\,")
+  labels <- paste(latex_escape_text(spec$labels), collapse = " \\quad ")
+
+  paste0(
+    title,
+    swatches,
+    "\\\\",
+    labels
+  )
+}
+
+render_bins_legend_latex <- function(spec) {
+  title <- if (is.null(spec$title)) "" else paste0("\\textbf{", latex_escape_text(spec$title), "}\\\\")
+  entries <- paste(
+    vapply(
+      seq_along(spec$values),
+      function(i) {
+        paste0(
+          latex_color_box(spec$values[[i]]),
+          "\\ ",
+          latex_escape_text(spec$labels[[i]])
+        )
+      },
+      character(1)
+    ),
+    collapse = "\\quad "
+  )
+
+  paste0(title, entries)
+}
+
+render_discrete_legend_latex <- function(spec) {
+  title <- if (is.null(spec$title)) "" else paste0("\\textbf{", latex_escape_text(spec$title), "}\\\\")
+  entries <- paste(
+    vapply(
+      seq_along(spec$values),
+      function(i) {
+        paste0(
+          latex_color_box(spec$values[[i]]),
+          "\\ ",
+          latex_escape_text(spec$labels[[i]])
+        )
+      },
+      character(1)
+    ),
+    collapse = "\\quad "
+  )
+
+  paste0(title, entries)
+}
+
 attach_scale_legend <- function(data, spec, output = NULL, placement = NULL) {
   output <- rlang::`%||%`(output, spec$legend$output)
   placement <- rlang::`%||%`(placement, spec$legend$placement)
   rendered <- render_scale_legend(spec = spec, output = output)
 
-  if (identical(output, "html") && identical(placement, "source_note")) {
+  if (identical(placement, "source_note")) {
     return(attach_legend_note(data, rendered))
-  }
-
-  if (!identical(output, "html")) {
-    rlang::abort(paste0("Legend attachment for `", output, "` output is not implemented yet."))
   }
 
   rlang::abort(paste0("Legend placement `", placement, "` is not implemented yet."))

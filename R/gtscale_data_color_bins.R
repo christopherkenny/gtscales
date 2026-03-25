@@ -76,7 +76,7 @@ gtscale_data_color_bins <- function(
       autocolor_light = autocolor_light,
       autocolor_dark = autocolor_dark
     ) |>
-    gtscale_spec_set_legend(output = "html", placement = "source_note")
+    gtscale_spec_set_legend(output = "contextual", placement = "source_note")
 
   gtscale_apply_legend(data = data, spec = spec)
 }

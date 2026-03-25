@@ -44,7 +44,7 @@ gtscale_color_discrete <- function(
     title = title,
     swatch_size = swatch_size
   ) |>
-    gtscale_spec_set_legend(output = "html", placement = "source_note")
+    gtscale_spec_set_legend(output = "contextual", placement = "source_note")
 
   gtscale_legend(data = data, spec = spec)
 }

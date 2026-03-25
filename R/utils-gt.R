@@ -10,8 +10,10 @@ gt_data_get <- function(data) {
 }
 
 attach_legend_note <- function(data, html) {
+  source_note <- if (is.list(html)) html else gt::html(html)
+
   gt::tab_source_note(
     data = data,
-    source_note = gt::html(html)
+    source_note = source_note
   )
 }

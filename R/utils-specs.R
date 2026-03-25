@@ -44,7 +44,7 @@ new_gtscale_spec <- function(
       ),
       legend = modifyList(
         list(
-          output = "html",
+          output = "contextual",
           placement = "source_note"
         ),
         legend
@@ -274,7 +274,7 @@ set_scale_application <- function(
   spec
 }
 
-set_scale_legend <- function(spec, output = "html", placement = "source_note") {
+set_scale_legend <- function(spec, output = "contextual", placement = "source_note") {
   validate_gtscale_spec(spec)
   spec$legend <- modifyList(
     spec$legend,

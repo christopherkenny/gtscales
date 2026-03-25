@@ -11,9 +11,10 @@ test_that("continuous legends use comma labels by default", {
   note <- tbl[["_source_notes"]][[1]]
 
   expect_s3_class(tbl, "gt_tbl")
-  expect_match(note, "Value")
-  expect_match(note, "1,000")
-  expect_match(note, "10,000")
+  expect_match(note$html, "Value")
+  expect_match(note$html, "1,000")
+  expect_match(note$html, "10,000")
+  expect_match(note$latex, "1,000", fixed = TRUE)
 })
 
 test_that("binned legends apply label functions to boundaries", {
@@ -29,8 +30,9 @@ test_that("binned legends apply label functions to boundaries", {
 
   note <- tbl[["_source_notes"]][[1]]
 
-  expect_match(note, "0% - 25%")
-  expect_match(note, "75% - 100%")
+  expect_match(note$html, "0% - 25%")
+  expect_match(note$html, "75% - 100%")
+  expect_match(note$latex, "0\\\\% - 25\\\\%", perl = TRUE)
 })
 
 test_that("quantile legends interpolate colors across quantile groups", {
@@ -52,7 +54,7 @@ test_that("quantile legends interpolate colors across quantile groups", {
   expect_length(unique(expected_colors), 4)
 
   for (clr in expected_colors) {
-    expect_match(note, clr, fixed = TRUE)
+    expect_match(note$html, clr, fixed = TRUE)
   }
 })
 
@@ -90,7 +92,24 @@ test_that("discrete wrappers add legend notes", {
   note <- tbl[["_source_notes"]][[1]]
 
   expect_s3_class(tbl, "gt_tbl")
-  expect_match(note, "Race rating")
-  expect_match(note, "Safe D")
-  expect_match(note, "#2166ac", ignore.case = TRUE)
+  expect_match(note$html, "Race rating")
+  expect_match(note$html, "Safe D")
+  expect_match(note$html, "#2166ac", ignore.case = TRUE)
+  expect_match(note$latex, "2166AC", fixed = TRUE)
+})
+
+test_that("latex export includes legend content from wrapper workflows", {
+  tbl <- gt::gt(gt::exibble) |>
+    gtscale_data_color_continuous(
+      column = num,
+      palette = c("#A0442C", "white", "#0063B1"),
+      title = "Numeric scale"
+    )
+
+  latex <- as.character(gt::as_latex(tbl))
+
+  expect_match(latex, "\\\\textbf\\{Numeric scale\\}", perl = TRUE)
+  expect_match(latex, "A0442C", fixed = TRUE)
+  expect_match(latex, "FFFFFF", fixed = TRUE)
+  expect_match(latex, "0063B1", fixed = TRUE)
 })

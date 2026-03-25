@@ -108,3 +108,11 @@ resolve_quantile_colors <- function(palette, n_intervals) {
     )
   )
 }
+
+normalize_color_hex <- function(color) {
+  rgb <- grDevices::col2rgb(color)
+  paste0(
+    "#",
+    toupper(sprintf("%02X%02X%02X", rgb[1, 1], rgb[2, 1], rgb[3, 1]))
+  )
+}
