@@ -1,46 +1,3 @@
-validate_gt_tbl <- function(data) {
-  if (!inherits(data, "gt_tbl")) {
-    rlang::abort("`data` must be a `gt_tbl` created by `gt::gt()`.")
-  }
-}
-
-resolve_column_name <- function(column) {
-  if (is.null(column) || identical(column, quote(NULL))) {
-    return(NULL)
-  }
-
-  if (is.character(column) && length(column) == 1) {
-    return(column)
-  }
-
-  if (is.symbol(column)) {
-    return(as.character(column))
-  }
-
-  rlang::abort("`column` must be supplied as a bare column name or a single string.")
-}
-
-gt_data_get <- function(data) {
-  validate_gt_tbl(data)
-  data[["_data"]]
-}
-
-resolve_column_data <- function(data, column) {
-  table_data <- gt_data_get(data)
-
-  if (is.null(column) || identical(column, quote(NULL))) {
-    return(NULL)
-  }
-
-  column_name <- resolve_column_name(column)
-
-  if (!column_name %in% names(table_data)) {
-    rlang::abort(paste0("Column `", column_name, "` was not found in the `gt` data."))
-  }
-
-  table_data[[column_name]]
-}
-
 resolve_domain <- function(data, column, domain = NULL) {
   if (!is.null(domain)) {
     if (!is.numeric(domain) || length(domain) != 2) {
@@ -110,25 +67,6 @@ resolve_labels <- function(values, labels) {
   as.character(labels)
 }
 
-legend_title_html <- function(title) {
-  if (is.null(title)) {
-    return("")
-  }
-
-  paste0(
-    "<div style=\"font-weight:600; margin-bottom:4px;\">",
-    title,
-    "</div>"
-  )
-}
-
-attach_legend_note <- function(data, html) {
-  gt::tab_source_note(
-    data = data,
-    source_note = gt::html(html)
-  )
-}
-
 default_breaks <- function(domain, n = 3) {
   breaks <- pretty(domain, n = n)
   breaks <- breaks[breaks >= domain[[1]] & breaks <= domain[[2]]]
@@ -140,32 +78,33 @@ default_breaks <- function(domain, n = 3) {
   breaks
 }
 
-data_color_with_legend <- function(data, column, data_color_args, legend_fn, legend_args) {
-  column_name <- resolve_column_name(column)
+resolve_quantile_breaks <- function(data, column, quantiles) {
+  column_data <- resolve_column_data(data, column)
 
-  colored <- do.call(
-    gt::data_color,
-    c(
-      list(
-        data = data,
-        columns = rlang::sym(column_name)
-      ),
-      data_color_args
-    )
-  )
-
-  legend_formals <- names(formals(legend_fn))
-  legend_lead <- list(data = colored)
-
-  if ("column" %in% legend_formals) {
-    legend_lead$column <- rlang::sym(column_name)
+  if (is.null(column_data) || !is.numeric(column_data)) {
+    rlang::abort("`column` must be numeric for quantile scales.")
   }
 
-  do.call(
-    legend_fn,
-    c(
-      legend_lead,
-      legend_args
+  if (!is.numeric(quantiles) || length(quantiles) != 1 || is.na(quantiles) || quantiles < 1) {
+    rlang::abort("`quantiles` must be a single positive number.")
+  }
+
+  stats::quantile(
+    column_data,
+    probs = seq(0, 1, length.out = quantiles + 1),
+    na.rm = TRUE,
+    names = FALSE
+  )
+}
+
+resolve_quantile_colors <- function(palette, n_intervals) {
+  if (length(palette) == n_intervals) {
+    return(as.character(palette))
+  }
+
+  as.character(
+    scales::gradient_n_pal(palette)(
+      seq(0, 1, length.out = n_intervals)
     )
   )
 }

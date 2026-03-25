@@ -17,6 +17,7 @@ The package currently focuses on three common legend types:
 
 - continuous gradients for numeric color scales
 - stepped legends for binned values
+- quantile-based legends for ranked values
 - discrete swatches for categorical encodings
 
 ## Overview
@@ -28,9 +29,11 @@ color encodings in `gt` tables:
 |----|----|
 | `gtscale_data_color_continuous()` | Color a numeric column and add a matching continuous legend in one call |
 | `gtscale_data_color_bins()` | Color a numeric column with bins and add the matching legend |
+| `gtscale_data_color_quantiles()` | Color a numeric column by quantile and add the matching legend |
 | `gtscale_data_color_discrete()` | Color a categorical column and add the matching discrete legend |
 | `gtscale_color_continuous()` | Add only the legend for an already-colored continuous scale |
 | `gtscale_color_bins()` | Add only the legend for an already-colored binned scale |
+| `gtscale_color_quantiles()` | Add only the legend for an already-colored quantile scale |
 | `gtscale_color_discrete()` | Add only the legend for an already-colored discrete scale |
 
 ## Installation
@@ -104,6 +107,24 @@ data.frame(
 ```
 
 <img src="man/figures/README-discrete.png" alt="" width="100%" />
+
+### Quantiles
+
+`gtscale_data_color_quantiles()` is useful when you want evenly sized
+rank groups instead of fixed numeric cutpoints.
+
+``` r
+exibble |>
+  gt() |>
+  gtscale_data_color_quantiles(
+    column = num,
+    palette = c("#fdd49e", "#fdbb84", "#ef6548", "#990000"),
+    quantiles = 4,
+    title = "Quartiles"
+  )
+```
+
+<img src="man/figures/README-quantiles.png" alt="" width="100%" />
 
 ## Note
 

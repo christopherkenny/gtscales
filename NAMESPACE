@@ -3,6 +3,8 @@
 export(gtscale_color_bins)
 export(gtscale_color_continuous)
 export(gtscale_color_discrete)
+export(gtscale_color_quantiles)
 export(gtscale_data_color_bins)
 export(gtscale_data_color_continuous)
 export(gtscale_data_color_discrete)
+export(gtscale_data_color_quantiles)
