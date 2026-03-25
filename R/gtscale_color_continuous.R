@@ -50,49 +50,19 @@ gtscale_color_continuous <- function(
     height = "14px",
     fn = NULL) {
   column <- substitute(column)
-  validate_gt_tbl(data)
-  palette <- resolve_palette(palette = palette, fn = fn)
-  domain <- resolve_domain(data = data, column = column, domain = domain)
+  spec <- gtscale_spec_continuous(
+    column = column,
+    palette = palette,
+    domain = domain,
+    breaks = breaks,
+    labels = labels,
+    title = title,
+    direction = direction,
+    width = width,
+    height = height,
+    fn = fn
+  ) |>
+    gtscale_spec_set_legend(output = "html", placement = "source_note")
 
-  if (is.null(breaks)) {
-    breaks <- default_breaks(domain)
-  }
-
-  breaks <- sort(unique(as.numeric(breaks)))
-  breaks <- breaks[breaks >= domain[[1]] & breaks <= domain[[2]]]
-
-  if (length(breaks) == 0) {
-    breaks <- domain
-  }
-
-  labels <- resolve_labels(breaks, labels)
-  break_positions <- scales::rescale(breaks, to = c(0, 100), from = domain)
-
-  bar_html <- paste0(
-    "<div style=\"width:", width, ";\">",
-    legend_title_html(title),
-    "<div style=\"height:", height, "; border-radius:999px; border:1px solid #d0d7de; ",
-    "background:linear-gradient(", direction, ", ", paste(palette, collapse = ", "), ");\"></div>",
-    "<div style=\"position:relative; width:", width, "; height:20px; margin-top:4px; font-size:11px; color:#57606a;\">",
-    paste(
-      vapply(
-        seq_along(labels),
-        function(i) {
-          paste0(
-            "<span style=\"position:absolute; left:",
-            formatC(break_positions[[i]], format = "f", digits = 2),
-            "%; transform:translateX(-50%); white-space:nowrap;\">",
-            labels[[i]],
-            "</span>"
-          )
-        },
-        character(1)
-      ),
-      collapse = ""
-    ),
-    "</div>",
-    "</div>"
-  )
-
-  attach_legend_note(data, bar_html)
+  gtscale_legend(data = data, spec = spec)
 }

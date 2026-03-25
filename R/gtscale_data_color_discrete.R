@@ -54,30 +54,26 @@ gtscale_data_color_discrete <- function(
     autocolor_light = "#FFFFFF",
     autocolor_dark = "#000000") {
   column <- substitute(column)
-
-  data_color_with_legend(
-    data = data,
+  spec <- gtscale_spec_discrete(
     column = column,
-    data_color_args = list(
-      method = "factor",
-      palette = values,
-      levels = levels,
-      ordered = ordered,
+    values = values,
+    labels = labels,
+    title = title,
+    swatch_size = swatch_size,
+    levels = levels,
+    ordered = ordered
+  ) |>
+    gtscale_spec_set_application(
+      apply_to = apply_to,
       na_color = na_color,
       alpha = alpha,
       reverse = reverse,
-      apply_to = apply_to,
       autocolor_text = autocolor_text,
       contrast_algo = contrast_algo,
       autocolor_light = autocolor_light,
       autocolor_dark = autocolor_dark
-    ),
-    legend_fn = gtscale_color_discrete,
-    legend_args = list(
-      values = values,
-      labels = labels,
-      title = title,
-      swatch_size = swatch_size
-    )
-  )
+    ) |>
+    gtscale_spec_set_legend(output = "html", placement = "source_note")
+
+  gtscale_apply_legend(data = data, spec = spec)
 }

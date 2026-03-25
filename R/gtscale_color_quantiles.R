@@ -47,19 +47,16 @@ gtscale_color_quantiles <- function(
     width = "180px",
     height = "14px") {
   column <- substitute(column)
-  validate_gt_tbl(data)
-  breaks <- resolve_quantile_breaks(data = data, column = column, quantiles = quantiles)
-  colors <- resolve_quantile_colors(palette = palette, n_intervals = length(breaks) - 1)
-
-  gtscale_color_bins(
-    data = data,
+  spec <- gtscale_spec_quantiles(
     column = column,
-    palette = colors,
-    domain = range(breaks, finite = TRUE),
-    bins = breaks,
+    palette = palette,
+    quantiles = quantiles,
     labels = labels,
     title = title,
     width = width,
     height = height
-  )
+  ) |>
+    gtscale_spec_set_legend(output = "html", placement = "source_note")
+
+  gtscale_legend(data = data, spec = spec)
 }

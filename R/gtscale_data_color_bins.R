@@ -56,34 +56,27 @@ gtscale_data_color_bins <- function(
     autocolor_light = "#FFFFFF",
     autocolor_dark = "#000000") {
   column <- substitute(column)
-  domain <- resolve_domain(data = data, column = column, domain = domain)
-
-  data_color_with_legend(
-    data = data,
+  spec <- gtscale_spec_bins(
     column = column,
-    data_color_args = list(
-      method = "bin",
-      palette = palette,
-      domain = domain,
-      bins = bins,
+    palette = palette,
+    bins = bins,
+    domain = domain,
+    labels = labels,
+    title = title,
+    width = width,
+    height = height
+  ) |>
+    gtscale_spec_set_application(
+      apply_to = apply_to,
       na_color = na_color,
       alpha = alpha,
       reverse = reverse,
-      apply_to = apply_to,
       autocolor_text = autocolor_text,
       contrast_algo = contrast_algo,
       autocolor_light = autocolor_light,
       autocolor_dark = autocolor_dark
-    ),
-    legend_fn = gtscale_color_bins,
-    legend_args = list(
-      palette = palette,
-      domain = domain,
-      bins = bins,
-      labels = labels,
-      title = title,
-      width = width,
-      height = height
-    )
-  )
+    ) |>
+    gtscale_spec_set_legend(output = "html", placement = "source_note")
+
+  gtscale_apply_legend(data = data, spec = spec)
 }

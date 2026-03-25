@@ -14,6 +14,26 @@ resolve_column_name <- function(column) {
   rlang::abort("`column` must be supplied as a bare column name or a single string.")
 }
 
+capture_spec_column <- function(column_expr, env = parent.frame()) {
+  if (is.symbol(column_expr)) {
+    column_name <- as.character(column_expr)
+
+    if (exists(column_name, envir = env, inherits = FALSE)) {
+      column_value <- get(column_name, envir = env, inherits = FALSE)
+
+      if (
+        is.null(column_value) ||
+        is.symbol(column_value) ||
+        (is.character(column_value) && length(column_value) == 1)
+      ) {
+        return(column_value)
+      }
+    }
+  }
+
+  column_expr
+}
+
 resolve_column_data <- function(data, column) {
   table_data <- gt_data_get(data)
 

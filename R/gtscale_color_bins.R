@@ -49,92 +49,17 @@ gtscale_color_bins <- function(
     width = "180px",
     height = "14px") {
   column <- substitute(column)
-  validate_gt_tbl(data)
-  domain <- resolve_domain(data = data, column = column, domain = domain)
+  spec <- gtscale_spec_bins(
+    column = column,
+    palette = palette,
+    bins = bins,
+    domain = domain,
+    labels = labels,
+    title = title,
+    width = width,
+    height = height
+  ) |>
+    gtscale_spec_set_legend(output = "html", placement = "source_note")
 
-  if (missing(bins)) {
-    rlang::abort("`bins` must be supplied for `gtscale_color_bins()`.")
-  }
-
-  bins <- sort(unique(as.numeric(bins)))
-
-  if (length(bins) < 2) {
-    rlang::abort("`bins` must contain at least two boundary values.")
-  }
-
-  if (bins[[1]] > domain[[1]] || bins[[length(bins)]] < domain[[2]]) {
-    rlang::abort("`bins` must span the full `domain`.")
-  }
-
-  n_intervals <- length(bins) - 1
-
-  if (length(palette) == n_intervals) {
-    colors <- palette
-  } else {
-    midpoints <- (bins[-1] + bins[-length(bins)]) / 2
-    colors <- scales::col_numeric(
-      palette = palette,
-      domain = domain
-    )(midpoints)
-  }
-
-  if (is.null(labels)) {
-    label_fn <- scales::label_comma()
-    labels <- paste0(
-      label_fn(bins[-length(bins)]),
-      " - ",
-      label_fn(bins[-1])
-    )
-  } else if (is.function(labels)) {
-    boundary_labels <- as.character(labels(bins))
-    labels <- paste0(
-      boundary_labels[-length(boundary_labels)],
-      " - ",
-      boundary_labels[-1]
-    )
-  } else {
-    labels <- resolve_labels(seq_len(n_intervals), labels)
-  }
-
-  swatch_width <- 100 / n_intervals
-
-  bins_html <- paste0(
-    "<div style=\"width:", width, ";\">",
-    legend_title_html(title),
-    "<div style=\"display:flex; width:100%; overflow:hidden; border:1px solid #d0d7de; border-radius:8px;\">",
-    paste(
-      vapply(
-        seq_len(n_intervals),
-        function(i) {
-          paste0(
-            "<span style=\"display:inline-block; width:",
-            formatC(swatch_width, format = "f", digits = 4),
-            "%; height:",
-            height,
-            "; background:",
-            colors[[i]],
-            ";\"></span>"
-          )
-        },
-        character(1)
-      ),
-      collapse = ""
-    ),
-    "</div>",
-    "<div style=\"display:flex; justify-content:space-between; gap:8px; margin-top:4px; font-size:11px; color:#57606a;\">",
-    paste(
-      vapply(
-        labels,
-        function(label) {
-          paste0("<span>", label, "</span>")
-        },
-        character(1)
-      ),
-      collapse = ""
-    ),
-    "</div>",
-    "</div>"
-  )
-
-  attach_legend_note(data, bins_html)
+  gtscale_legend(data = data, spec = spec)
 }

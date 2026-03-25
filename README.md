@@ -13,6 +13,9 @@ by adding compact legends directly to the table output.
 The main interface is a set of `gtscale_data_color_*()` helpers that
 color a column and add the matching legend in one call.
 
+There is also a reusable spec workflow for cases where you want to
+define a scale once, then apply or render it separately.
+
 The package currently focuses on three common legend types:
 
 - continuous gradients for numeric color scales
@@ -126,10 +129,32 @@ exibble |>
 
 <img src="man/figures/README-quantiles.png" alt="" width="100%" />
 
+## Spec Workflow
+
+If you want a more composable workflow, you can build a `gtscale_spec`
+first and then apply it, render only the legend, or do both together.
+
+``` r
+spec <- gtscale_spec_continuous(
+  num,
+  palette = c("#A0442C", "white", "#0063B1"),
+  title = "Numeric scale"
+) |>
+  gtscale_spec_set_application(apply_to = "fill") |>
+  gtscale_spec_set_legend(output = "html", placement = "source_note")
+
+exibble |>
+  gt() |>
+  gtscale_apply_legend(spec)
+```
+
+This spec workflow is the foundation for future backend support beyond
+HTML, including formats like LaTeX and Typst.
+
 ## Note
 
 At the moment, legends are attached as source notes, which keeps them
 easy to add to existing `gt` pipelines. For most usage, the
 `gtscale_data_color_*()` wrappers should be the default choice, while
-the lower-level `gtscale_color_*()` functions are there for cases where
-the table coloring is already handled elsewhere.
+the lower-level `gtscale_color_*()` functions and `gtscale_spec_*()`
+constructors are there for cases where you want more control.
