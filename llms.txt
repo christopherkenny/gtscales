@@ -121,6 +121,11 @@ exibble |>
 
   Add only a discrete color legend to a `gt` table
 
+- [`gtscale_color_diverging()`](https://christophertkenny.com/gtscales/reference/gtscale_color_diverging.md)
+  :
+
+  Add only a diverging color legend to a `gt` table
+
 - [`gtscale_color_quantiles()`](https://christophertkenny.com/gtscales/reference/gtscale_color_quantiles.md)
   :
 
@@ -140,6 +145,12 @@ exibble |>
   :
 
   Color a categorical `gt` column and add a matching discrete legend
+
+- [`gtscale_data_color_diverging()`](https://christophertkenny.com/gtscales/reference/gtscale_data_color_diverging.md)
+  :
+
+  Color a numeric `gt` column with a diverging scale and add a matching
+  legend
 
 - [`gtscale_data_color_quantiles()`](https://christophertkenny.com/gtscales/reference/gtscale_data_color_quantiles.md)
   :
@@ -170,6 +181,11 @@ exibble |>
   :
 
   Create a discrete `gtscales` spec
+
+- [`gtscale_spec_diverging()`](https://christophertkenny.com/gtscales/reference/gtscale_spec_diverging.md)
+  :
+
+  Create a diverging `gtscales` spec
 
 - [`gtscale_spec_quantiles()`](https://christophertkenny.com/gtscales/reference/gtscale_spec_quantiles.md)
   :

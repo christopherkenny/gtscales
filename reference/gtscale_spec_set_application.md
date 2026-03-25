@@ -11,6 +11,7 @@ gtscale_spec_set_application(
   na_color = NULL,
   alpha = NULL,
   reverse = FALSE,
+  accessibility = c("none", "warn"),
   autocolor_text = TRUE,
   contrast_algo = c("apca", "wcag"),
   autocolor_light = "#FFFFFF",
@@ -40,6 +41,10 @@ gtscale_spec_set_application(
 - reverse:
 
   Whether to reverse the color mapping.
+
+- accessibility:
+
+  Whether to warn about low-contrast adjacent legend colors.
 
 - autocolor_text:
 

@@ -38,7 +38,14 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gtscale_spec_set_legend</span><span class="op">(</span><span class="va">spec</span>, output <span class="op">=</span> <span class="st">"html"</span>, placement <span class="op">=</span> <span class="st">"source_note"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gtscale_spec_set_legend</span><span class="op">(</span></span>
+<span>  <span class="va">spec</span>,</span>
+<span>  output <span class="op">=</span> <span class="st">"html"</span>,</span>
+<span>  placement <span class="op">=</span> <span class="st">"source_note"</span>,</span>
+<span>  show_na <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  na_label <span class="op">=</span> <span class="st">"Missing"</span>,</span>
+<span>  na_color <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -56,8 +63,21 @@
 
 
 <dt id="arg-placement">placement<a class="anchor" aria-label="anchor" href="#arg-placement"></a></dt>
-<dd><p>Legend placement target. Currently only <code>"source_note"</code> is
-implemented.</p></dd>
+<dd><p>Legend placement target. <code>"source_note"</code> and <code>"subtitle"</code>
+are currently implemented.</p></dd>
+
+
+<dt id="arg-show-na">show_na<a class="anchor" aria-label="anchor" href="#arg-show-na"></a></dt>
+<dd><p>Whether to include an explicit missing-value legend entry.</p></dd>
+
+
+<dt id="arg-na-label">na_label<a class="anchor" aria-label="anchor" href="#arg-na-label"></a></dt>
+<dd><p>Label to use for missing values in the legend.</p></dd>
+
+
+<dt id="arg-na-color">na_color<a class="anchor" aria-label="anchor" href="#arg-na-color"></a></dt>
+<dd><p>Optional legend swatch color for missing values. When
+omitted and <code>show_na = TRUE</code>, a neutral gray swatch is used.</p></dd>
 
 </dl></div>
     <div class="section level2">

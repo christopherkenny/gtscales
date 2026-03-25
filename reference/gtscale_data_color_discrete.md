@@ -17,6 +17,7 @@ gtscale_data_color_discrete(
   na_color = NULL,
   alpha = NULL,
   reverse = FALSE,
+  accessibility = c("none", "warn"),
   apply_to = c("fill", "text"),
   autocolor_text = TRUE,
   contrast_algo = c("apca", "wcag"),
@@ -73,6 +74,10 @@ gtscale_data_color_discrete(
 - reverse:
 
   Whether to reverse the color mapping.
+
+- accessibility:
+
+  Whether to warn about low-contrast adjacent legend colors.
 
 - apply_to:
 

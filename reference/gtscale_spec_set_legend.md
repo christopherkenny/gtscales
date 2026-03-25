@@ -5,7 +5,14 @@ Set how a `gtscales` legend should be rendered
 ## Usage
 
 ``` r
-gtscale_spec_set_legend(spec, output = "html", placement = "source_note")
+gtscale_spec_set_legend(
+  spec,
+  output = "html",
+  placement = "source_note",
+  show_na = FALSE,
+  na_label = "Missing",
+  na_color = NULL
+)
 ```
 
 ## Arguments
@@ -22,8 +29,21 @@ gtscale_spec_set_legend(spec, output = "html", placement = "source_note")
 
 - placement:
 
-  Legend placement target. Currently only `"source_note"` is
-  implemented.
+  Legend placement target. `"source_note"` and `"subtitle"` are
+  currently implemented.
+
+- show_na:
+
+  Whether to include an explicit missing-value legend entry.
+
+- na_label:
+
+  Label to use for missing values in the legend.
+
+- na_color:
+
+  Optional legend swatch color for missing values. When omitted and
+  `show_na = TRUE`, a neutral gray swatch is used.
 
 ## Value
 
