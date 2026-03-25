@@ -54,14 +54,14 @@ exibble |>
   gt() |>
   data_color(
     columns = currency,
-    method = "bin",
-    palette = c("#f7fbff", "#08306b"),
+    method = 'bin',
+    palette = c('#f7fbff', '#08306b'),
     bins = c(0, 10, 100, 1000, 10000000)
   ) |>
   gtscale_color_bins(
     column = currency,
-    palette = c("#f7fbff", "#08306b"),
+    palette = c('#f7fbff', '#08306b'),
     bins = c(0, 10, 100, 1000, 10000000),
-    title = "Binned values"
+    title = 'Binned values'
   )
 }

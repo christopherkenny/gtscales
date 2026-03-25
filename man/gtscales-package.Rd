@@ -4,21 +4,16 @@
 \name{gtscales-package}
 \alias{gtscales}
 \alias{gtscales-package}
-\title{gtscales: Scale legends for gt tables}
+\title{gtscales: Color Scale Extensions for 'gt'}
 \description{
-\code{gtscales} adds compact legends to color-encoded \code{gt} tables.
+Adds legend helpers for color-encoded 'gt' tables. The primary interface combines 'gt::data_color()' with matched legends for continuous, binned, quantile, and discrete scales, while lower-level helpers support legend-only and reusable scale specification workflows.
 }
-\details{
-The package supports two complementary workflows:
+\seealso{
+Useful links:
 \itemize{
-\item wrapper helpers like \code{\link[=gtscale_data_color_continuous]{gtscale_data_color_continuous()}} for the common
-"color and add a matching legend" path
-\item reusable spec objects built with \verb{gtscale_spec_*()} for more composable
-workflows
+  \item \url{https://christophertkenny.com/gtscales/}
 }
 
-The spec workflow is intended to support future output backends beyond HTML,
-including formats such as LaTeX and Typst.
 }
 \author{
 \strong{Maintainer}: Christopher T. Kenny \email{ctkenny@proton.me} (\href{https://orcid.org/0000-0002-9386-6860}{ORCID})

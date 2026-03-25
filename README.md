@@ -11,13 +11,14 @@ coverage](https://codecov.io/gh/christopherkenny/gtscales/graph/badge.svg)](http
 <!-- badges: end -->
 
 The goal of gtscales is to make color-encoded `gt` tables easier to read
-by adding compact legends directly to the table output.
+by adding matched legends directly to the rendered output.
 
 The main interface is a set of `gtscale_data_color_*()` helpers that
 color a column and add the matching legend in one call.
 
 There is also a reusable spec workflow for cases where you want to
-define a scale once, then apply or render it separately.
+define a scale once, then apply it, legendize it, or render it
+separately.
 
 The package currently focuses on three common legend types:
 
@@ -30,7 +31,7 @@ The currently validated workflows are:
 
 - HTML rendering through `gt`
 - LaTeX/PDF rendering through `gt` and Quarto
-- Typst rendering through the Quarto example workflow
+- Typst standalone legend rendering through the Quarto example workflow
 
 ## Overview
 
@@ -157,8 +158,8 @@ exibble |>
   gtscale_apply_legend(spec)
 ```
 
-This spec workflow is the foundation for backend support beyond HTML,
-including LaTeX and Typst.
+This spec workflow is the foundation for rendering beyond the default
+HTML case, including LaTeX and Typst workflows.
 
 You can also render a legend directly for another backend:
 
@@ -178,7 +179,7 @@ gtscale_render_legend(
 ```
 
 That returns Typst markup generated from the same scale spec used for
-HTML and LaTeX rendering.
+the HTML and LaTeX paths.
 
 ## Backend Examples
 

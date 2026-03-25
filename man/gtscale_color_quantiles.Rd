@@ -51,14 +51,14 @@ exibble |>
   gt() |>
   data_color(
     columns = num,
-    method = "quantile",
-    palette = c("#fdd49e", "#fdbb84", "#ef6548", "#990000"),
+    method = 'quantile',
+    palette = c('#fdd49e', '#fdbb84', '#ef6548', '#990000'),
     quantiles = 4
   ) |>
   gtscale_color_quantiles(
     column = num,
-    palette = c("#fdd49e", "#fdbb84", "#ef6548", "#990000"),
+    palette = c('#fdd49e', '#fdbb84', '#ef6548', '#990000'),
     quantiles = 4,
-    title = "Quantile bins"
+    title = 'Quantile bins'
   )
 }

@@ -9,11 +9,10 @@ Authors@R:
            role = c("aut", "cre"),
            email = "ctkenny@proton.me",
            comment = c(ORCID = "0000-0002-9386-6860"))
-Description: Adds compact legend helpers for 'gt' tables so color-encoded
-    columns can be explained inside the rendered table. The primary interface
-    combines 'gt::data_color()' with matched legends for continuous, binned,
-    and discrete scales, with lower-level helpers available for legend-only
-    workflows.
+Description: Adds legend helpers for color-encoded 'gt' tables. The primary
+    interface combines 'gt::data_color()' with matched legends for continuous,
+    binned, quantile, and discrete scales, while lower-level helpers support
+    legend-only and reusable scale specification workflows.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -26,4 +25,4 @@ Suggests:
     testthat (>= 3.0.0),
     vdiffr
 Config/testthat/edition: 3
-URL: http://christophertkenny.com/gtscales/
+URL: https://christophertkenny.com/gtscales/

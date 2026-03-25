@@ -81,7 +81,7 @@ exibble |>
   gt() |>
   gtscale_data_color_continuous(
     column = num,
-    palette = c("#A0442C", "white", "#0063B1"),
-    title = "Value"
+    palette = c('#A0442C', 'white', '#0063B1'),
+    title = 'Value'
   )
 }

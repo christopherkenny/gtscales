@@ -28,14 +28,14 @@ Render a legend from a \code{gtscale_spec}
 \examples{
 spec <- gtscale_spec_quantiles(
   num,
-  palette = c("#fdd49e", "#fdbb84", "#ef6548", "#990000"),
+  palette = c('#fdd49e', '#fdbb84', '#ef6548', '#990000'),
   quantiles = 4,
-  title = "Quartiles"
+  title = 'Quartiles'
 )
 
 gtscale_render_legend(
   spec = spec,
   data = gt::gt(gt::exibble),
-  output = "latex"
+  output = 'latex'
 )
 }

@@ -59,12 +59,12 @@ exibble |>
   gt() |>
   data_color(
     columns = num,
-    method = "numeric",
-    palette = c("#A0442C", "white", "#0063B1")
+    method = 'numeric',
+    palette = c('#A0442C', 'white', '#0063B1')
   ) |>
   gtscale_color_continuous(
     column = num,
-    palette = c("#A0442C", "white", "#0063B1"),
-    title = "Value"
+    palette = c('#A0442C', 'white', '#0063B1'),
+    title = 'Value'
   )
 }

@@ -75,8 +75,8 @@ exibble |>
   gt() |>
   gtscale_data_color_bins(
     column = currency,
-    palette = c("#f7fbff", "#08306b"),
+    palette = c('#f7fbff', '#08306b'),
     bins = c(0, 10, 100, 1000, 10000, 70000),
-    title = "Currency bins"
+    title = 'Currency bins'
   )
 }

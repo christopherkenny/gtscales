@@ -35,18 +35,18 @@ handled elsewhere. For the usual "color and legendize" workflow, prefer
 library(gt)
 
 data.frame(
-  category = c("Low", "Medium", "High"),
+  category = c('Low', 'Medium', 'High'),
   value = c(12, 47, 83)
 ) |>
   gt() |>
   data_color(
     columns = category,
-    method = "factor",
-    palette = c("#1b9e77", "#d95f02", "#7570b3")
+    method = 'factor',
+    palette = c('#1b9e77', '#d95f02', '#7570b3')
   ) |>
   gtscale_color_discrete(
-    values = c("#1b9e77", "#d95f02", "#7570b3"),
-    labels = c("Low", "Medium", "High"),
-    title = "Category"
+    values = c('#1b9e77', '#d95f02', '#7570b3'),
+    labels = c('Low', 'Medium', 'High'),
+    title = 'Category'
   )
 }
