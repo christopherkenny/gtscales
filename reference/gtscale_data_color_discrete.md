@@ -107,15 +107,15 @@ A modified [gt::gt](https://gt.rstudio.com/reference/gt.html) table.
 library(gt)
 
 data.frame(
-  category = c("Low", "Medium", "High"),
+  category = c('Low', 'Medium', 'High'),
   value = c(12, 47, 83)
 ) |>
   gt() |>
   gtscale_data_color_discrete(
     column = category,
-    values = c("#1b9e77", "#d95f02", "#7570b3"),
-    labels = c("Low", "Medium", "High"),
-    title = "Category"
+    values = c('#1b9e77', '#d95f02', '#7570b3'),
+    labels = c('Low', 'Medium', 'High'),
+    title = 'Category'
   )
 
 

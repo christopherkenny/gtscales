@@ -2,7 +2,7 @@
 
 This is a lower-level helper for cases where table coloring is already
 handled elsewhere. For the usual "color and legendize" workflow, prefer
-[`gtscale_data_color_bins()`](http://christophertkenny.com/gtscales/reference/gtscale_data_color_bins.md).
+[`gtscale_data_color_bins()`](https://christophertkenny.com/gtscales/reference/gtscale_data_color_bins.md).
 
 ## Usage
 
@@ -76,15 +76,15 @@ exibble |>
   gt() |>
   data_color(
     columns = currency,
-    method = "bin",
-    palette = c("#f7fbff", "#08306b"),
+    method = 'bin',
+    palette = c('#f7fbff', '#08306b'),
     bins = c(0, 10, 100, 1000, 10000000)
   ) |>
   gtscale_color_bins(
     column = currency,
-    palette = c("#f7fbff", "#08306b"),
+    palette = c('#f7fbff', '#08306b'),
     bins = c(0, 10, 100, 1000, 10000000),
-    title = "Binned values"
+    title = 'Binned values'
   )
 #> Warning: Some values were outside the color scale and will be treated as NA
 

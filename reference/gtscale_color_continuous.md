@@ -2,7 +2,7 @@
 
 This is a lower-level helper for cases where table coloring is already
 handled elsewhere. For the usual "color and legendize" workflow, prefer
-[`gtscale_data_color_continuous()`](http://christophertkenny.com/gtscales/reference/gtscale_data_color_continuous.md).
+[`gtscale_data_color_continuous()`](https://christophertkenny.com/gtscales/reference/gtscale_data_color_continuous.md).
 
 ## Usage
 
@@ -85,13 +85,13 @@ exibble |>
   gt() |>
   data_color(
     columns = num,
-    method = "numeric",
-    palette = c("#A0442C", "white", "#0063B1")
+    method = 'numeric',
+    palette = c('#A0442C', 'white', '#0063B1')
   ) |>
   gtscale_color_continuous(
     column = num,
-    palette = c("#A0442C", "white", "#0063B1"),
-    title = "Value"
+    palette = c('#A0442C', 'white', '#0063B1'),
+    title = 'Value'
   )
 
 

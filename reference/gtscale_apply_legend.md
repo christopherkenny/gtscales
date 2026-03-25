@@ -30,8 +30,8 @@ library(gt)
 
 spec <- gtscale_spec_continuous(
   num,
-  palette = c("#A0442C", "white", "#0063B1"),
-  title = "Value"
+  palette = c('#A0442C', 'white', '#0063B1'),
+  title = 'Value'
 )
 
 exibble |>

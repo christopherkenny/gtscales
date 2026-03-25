@@ -1,13 +1,14 @@
 # gtscales
 
 The goal of gtscales is to make color-encoded `gt` tables easier to read
-by adding compact legends directly to the table output.
+by adding matched legends directly to the rendered output.
 
 The main interface is a set of `gtscale_data_color_*()` helpers that
 color a column and add the matching legend in one call.
 
 There is also a reusable spec workflow for cases where you want to
-define a scale once, then apply or render it separately.
+define a scale once, then apply it, legendize it, or render it
+separately.
 
 The package currently focuses on three common legend types:
 
@@ -20,23 +21,23 @@ The currently validated workflows are:
 
 - HTML rendering through `gt`
 - LaTeX/PDF rendering through `gt` and Quarto
-- Typst rendering through the Quarto example workflow
+- Typst standalone legend rendering through the Quarto example workflow
 
 ## Overview
 
 `gtscales` currently provides a small family of helpers for explaining
 color encodings in `gt` tables:
 
-| Function                                                                                                              | Description                                                             |
-|-----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------|
-| [`gtscale_data_color_continuous()`](http://christophertkenny.com/gtscales/reference/gtscale_data_color_continuous.md) | Color a numeric column and add a matching continuous legend in one call |
-| [`gtscale_data_color_bins()`](http://christophertkenny.com/gtscales/reference/gtscale_data_color_bins.md)             | Color a numeric column with bins and add the matching legend            |
-| [`gtscale_data_color_quantiles()`](http://christophertkenny.com/gtscales/reference/gtscale_data_color_quantiles.md)   | Color a numeric column by quantile and add the matching legend          |
-| [`gtscale_data_color_discrete()`](http://christophertkenny.com/gtscales/reference/gtscale_data_color_discrete.md)     | Color a categorical column and add the matching discrete legend         |
-| [`gtscale_color_continuous()`](http://christophertkenny.com/gtscales/reference/gtscale_color_continuous.md)           | Add only the legend for an already-colored continuous scale             |
-| [`gtscale_color_bins()`](http://christophertkenny.com/gtscales/reference/gtscale_color_bins.md)                       | Add only the legend for an already-colored binned scale                 |
-| [`gtscale_color_quantiles()`](http://christophertkenny.com/gtscales/reference/gtscale_color_quantiles.md)             | Add only the legend for an already-colored quantile scale               |
-| [`gtscale_color_discrete()`](http://christophertkenny.com/gtscales/reference/gtscale_color_discrete.md)               | Add only the legend for an already-colored discrete scale               |
+| Function                                                                                                               | Description                                                             |
+|------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------|
+| [`gtscale_data_color_continuous()`](https://christophertkenny.com/gtscales/reference/gtscale_data_color_continuous.md) | Color a numeric column and add a matching continuous legend in one call |
+| [`gtscale_data_color_bins()`](https://christophertkenny.com/gtscales/reference/gtscale_data_color_bins.md)             | Color a numeric column with bins and add the matching legend            |
+| [`gtscale_data_color_quantiles()`](https://christophertkenny.com/gtscales/reference/gtscale_data_color_quantiles.md)   | Color a numeric column by quantile and add the matching legend          |
+| [`gtscale_data_color_discrete()`](https://christophertkenny.com/gtscales/reference/gtscale_data_color_discrete.md)     | Color a categorical column and add the matching discrete legend         |
+| [`gtscale_color_continuous()`](https://christophertkenny.com/gtscales/reference/gtscale_color_continuous.md)           | Add only the legend for an already-colored continuous scale             |
+| [`gtscale_color_bins()`](https://christophertkenny.com/gtscales/reference/gtscale_color_bins.md)                       | Add only the legend for an already-colored binned scale                 |
+| [`gtscale_color_quantiles()`](https://christophertkenny.com/gtscales/reference/gtscale_color_quantiles.md)             | Add only the legend for an already-colored quantile scale               |
+| [`gtscale_color_discrete()`](https://christophertkenny.com/gtscales/reference/gtscale_color_discrete.md)               | Add only the legend for an already-colored discrete scale               |
 
 ## Installation
 
@@ -55,7 +56,7 @@ images so the page stays lightweight on GitHub.
 
 ### Continuous
 
-[`gtscale_data_color_continuous()`](http://christophertkenny.com/gtscales/reference/gtscale_data_color_continuous.md)
+[`gtscale_data_color_continuous()`](https://christophertkenny.com/gtscales/reference/gtscale_data_color_continuous.md)
 colors the column and adds a matching gradient legend.
 
 ``` r
@@ -72,7 +73,7 @@ exibble |>
 
 ### Bins
 
-[`gtscale_data_color_bins()`](http://christophertkenny.com/gtscales/reference/gtscale_data_color_bins.md)
+[`gtscale_data_color_bins()`](https://christophertkenny.com/gtscales/reference/gtscale_data_color_bins.md)
 is useful when the color mapping is interval-based.
 
 ``` r
@@ -90,7 +91,7 @@ exibble |>
 
 ### Discrete
 
-[`gtscale_data_color_discrete()`](http://christophertkenny.com/gtscales/reference/gtscale_data_color_discrete.md)
+[`gtscale_data_color_discrete()`](https://christophertkenny.com/gtscales/reference/gtscale_data_color_discrete.md)
 is more useful when colors encode a compact status or class variable
 that benefits from a legend.
 
@@ -113,7 +114,7 @@ data.frame(
 
 ### Quantiles
 
-[`gtscale_data_color_quantiles()`](http://christophertkenny.com/gtscales/reference/gtscale_data_color_quantiles.md)
+[`gtscale_data_color_quantiles()`](https://christophertkenny.com/gtscales/reference/gtscale_data_color_quantiles.md)
 is useful when you want evenly sized rank groups instead of fixed
 numeric cutpoints.
 
@@ -149,8 +150,8 @@ exibble |>
   gtscale_apply_legend(spec)
 ```
 
-This spec workflow is the foundation for backend support beyond HTML,
-including LaTeX and Typst.
+This spec workflow is the foundation for rendering beyond the default
+HTML case, including LaTeX and Typst workflows.
 
 You can also render a legend directly for another backend:
 
@@ -170,7 +171,7 @@ gtscale_render_legend(
 ```
 
 That returns Typst markup generated from the same scale spec used for
-HTML and LaTeX rendering.
+the HTML and LaTeX paths.
 
 ## Backend Examples
 
