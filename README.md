@@ -36,6 +36,8 @@ exibble |>
   gtscale_data_color_continuous(
     column = num,
     palette = c('#A0442C', 'white', '#0063B1'),
+    labels = big_number_labels,
+    width = '220px',
     title = 'Numeric scale'
   )
 ```
@@ -74,7 +76,7 @@ data.frame(
   gt() |>
   gtscale_data_color_discrete(
     column = status,
-    values = c('#2166ac', '#f7f7f7', '#ef8a62', '#b2182b'),
+    values = c('#2166ac', '#f7f7f7', '#f4a3b4', '#b2182b'),
     labels = c('Safe D', 'Toss-up', 'Lean R', 'Safe R'),
     title = 'Race rating'
   )
@@ -94,6 +96,8 @@ exibble |>
     column = num,
     palette = c('#fdd49e', '#fdbb84', '#ef6548', '#990000'),
     quantiles = 4,
+    labels = big_number_labels,
+    width = '220px',
     title = 'Quartiles'
   )
 ```
@@ -118,6 +122,8 @@ data.frame(
     column = when,
     palette = scales::pal_viridis(),
     bins = scales::breaks_width('1 month'),
+    labels = date_labels,
+    width = '220px',
     title = 'Monthly bins'
   )
 
@@ -128,6 +134,7 @@ data.frame(value = c(1, 10, 100, 1000)) |>
     palette = scales::pal_viridis(),
     transform = 'log10',
     breaks = scales::breaks_log(),
-    labels = scales::label_number()
+    labels = big_number_labels,
+    width = '220px'
   )
 ```

@@ -14,6 +14,9 @@ knitr::opts_chunk$set(
 
 library(gt)
 library(gtscales)
+
+big_number_labels <- scales::label_number(scale_cut = scales::cut_short_scale())
+date_labels <- scales::label_date('%b %d')
 ```
 
 # gtscales <a href="https://christophertkenny.com/gtscales/"><img src="man/figures/logo.png" align="right" height="125" alt="gtscales website" /></a>
@@ -46,6 +49,8 @@ exibble |>
   gtscale_data_color_continuous(
     column = num,
     palette = c('#A0442C', 'white', '#0063B1'),
+    labels = big_number_labels,
+    width = '220px',
     title = 'Numeric scale'
   )
 ```
@@ -58,6 +63,8 @@ exibble |>
   gtscale_data_color_continuous(
     column = num,
     palette = c('#A0442C', 'white', '#0063B1'),
+    labels = big_number_labels,
+    width = '220px',
     title = 'Numeric scale'
   ) |>
   gt::gtsave(filename = 'man/figures/README-continuous.png')
@@ -111,7 +118,7 @@ data.frame(
   gt() |>
   gtscale_data_color_discrete(
     column = status,
-    values = c('#2166ac', '#f7f7f7', '#ef8a62', '#b2182b'),
+    values = c('#2166ac', '#f7f7f7', '#f4a3b4', '#b2182b'),
     labels = c('Safe D', 'Toss-up', 'Lean R', 'Safe R'),
     title = 'Race rating'
   )
@@ -126,7 +133,7 @@ data.frame(
   gt() |>
   gtscale_data_color_discrete(
     column = status,
-    values = c('#2166ac', '#f7f7f7', '#ef8a62', '#b2182b'),
+    values = c('#2166ac', '#f7f7f7', '#f4a3b4', '#b2182b'),
     labels = c('Safe D', 'Toss-up', 'Lean R', 'Safe R'),
     title = 'Race rating'
   ) |>
@@ -148,6 +155,8 @@ exibble |>
     column = num,
     palette = c('#fdd49e', '#fdbb84', '#ef6548', '#990000'),
     quantiles = 4,
+    labels = big_number_labels,
+    width = '220px',
     title = 'Quartiles'
   )
 ```
@@ -159,6 +168,8 @@ exibble |>
     column = num,
     palette = c('#fdd49e', '#fdbb84', '#ef6548', '#990000'),
     quantiles = 4,
+    labels = big_number_labels,
+    width = '220px',
     title = 'Quartiles'
   ) |>
   gt::gtsave(filename = 'man/figures/README-quantiles.png')
@@ -184,6 +195,8 @@ data.frame(
     column = when,
     palette = scales::pal_viridis(),
     bins = scales::breaks_width('1 month'),
+    labels = date_labels,
+    width = '220px',
     title = 'Monthly bins'
   )
 
@@ -194,6 +207,7 @@ data.frame(value = c(1, 10, 100, 1000)) |>
     palette = scales::pal_viridis(),
     transform = 'log10',
     breaks = scales::breaks_log(),
-    labels = scales::label_number()
+    labels = big_number_labels,
+    width = '220px'
   )
 ```
