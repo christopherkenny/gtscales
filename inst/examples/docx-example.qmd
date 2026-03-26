@@ -12,9 +12,6 @@ library(scales)
 
 This example shows the DOCX workflow for `gtscales`.
 
-`gtscale_postprocess_docx()` is available as a fallback repair helper, but the
-goal is for this example to work without it.
-
 ```{r}
 gt::exibble |>
   gt() |>

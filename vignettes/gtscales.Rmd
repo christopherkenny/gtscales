@@ -277,5 +277,3 @@ Validated example workflows live in `inst/examples` for:
 - RTF
 
 The `gt` integration is strongest when legends are attached as source notes, since that path now works across HTML, LaTeX, DOCX, and RTF. Heading placement is still useful, but it is best reserved for workflows where you control the output path more tightly.
-
-`gtscale_postprocess_docx()` is also available as a fallback if you ever need to repair legend image embeds in a rendered Word document, but it should not be part of the normal Quarto DOCX workflow.

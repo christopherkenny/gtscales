@@ -148,7 +148,3 @@ Validated example documents live in `inst/examples` for:
 - Typst
 - DOCX
 - RTF
-
-Word output now works through the Quarto example workflow as well. If
-you ever end up with a `.docx` that needs its legend images re-embedded,
-you can use `gtscale_postprocess_docx()` as a fallback repair step.
