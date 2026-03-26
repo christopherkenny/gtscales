@@ -8,6 +8,8 @@ gtscale_spec_quantiles(
   column,
   palette,
   quantiles = 4,
+  oob = NULL,
+  right = FALSE,
   labels = NULL,
   title = NULL,
   width = "180px",
@@ -15,14 +17,21 @@ gtscale_spec_quantiles(
 )
 }
 \arguments{
-\item{column}{A column to target.}
+\item{column}{A numeric, Date, POSIXt, or difftime column to target.}
 
 \item{palette}{A vector of colors or palette endpoints used for the quantile
-groups. A single named palette can also be supplied.}
+groups. A single named palette or palette function can also be supplied.}
 
 \item{quantiles}{The number of quantile groups.}
 
-\item{labels}{A labeling function or character vector for the legend.}
+\item{oob}{Out-of-bounds handling function or shortcut. Use a function like
+\code{\link[scales:oob]{scales::oob_squish()}} or a shortcut such as \code{"censor"} or \code{"squish"}.}
+
+\item{right}{Whether intervals should be closed on the right. The default of
+\code{FALSE} yields intervals like \verb{[a, b)}.}
+
+\item{labels}{An optional labeling function or character vector for the
+legend. When omitted, labels are inferred from the quantile break values.}
 
 \item{title}{Optional legend title.}
 

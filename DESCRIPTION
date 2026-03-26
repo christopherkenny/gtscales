@@ -1,6 +1,6 @@
 Package: gtscales
 Title: Color Scale Extensions for 'gt'
-Version: 0.0.0.9000
+Version: 0.0.1
 Depends:
     R (>= 4.1.0)
 Authors@R:
@@ -21,8 +21,11 @@ Imports:
     gt,
     rlang,
     scales
-Suggests: 
+Suggests:
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0),
     vdiffr
 Config/testthat/edition: 3
 URL: https://christophertkenny.com/gtscales/
+VignetteBuilder: knitr

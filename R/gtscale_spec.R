@@ -2,14 +2,20 @@
 #'
 #' @param column A column to target.
 #' @param palette A vector of colors used in the scale.
-#'   A single named palette such as `"viridis"` or `"Blues 3"` can also be
-#'   supplied.
+#'   A single named palette such as `"viridis"` or `"Blues 3"`, or a palette
+#'   function, can also be supplied.
 #' @param domain Optional numeric limits. If omitted, these can be inferred when
 #'   the spec is applied to a `gt` table.
-#' @param breaks Optional numeric break values for the legend.
-#' @param labels A labeling function or character vector for the legend.
+#' @param breaks Optional break values or a break function for the legend.
+#' @param labels An optional labeling function or character vector for the
+#'   legend. When omitted, labels are inferred from the data or transform.
 #' @param title Optional legend title.
-#' @param transform Transformation used for color mapping and break placement.
+#' @param transform A transformation specification understood by
+#'   [scales::as.transform()]. When omitted, an appropriate identity, date,
+#'   time, or timespan transform is inferred from the data.
+#' @param oob Out-of-bounds handling function or shortcut passed through to the
+#'   internal color mapper. Use a function like [scales::oob_squish()] or a
+#'   shortcut such as `"censor"`, `"squish"`, `"keep"`, or `"discard"`.
 #' @param direction CSS gradient direction. Defaults to `"to right"`.
 #' @param width Width of the legend bar.
 #' @param height Height of the legend bar.
@@ -22,15 +28,15 @@ gtscale_spec_continuous <- function(
   palette = NULL,
   domain = NULL,
   breaks = NULL,
-  labels = scales::label_comma(),
+  labels = NULL,
   title = NULL,
-  transform = c('identity', 'log10', 'sqrt'),
+  transform = NULL,
+  oob = NULL,
   direction = 'to right',
   width = '160px',
   height = '14px',
   fn = NULL
 ) {
-  transform <- match.arg(transform)
   column <- capture_spec_column(substitute(column), parent.frame())
 
   new_gtscale_spec(
@@ -40,6 +46,7 @@ gtscale_spec_continuous <- function(
     palette = palette,
     domain = domain,
     transform = transform,
+    oob = oob,
     breaks = breaks,
     labels = labels,
     title = title,
@@ -56,15 +63,21 @@ gtscale_spec_continuous <- function(
 #'
 #' @param column A column or shared set of columns to target.
 #' @param palette Two endpoint colors or three diverging colors.
-#'   A single named palette such as `"Blue-Red 3"` or `"viridis"` can also be
-#'   supplied.
+#'   A single named palette such as `"Blue-Red 3"` or `"viridis"`, or a palette
+#'   function, can also be supplied.
 #' @param domain Optional numeric limits. If omitted, these can be inferred when
 #'   the spec is applied to a `gt` table.
 #' @param midpoint Numeric midpoint used to anchor the diverging scale.
-#' @param breaks Optional numeric break values for the legend.
-#' @param labels A labeling function or character vector for the legend.
+#' @param breaks Optional break values or a break function for the legend.
+#' @param labels An optional labeling function or character vector for the
+#'   legend. When omitted, labels are inferred from the data or transform.
 #' @param title Optional legend title.
-#' @param transform Transformation used for color mapping and break placement.
+#' @param transform A transformation specification understood by
+#'   [scales::as.transform()]. When omitted, an appropriate identity, date,
+#'   time, or timespan transform is inferred from the data.
+#' @param oob Out-of-bounds handling function or shortcut passed through to the
+#'   internal color mapper. Use a function like [scales::oob_squish()] or a
+#'   shortcut such as `"censor"`, `"squish"`, `"keep"`, or `"discard"`.
 #' @param direction CSS gradient direction. Defaults to `"to right"`.
 #' @param width Width of the legend bar.
 #' @param height Height of the legend bar.
@@ -79,15 +92,15 @@ gtscale_spec_diverging <- function(
   domain = NULL,
   midpoint = 0,
   breaks = NULL,
-  labels = scales::label_comma(),
+  labels = NULL,
   title = NULL,
-  transform = c('identity', 'log10', 'sqrt'),
+  transform = NULL,
+  oob = NULL,
   direction = 'to right',
   width = '160px',
   height = '14px',
   mid_color = '#FFFFFF'
 ) {
-  transform <- match.arg(transform)
   column <- capture_spec_column(substitute(column), parent.frame())
 
   new_gtscale_spec(
@@ -98,6 +111,7 @@ gtscale_spec_diverging <- function(
     domain = domain,
     midpoint = midpoint,
     transform = transform,
+    oob = oob,
     breaks = breaks,
     labels = labels,
     title = title,
@@ -114,11 +128,20 @@ gtscale_spec_diverging <- function(
 #'
 #' @param column A column to target.
 #' @param palette A vector of colors or palette endpoints used for the bins.
-#'   A single named palette can also be supplied.
-#' @param bins A numeric vector of bin boundaries.
-#' @param domain Optional numeric limits. If omitted, these can be inferred when
-#'   the spec is applied to a `gt` table.
-#' @param labels A labeling function or character vector for the legend.
+#'   A single named palette or palette function can also be supplied.
+#' @param bins Optional bin boundaries or a break function. When omitted,
+#'   breaks are generated from the `domain`, `column`, and `transform`.
+#' @param domain Optional limits. If omitted, these can be inferred when the
+#'   spec is applied to a `gt` table.
+#' @param transform A transformation specification understood by
+#'   [scales::as.transform()]. This is used when generating default bins or
+#'   when interpreting break functions.
+#' @param oob Out-of-bounds handling function or shortcut. Use a function like
+#'   [scales::oob_squish()] or a shortcut such as `"censor"` or `"squish"`.
+#' @param right Whether intervals should be closed on the right. The default of
+#'   `FALSE` yields intervals like `[a, b)`.
+#' @param labels An optional labeling function or character vector for the
+#'   legend. When omitted, labels are inferred from the bin values.
 #' @param title Optional legend title.
 #' @param width Width of the legend.
 #' @param height Height of the swatches.
@@ -128,8 +151,11 @@ gtscale_spec_diverging <- function(
 gtscale_spec_bins <- function(
   column,
   palette,
-  bins,
+  bins = NULL,
   domain = NULL,
+  transform = NULL,
+  oob = NULL,
+  right = FALSE,
   labels = NULL,
   title = NULL,
   width = '180px',
@@ -143,7 +169,10 @@ gtscale_spec_bins <- function(
     column = column,
     palette = palette,
     domain = domain,
+    transform = transform,
+    oob = oob,
     bins = bins,
+    right = right,
     labels = labels,
     title = title,
     style = list(
@@ -155,11 +184,16 @@ gtscale_spec_bins <- function(
 
 #' Create a quantile `gtscales` spec
 #'
-#' @param column A column to target.
+#' @param column A numeric, Date, POSIXt, or difftime column to target.
 #' @param palette A vector of colors or palette endpoints used for the quantile
-#'   groups. A single named palette can also be supplied.
+#'   groups. A single named palette or palette function can also be supplied.
 #' @param quantiles The number of quantile groups.
-#' @param labels A labeling function or character vector for the legend.
+#' @param oob Out-of-bounds handling function or shortcut. Use a function like
+#'   [scales::oob_squish()] or a shortcut such as `"censor"` or `"squish"`.
+#' @param right Whether intervals should be closed on the right. The default of
+#'   `FALSE` yields intervals like `[a, b)`.
+#' @param labels An optional labeling function or character vector for the
+#'   legend. When omitted, labels are inferred from the quantile break values.
 #' @param title Optional legend title.
 #' @param width Width of the legend.
 #' @param height Height of the swatches.
@@ -170,6 +204,8 @@ gtscale_spec_quantiles <- function(
   column,
   palette,
   quantiles = 4,
+  oob = NULL,
+  right = FALSE,
   labels = NULL,
   title = NULL,
   width = '180px',
@@ -183,6 +219,8 @@ gtscale_spec_quantiles <- function(
     column = column,
     palette = palette,
     quantiles = quantiles,
+    oob = oob,
+    right = right,
     labels = labels,
     title = title,
     style = list(
@@ -195,7 +233,8 @@ gtscale_spec_quantiles <- function(
 #' Create a discrete `gtscales` spec
 #'
 #' @param column A column to target.
-#' @param values A vector of color values or a single named discrete palette.
+#' @param values A vector of color values, a single named discrete palette, or a
+#'   discrete palette function.
 #' @param labels Labels for each legend swatch. Defaults to `values`.
 #' @param title Optional legend title.
 #' @param swatch_size Size of each discrete color swatch.
@@ -234,8 +273,6 @@ gtscale_spec_discrete <- function(
 #'
 #' @inheritParams gtscale_data_color_continuous
 #' @param spec A `gtscale_spec`.
-#' @param accessibility Whether to warn about low-contrast adjacent legend
-#'   colors.
 #'
 #' @return A modified `gtscale_spec`.
 #' @export
@@ -245,7 +282,6 @@ gtscale_spec_set_application <- function(
   na_color = NULL,
   alpha = NULL,
   reverse = FALSE,
-  accessibility = c('none', 'warn'),
   autocolor_text = TRUE,
   contrast_algo = c('apca', 'wcag'),
   autocolor_light = '#FFFFFF',
@@ -257,7 +293,6 @@ gtscale_spec_set_application <- function(
     na_color = na_color,
     alpha = alpha,
     reverse = reverse,
-    accessibility = accessibility,
     autocolor_text = autocolor_text,
     contrast_algo = contrast_algo,
     autocolor_light = autocolor_light,
@@ -271,10 +306,15 @@ gtscale_spec_set_application <- function(
 #' @param output Output target for the legend. Use `"contextual"` for
 #'   `gt`-managed HTML/LaTeX source notes, or choose a specific output like
 #'   `"html"`, `"latex"`, or `"typst"`.
-#' @param placement Legend placement target. `"source_note"` and `"subtitle"`
-#'   are currently implemented.
+#' @param placement Legend placement target. `"source_note"`, `"title"`, and
+#'   `"subtitle"` are currently implemented.
 #' @param layout Whether multiple legends in the same heading area should stack
 #'   vertically or sit inline.
+#' @param align Horizontal alignment for the legend container.
+#' @param show_border Whether the legend bar, bin frame, and swatches should
+#'   draw borders.
+#' @param border_color Border color used for legend frames and swatches.
+#' @param border_radius Border radius used for HTML and Typst legend frames.
 #' @param show_na Whether to include an explicit missing-value legend entry.
 #' @param na_label Label to use for missing values in the legend.
 #' @param na_color Optional legend swatch color for missing values. When
@@ -287,16 +327,25 @@ gtscale_spec_set_legend <- function(
   output = 'contextual',
   placement = 'source_note',
   layout = c('stack', 'inline'),
+  align = c('left', 'center', 'right'),
+  show_border = TRUE,
+  border_color = '#D0D7DE',
+  border_radius = '8px',
   show_na = FALSE,
   na_label = 'Missing',
   na_color = NULL
 ) {
   layout <- match.arg(layout)
+  align <- match.arg(align)
   set_scale_legend(
     spec = spec,
     output = output,
     placement = placement,
     layout = layout,
+    align = align,
+    show_border = show_border,
+    border_color = border_color,
+    border_radius = border_radius,
     show_na = show_na,
     na_label = na_label,
     na_color = na_color

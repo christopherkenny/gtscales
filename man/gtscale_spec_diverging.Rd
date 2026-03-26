@@ -10,9 +10,10 @@ gtscale_spec_diverging(
   domain = NULL,
   midpoint = 0,
   breaks = NULL,
-  labels = scales::label_comma(),
+  labels = NULL,
   title = NULL,
-  transform = c("identity", "log10", "sqrt"),
+  transform = NULL,
+  oob = NULL,
   direction = "to right",
   width = "160px",
   height = "14px",
@@ -23,21 +24,28 @@ gtscale_spec_diverging(
 \item{column}{A column or shared set of columns to target.}
 
 \item{palette}{Two endpoint colors or three diverging colors.
-A single named palette such as \code{"Blue-Red 3"} or \code{"viridis"} can also be
-supplied.}
+A single named palette such as \code{"Blue-Red 3"} or \code{"viridis"}, or a palette
+function, can also be supplied.}
 
 \item{domain}{Optional numeric limits. If omitted, these can be inferred when
 the spec is applied to a \code{gt} table.}
 
 \item{midpoint}{Numeric midpoint used to anchor the diverging scale.}
 
-\item{breaks}{Optional numeric break values for the legend.}
+\item{breaks}{Optional break values or a break function for the legend.}
 
-\item{labels}{A labeling function or character vector for the legend.}
+\item{labels}{An optional labeling function or character vector for the
+legend. When omitted, labels are inferred from the data or transform.}
 
 \item{title}{Optional legend title.}
 
-\item{transform}{Transformation used for color mapping and break placement.}
+\item{transform}{A transformation specification understood by
+\code{\link[scales:new_transform]{scales::as.transform()}}. When omitted, an appropriate identity, date,
+time, or timespan transform is inferred from the data.}
+
+\item{oob}{Out-of-bounds handling function or shortcut passed through to the
+internal color mapper. Use a function like \code{\link[scales:oob]{scales::oob_squish()}} or a
+shortcut such as \code{"censor"}, \code{"squish"}, \code{"keep"}, or \code{"discard"}.}
 
 \item{direction}{CSS gradient direction. Defaults to \code{"to right"}.}
 

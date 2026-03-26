@@ -9,9 +9,10 @@ gtscale_spec_continuous(
   palette = NULL,
   domain = NULL,
   breaks = NULL,
-  labels = scales::label_comma(),
+  labels = NULL,
   title = NULL,
-  transform = c("identity", "log10", "sqrt"),
+  transform = NULL,
+  oob = NULL,
   direction = "to right",
   width = "160px",
   height = "14px",
@@ -22,19 +23,26 @@ gtscale_spec_continuous(
 \item{column}{A column to target.}
 
 \item{palette}{A vector of colors used in the scale.
-A single named palette such as \code{"viridis"} or \code{"Blues 3"} can also be
-supplied.}
+A single named palette such as \code{"viridis"} or \code{"Blues 3"}, or a palette
+function, can also be supplied.}
 
 \item{domain}{Optional numeric limits. If omitted, these can be inferred when
 the spec is applied to a \code{gt} table.}
 
-\item{breaks}{Optional numeric break values for the legend.}
+\item{breaks}{Optional break values or a break function for the legend.}
 
-\item{labels}{A labeling function or character vector for the legend.}
+\item{labels}{An optional labeling function or character vector for the
+legend. When omitted, labels are inferred from the data or transform.}
 
 \item{title}{Optional legend title.}
 
-\item{transform}{Transformation used for color mapping and break placement.}
+\item{transform}{A transformation specification understood by
+\code{\link[scales:new_transform]{scales::as.transform()}}. When omitted, an appropriate identity, date,
+time, or timespan transform is inferred from the data.}
+
+\item{oob}{Out-of-bounds handling function or shortcut passed through to the
+internal color mapper. Use a function like \code{\link[scales:oob]{scales::oob_squish()}} or a
+shortcut such as \code{"censor"}, \code{"squish"}, \code{"keep"}, or \code{"discard"}.}
 
 \item{direction}{CSS gradient direction. Defaults to \code{"to right"}.}
 

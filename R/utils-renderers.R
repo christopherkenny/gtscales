@@ -10,6 +10,40 @@ legend_title_html <- function(title) {
   )
 }
 
+legend_container_style_html <- function(spec, width = NULL) {
+  width <- width %||% spec$style$width %||% 'auto'
+  alignment <- switch(
+    spec$legend$align,
+    left = 'margin-right:auto; text-align:left;',
+    center = 'margin-left:auto; margin-right:auto; text-align:center;',
+    right = 'margin-left:auto; text-align:right;'
+  )
+
+  paste0('width:', width, '; ', alignment)
+}
+
+legend_border_css_html <- function(spec) {
+  if (!isTRUE(spec$legend$show_border)) {
+    return('border:none; ')
+  }
+
+  paste0(
+    'border:1px solid ',
+    spec$legend$border_color,
+    '; border-radius:',
+    spec$legend$border_radius,
+    '; '
+  )
+}
+
+legend_swatch_border_css_html <- function(spec) {
+  if (!isTRUE(spec$legend$show_border)) {
+    return('border:none; ')
+  }
+
+  paste0('border:1px solid ', spec$legend$border_color, '; ')
+}
+
 latex_escape_text <- function(text) {
   text <- gsub('\\\\', '\\\\textbackslash{}', text)
   text <- gsub('([#$%&_{}])', '\\\\\\1', text, perl = TRUE)
@@ -23,21 +57,56 @@ latex_color_box <- function(color, width = '1.4em', height = '0.9ex') {
   paste0('\\textcolor[HTML]{', color, '}{\\rule{', width, '}{', height, '}}')
 }
 
+latex_alignment_prefix <- function(spec) {
+  switch(
+    spec$legend$align,
+    left = '\\raggedright ',
+    center = '\\centering ',
+    right = '\\raggedleft '
+  )
+}
+
+latex_alignment_wrap <- function(spec, content) {
+  paste0('{', latex_alignment_prefix(spec), content, '}')
+}
+
 typst_color <- function(color) {
   paste0('rgb("', normalize_color_hex(color), '")')
 }
 
-typst_color_box <- function(color) {
+size_to_typst <- function(value) {
+  if (grepl('px$', value)) {
+    numeric_value <- suppressWarnings(as.numeric(sub('px$', '', value)))
+
+    if (is.finite(numeric_value)) {
+      return(paste0(format(numeric_value * 0.75, trim = TRUE, scientific = FALSE), 'pt'))
+    }
+  }
+
+  value
+}
+
+typst_color_box <- function(color, spec) {
+  stroke <- if (isTRUE(spec$legend$show_border)) {
+    paste0('stroke: ', typst_color(spec$legend$border_color), ', ')
+  } else {
+    'stroke: none, '
+  }
+
   paste0(
     'box(',
     'fill: ', typst_color(color), ', ',
-    'stroke: rgb("#D0D7DE"), ',
+    stroke,
     'inset: 0pt, ',
     'width: 1.2em, ',
     'height: 0.8em, ',
-    'radius: 2pt',
+    'radius: ', size_to_typst(spec$legend$border_radius),
     ')[ ]'
   )
+}
+
+typst_alignment_wrap <- function(spec, content) {
+  paste0('align(', spec$legend$align, ', ', content, ')')
 }
 
 typst_escape_text <- function(text) {
@@ -88,9 +157,10 @@ render_continuous_legend_html <- function(spec) {
   na_entry <- render_na_legend_html(spec)
 
   paste0(
-    '<div style="width:', spec$style$width, ';">',
+    '<div style="', legend_container_style_html(spec), '">',
     legend_title_html(spec$title),
-    '<div style="height:', spec$style$height, '; border-radius:999px; border:1px solid #d0d7de; ',
+    '<div style="height:', spec$style$height, '; border-radius:', spec$legend$border_radius, '; ',
+    legend_border_css_html(spec),
     'background:linear-gradient(', spec$style$direction, ', ', paste(spec$palette, collapse = ', '), ');"></div>',
     '<div style="position:relative; width:', spec$style$width, '; height:20px; margin-top:4px; font-size:11px; color:#57606a;">',
     paste(
@@ -121,9 +191,11 @@ render_bins_legend_html <- function(spec) {
   na_entry <- render_na_legend_html(spec)
 
   paste0(
-    '<div style="width:', spec$style$width, ';">',
+    '<div style="', legend_container_style_html(spec), '">',
     legend_title_html(spec$title),
-    '<div style="display:flex; width:100%; overflow:hidden; border:1px solid #d0d7de; border-radius:8px;">',
+    '<div style="display:flex; width:100%; overflow:hidden; ',
+    legend_border_css_html(spec),
+    '">',
     paste(
       vapply(
         seq_len(n_intervals),
@@ -164,7 +236,7 @@ render_discrete_legend_html <- function(spec) {
   na_entry <- render_na_legend_html(spec)
 
   paste0(
-    '<div>',
+    '<div style="', legend_container_style_html(spec, width = 'auto'), '">',
     legend_title_html(spec$title),
     '<div style="display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center;">',
     paste(
@@ -174,7 +246,9 @@ render_discrete_legend_html <- function(spec) {
           paste0(
             '<span style="display:inline-flex; align-items:center; gap:6px;">',
             '<span style="display:inline-block; width:', spec$style$swatch_size, '; height:', spec$style$swatch_size,
-            '; border-radius:3px; border:1px solid #d0d7de; background:', spec$values[[i]], ';"></span>',
+            '; border-radius:3px; ',
+            legend_swatch_border_css_html(spec),
+            'background:', spec$values[[i]], ';"></span>',
             '<span>', spec$labels[[i]], '</span>',
             '</span>'
           )
@@ -197,7 +271,9 @@ render_na_legend_html <- function(spec) {
   paste0(
     '<div style="margin-top:6px; font-size:11px; color:#57606a;">',
     '<span style="display:inline-flex; align-items:center; gap:6px;">',
-    '<span style="display:inline-block; width:12px; height:12px; border-radius:3px; border:1px solid #d0d7de; background:',
+    '<span style="display:inline-block; width:12px; height:12px; border-radius:3px; ',
+    legend_swatch_border_css_html(spec),
+    'background:',
     resolve_na_legend_color(spec),
     ';"></span>',
     '<span>',
@@ -225,13 +301,13 @@ render_continuous_legend_latex <- function(spec) {
   labels <- paste(latex_escape_text(spec$labels), collapse = ' \\quad ')
   na_entry <- render_na_legend_latex(spec)
 
-  paste0(
+  latex_alignment_wrap(spec, paste0(
     title,
     swatches,
     '\\\\',
     labels,
     na_entry
-  )
+  ))
 }
 
 render_bins_legend_latex <- function(spec) {
@@ -252,7 +328,7 @@ render_bins_legend_latex <- function(spec) {
   )
   na_entry <- render_na_legend_latex(spec)
 
-  paste0(title, entries, na_entry)
+  latex_alignment_wrap(spec, paste0(title, entries, na_entry))
 }
 
 render_discrete_legend_latex <- function(spec) {
@@ -273,7 +349,7 @@ render_discrete_legend_latex <- function(spec) {
   )
   na_entry <- render_na_legend_latex(spec)
 
-  paste0(title, entries, na_entry)
+  latex_alignment_wrap(spec, paste0(title, entries, na_entry))
 }
 
 render_na_legend_latex <- function(spec) {
@@ -358,7 +434,7 @@ draw_continuous_legend_word <- function(spec) {
   bar_bottom <- 0.46
   bar_top <- 0.64
   palette <- grDevices::colorRampPalette(spec$palette)(256)
-  raster <- as.raster(matrix(palette, nrow = 1))
+  raster <- grDevices::as.raster(matrix(palette, nrow = 1))
 
   grid::grid.raster(
     image = raster,
@@ -373,7 +449,11 @@ draw_continuous_legend_word <- function(spec) {
     y = (bar_bottom + bar_top) / 2,
     width = bar_right - bar_left,
     height = bar_top - bar_bottom,
-    gp = grid::gpar(fill = NA, col = '#BDBDBD', lwd = 1)
+    gp = grid::gpar(
+      fill = NA,
+      col = if (isTRUE(spec$legend$show_border)) spec$legend$border_color else NA,
+      lwd = if (isTRUE(spec$legend$show_border)) 1 else 0
+    )
   )
 
   break_positions <- rescale_break_positions(
@@ -418,7 +498,11 @@ draw_bins_legend_word <- function(spec) {
       y = (bottom + top) / 2,
       width = width,
       height = top - bottom,
-      gp = grid::gpar(fill = spec$values[[i]], col = '#BDBDBD', lwd = 1)
+      gp = grid::gpar(
+        fill = spec$values[[i]],
+        col = if (isTRUE(spec$legend$show_border)) spec$legend$border_color else NA,
+        lwd = if (isTRUE(spec$legend$show_border)) 1 else 0
+      )
     )
     grid::grid.text(
       label = spec$labels[[i]],
@@ -454,7 +538,11 @@ draw_discrete_legend_word <- function(spec) {
       width = 0.03,
       height = 0.08,
       just = c('left', 'center'),
-      gp = grid::gpar(fill = spec$values[[i]], col = '#BDBDBD', lwd = 1)
+      gp = grid::gpar(
+        fill = spec$values[[i]],
+        col = if (isTRUE(spec$legend$show_border)) spec$legend$border_color else NA,
+        lwd = if (isTRUE(spec$legend$show_border)) 1 else 0
+      )
     )
     grid::grid.text(
       label = spec$labels[[i]],
@@ -490,21 +578,26 @@ render_continuous_legend_typst <- function(spec) {
   )
   gradient_stops <- paste(vapply(spec$palette, typst_color, character(1)), collapse = ', ')
   na_entry <- render_na_legend_typst(spec)
+  stroke <- if (isTRUE(spec$legend$show_border)) {
+    paste0('stroke: 0.5pt + ', typst_color(spec$legend$border_color), ', ')
+  } else {
+    'stroke: none, '
+  }
 
-  paste0(
+  typst_alignment_wrap(spec, paste0(
     '#stack(dir: ttb, spacing: 0.35em, ',
     title,
     'rect(',
     'width: 14em, ',
     'height: 0.9em, ',
-    'radius: 2pt, ',
-    'stroke: 0.5pt + rgb("#D0D7DE"), ',
+    'radius: ', size_to_typst(spec$legend$border_radius), ', ',
+    stroke,
     'fill: gradient.linear(', gradient_stops, ', relative: "self")',
     '),',
     'box(width: 14em, stack(dir: ltr, spacing: 1fr, ', labels, '))',
     na_entry,
     ')'
-  )
+  ))
 }
 
 render_bins_legend_typst <- function(spec) {
@@ -519,7 +612,7 @@ render_bins_legend_typst <- function(spec) {
       function(i) {
         paste0(
           'stack(dir: ltr, spacing: 0.35em, ',
-          typst_color_box(spec$values[[i]]), ', ',
+          typst_color_box(spec$values[[i]], spec), ', ',
           '[', typst_escape_text(spec$labels[[i]]), '])'
         )
       },
@@ -529,13 +622,13 @@ render_bins_legend_typst <- function(spec) {
   )
   na_entry <- render_na_legend_typst(spec)
 
-  paste0(
+  typst_alignment_wrap(spec, paste0(
     '#stack(dir: ttb, spacing: 0.35em, ',
     title,
     'stack(dir: ltr, spacing: 0.9em, ', entries, ')',
     na_entry,
     ')'
-  )
+  ))
 }
 
 render_discrete_legend_typst <- function(spec) {
@@ -550,7 +643,7 @@ render_discrete_legend_typst <- function(spec) {
       function(i) {
         paste0(
           'stack(dir: ltr, spacing: 0.35em, ',
-          typst_color_box(spec$values[[i]]), ', ',
+          typst_color_box(spec$values[[i]], spec), ', ',
           '[', typst_escape_text(spec$labels[[i]]), '])'
         )
       },
@@ -560,13 +653,13 @@ render_discrete_legend_typst <- function(spec) {
   )
   na_entry <- render_na_legend_typst(spec)
 
-  paste0(
+  typst_alignment_wrap(spec, paste0(
     '#stack(dir: ttb, spacing: 0.35em, ',
     title,
     'stack(dir: ltr, spacing: 0.9em, ', entries, ')',
     na_entry,
     ')'
-  )
+  ))
 }
 
 render_na_legend_typst <- function(spec) {
@@ -576,7 +669,7 @@ render_na_legend_typst <- function(spec) {
 
   paste0(
     ', stack(dir: ltr, spacing: 0.35em, ',
-    typst_color_box(resolve_na_legend_color(spec)),
+    typst_color_box(resolve_na_legend_color(spec), spec),
     ', [',
     typst_escape_text(spec$legend$na_label),
     '])'
@@ -595,6 +688,10 @@ attach_scale_legend <- function(data, spec, output = NULL, placement = NULL) {
 
   if (identical(placement, 'subtitle')) {
     return(attach_legend_subtitle(data, heading_rendered))
+  }
+
+  if (identical(placement, 'title')) {
+    return(attach_legend_title(data, heading_rendered))
   }
 
   rlang::abort(paste0('Legend placement `', placement, '` is not implemented yet.'))
@@ -622,13 +719,11 @@ apply_scale_color <- function(data, spec) {
         data_color_args$reverse <- spec$application$reverse
       }
 
-      if (identical(spec$color_method, 'numeric')) {
-        if (is.null(spec$fn)) {
-          data_color_args$palette <- spec$palette
-          data_color_args$domain <- spec$domain
-        } else {
-          data_color_args$fn <- spec$fn
-        }
+      if (!is.null(spec$fn)) {
+        data_color_args$fn <- spec$fn
+      } else if (identical(spec$color_method, 'numeric')) {
+        data_color_args$palette <- spec$palette
+        data_color_args$domain <- spec$domain
       } else if (identical(spec$color_method, 'bin')) {
         data_color_args$palette <- spec$palette
         data_color_args$domain <- spec$domain

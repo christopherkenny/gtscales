@@ -9,7 +9,10 @@ gtscale_color_bins(
   column = NULL,
   palette,
   domain = NULL,
-  bins,
+  bins = NULL,
+  transform = NULL,
+  oob = NULL,
+  right = FALSE,
   labels = NULL,
   title = NULL,
   width = "180px",
@@ -19,20 +22,31 @@ gtscale_color_bins(
 \arguments{
 \item{data}{A \code{gt_tbl} created by \code{\link[gt:gt]{gt::gt()}}.}
 
-\item{column}{An optional numeric column in the underlying table used to infer
-\code{domain}.}
+\item{column}{An optional numeric, Date, POSIXt, or difftime column in the
+underlying table used to infer \code{domain}.}
 
-\item{palette}{A vector of colors, palette endpoints, or a single named
-palette used to color the bins.}
+\item{palette}{A vector of colors, palette endpoints, a single named
+palette, or a palette function used to color the bins.}
 
-\item{domain}{A numeric vector of length 2 giving the scale limits. When
-omitted, the limits are inferred from \code{column}.}
+\item{domain}{A vector of length 2 giving the scale limits. When omitted,
+the limits are inferred from \code{column}.}
 
-\item{bins}{A numeric vector of bin boundaries.}
+\item{bins}{Optional bin boundaries or a break function. When omitted,
+breaks are generated from \code{domain}, \code{column}, and \code{transform}.}
 
-\item{labels}{A labeling function or a character vector for the bins. When a
-function is supplied, it is applied to the bin boundaries before interval
-labels are constructed.}
+\item{transform}{A transformation specification understood by
+\code{\link[scales:new_transform]{scales::as.transform()}}. This is used when generating default bins or
+when interpreting break functions.}
+
+\item{oob}{Out-of-bounds handling function or shortcut. Use a function like
+\code{\link[scales:oob]{scales::oob_squish()}} or a shortcut such as \code{"censor"} or \code{"squish"}.}
+
+\item{right}{Whether intervals should be closed on the right. The default of
+\code{FALSE} yields intervals like \verb{[a, b)}.}
+
+\item{labels}{An optional labeling function or a character vector for the
+bins. When a function is supplied, it is applied to the bin boundaries
+before interval labels are constructed.}
 
 \item{title}{Optional legend title.}
 

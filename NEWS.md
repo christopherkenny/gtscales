@@ -1,4 +1,4 @@
-# gtscales (0.0.0.9000)
+# gtscales 0.0.1
 
 * Initial development release of `gtscales`, focused on matched legends for color-encoded `gt` tables.
 * `gtscale_data_color_*()` and `gtscale_color_*()` support continuous, binned, quantile, discrete, and diverging or midpoint-aware scales.

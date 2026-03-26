@@ -5,13 +5,20 @@
 #' @param data A `gt_tbl` created by [gt::gt()].
 #' @param column A numeric column to color and legendize.
 #' @param palette A vector of colors used in the table and legend gradient. A
-#'   single named palette can also be supplied.
+#'   single named palette or palette function can also be supplied.
 #' @param domain A numeric vector of length 2 giving the scale limits. When
 #'   omitted, the limits are inferred from `column`.
-#' @param breaks Optional numeric break values to display below the gradient.
-#' @param labels A labeling function or a character vector for the breaks.
+#' @param breaks Optional break values or a break function to display below the
+#'   gradient.
+#' @param labels An optional labeling function or a character vector for the
+#'   breaks.
 #' @param title Optional legend title.
-#' @param transform Transformation used for color mapping and break placement.
+#' @param transform A transformation specification understood by
+#'   [scales::as.transform()]. When omitted, an appropriate transform is
+#'   inferred from the data.
+#' @param oob Out-of-bounds handling function or shortcut. Use a function like
+#'   [scales::oob_squish()] or a shortcut such as `"censor"`, `"squish"`,
+#'   `"keep"`, or `"discard"`.
 #' @param direction CSS gradient direction. Defaults to `"to right"`.
 #' @param width Width of the legend bar.
 #' @param height Height of the legend bar.
@@ -19,8 +26,6 @@
 #' @param na_color Color used for missing values.
 #' @param alpha Alpha applied by [gt::data_color()].
 #' @param reverse Whether to reverse the color mapping.
-#' @param accessibility Whether to warn about low-contrast adjacent legend
-#'   colors.
 #' @param autocolor_text Whether to automatically adjust text color.
 #' @param contrast_algo Contrast algorithm passed to [gt::data_color()].
 #' @param autocolor_light Light text color used by [gt::data_color()].
@@ -48,9 +53,10 @@ gtscale_data_color_continuous <- function(
   palette = NULL,
   domain = NULL,
   breaks = NULL,
-  labels = scales::label_comma(),
+  labels = NULL,
   title = NULL,
-  transform = c('identity', 'log10', 'sqrt'),
+  transform = NULL,
+  oob = NULL,
   direction = 'to right',
   width = '160px',
   height = '14px',
@@ -58,14 +64,12 @@ gtscale_data_color_continuous <- function(
   na_color = NULL,
   alpha = NULL,
   reverse = FALSE,
-  accessibility = c('none', 'warn'),
   autocolor_text = TRUE,
   contrast_algo = c('apca', 'wcag'),
   autocolor_light = '#FFFFFF',
   autocolor_dark = '#000000',
   fn = NULL
 ) {
-  transform <- match.arg(transform)
   column <- substitute(column)
   spec <- gtscale_spec_continuous(
     column = column,
@@ -75,6 +79,7 @@ gtscale_data_color_continuous <- function(
     labels = labels,
     title = title,
     transform = transform,
+    oob = oob,
     direction = direction,
     width = width,
     height = height,
@@ -85,7 +90,6 @@ gtscale_data_color_continuous <- function(
       na_color = na_color,
       alpha = alpha,
       reverse = reverse,
-      accessibility = accessibility,
       autocolor_text = autocolor_text,
       contrast_algo = contrast_algo,
       autocolor_light = autocolor_light,

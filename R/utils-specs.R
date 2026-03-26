@@ -6,8 +6,10 @@ new_gtscale_spec <- function(
   domain = NULL,
   midpoint = NULL,
   transform = 'identity',
+  oob = NULL,
   bins = NULL,
   quantiles = NULL,
+  right = NULL,
   breaks = NULL,
   values = NULL,
   labels = NULL,
@@ -26,21 +28,22 @@ new_gtscale_spec <- function(
       domain = domain,
       midpoint = midpoint,
       transform = transform,
+      oob = oob,
       bins = bins,
       quantiles = quantiles,
+      right = right,
       breaks = breaks,
       values = values,
       labels = labels,
       title = title,
       fn = fn,
       style = style,
-      application = modifyList(
+      application = utils::modifyList(
         list(
           apply_to = 'fill',
           na_color = NULL,
           alpha = NULL,
           reverse = FALSE,
-          accessibility = 'none',
           autocolor_text = TRUE,
           contrast_algo = 'apca',
           autocolor_light = '#FFFFFF',
@@ -48,11 +51,15 @@ new_gtscale_spec <- function(
         ),
         application
       ),
-      legend = modifyList(
+      legend = utils::modifyList(
         list(
           output = 'contextual',
           placement = 'source_note',
           layout = 'stack',
+          align = 'left',
+          show_border = TRUE,
+          border_color = '#D0D7DE',
+          border_radius = '8px',
           show_na = FALSE,
           na_label = 'Missing',
           na_color = NULL
@@ -70,41 +77,45 @@ build_continuous_spec <- function(
   palette = NULL,
   domain = NULL,
   breaks = NULL,
-  labels = scales::label_comma(),
+  labels = NULL,
   title = NULL,
-  transform = 'identity',
+  transform = NULL,
+  oob = NULL,
   direction = 'to right',
   width = '160px',
   height = '14px',
   fn = NULL
 ) {
-  if (!identical(transform, 'identity') && !is.null(fn)) {
+  if (!is.null(transform) && !is.null(fn)) {
     rlang::abort('`transform` and `fn` cannot be supplied together.')
   }
 
   palette <- resolve_palette(palette = palette, fn = fn, n = 7)
   domain <- resolve_domain(data = data, column = column, domain = domain)
-  validate_transform_domain(domain, transform)
+  transform <- validate_transform_domain(domain, transform)
+  oob <- resolve_oob(oob, default = 'censor')
 
-  if (is.null(breaks)) {
-    breaks <- default_breaks(domain, transform = transform)
-  }
-
-  breaks <- sort(unique(as.numeric(breaks)))
-  breaks <- breaks[breaks >= domain[[1]] & breaks <= domain[[2]]]
+  breaks <- resolve_breaks(domain = domain, breaks = breaks, transform = transform)
 
   if (length(breaks) == 0) {
     breaks <- domain
   }
 
-  if (is.null(fn) && !identical(transform, 'identity')) {
+  if (is.null(fn)) {
     transformed_domain <- transform_values(domain, transform)
 
     fn <- function(x) {
+      transformed_x <- transform_values(x, transform)
+      transformed_x <- apply_oob(
+        transformed_x,
+        oob = oob,
+        range = transformed_domain,
+        scale_type = 'continuous'
+      )
       out <- scales::col_numeric(
         palette = palette,
         domain = transformed_domain
-      )(transform_values(x, transform))
+      )(transformed_x)
       out[is.na(x)] <- '#00000000'
       out
     }
@@ -117,6 +128,7 @@ build_continuous_spec <- function(
     palette = palette,
     domain = domain,
     transform = transform,
+    oob = oob,
     breaks = breaks,
     labels = resolve_labels(breaks, labels),
     title = title,
@@ -136,9 +148,10 @@ build_diverging_spec <- function(
   domain = NULL,
   midpoint = 0,
   breaks = NULL,
-  labels = scales::label_comma(),
+  labels = NULL,
   title = NULL,
-  transform = 'identity',
+  transform = NULL,
+  oob = NULL,
   direction = 'to right',
   width = '160px',
   height = '14px',
@@ -147,7 +160,8 @@ build_diverging_spec <- function(
   na_color = '#00000000'
 ) {
   domain <- resolve_domain(data = data, column = column, domain = domain)
-  validate_transform_domain(domain, transform)
+  transform <- validate_transform_domain(domain, transform)
+  oob <- resolve_oob(oob, default = 'censor')
 
   if (!is.numeric(midpoint) || length(midpoint) != 1 || is.na(midpoint)) {
     rlang::abort('`midpoint` must be a single finite number.')
@@ -169,16 +183,11 @@ build_diverging_spec <- function(
     palette <- rev(palette)
   }
 
-  if (is.null(breaks)) {
-    breaks <- sort(unique(c(domain[[1]], midpoint, domain[[2]])))
-  } else {
-    breaks <- sort(unique(as.numeric(breaks)))
-  }
-
-  breaks <- breaks[breaks >= domain[[1]] & breaks <= domain[[2]]]
+  breaks <- resolve_breaks(domain = domain, breaks = breaks, transform = transform)
 
   if (!midpoint %in% breaks) {
-    breaks <- sort(unique(c(breaks, midpoint)))
+    breaks <- c(breaks, midpoint)
+    breaks <- breaks[order(as.numeric(breaks))]
   }
 
   values <- scales::rescale(
@@ -187,9 +196,16 @@ build_diverging_spec <- function(
     from = transform_values(domain, transform)
   )
   fn <- function(x) {
+    transformed_x <- transform_values(x, transform)
+    transformed_x <- apply_oob(
+      transformed_x,
+      oob = oob,
+      range = transform_values(domain, transform),
+      scale_type = 'diverging'
+    )
     out <- scales::gradient_n_pal(colours = palette, values = values)(
       scales::rescale(
-        transform_values(x, transform),
+        transformed_x,
         to = c(0, 1),
         from = transform_values(domain, transform)
       )
@@ -206,6 +222,7 @@ build_diverging_spec <- function(
     domain = domain,
     midpoint = midpoint,
     transform = transform,
+    oob = oob,
     breaks = breaks,
     labels = resolve_labels(breaks, labels),
     title = title,
@@ -223,26 +240,33 @@ build_bins_spec <- function(
   column,
   palette,
   domain = NULL,
-  bins,
+  bins = NULL,
+  transform = NULL,
+  oob = NULL,
+  right = FALSE,
   labels = NULL,
   title = NULL,
   width = '180px',
-  height = '14px'
+  height = '14px',
+  reverse = FALSE,
+  na_color = '#00000000'
 ) {
   domain <- resolve_domain(data = data, column = column, domain = domain)
+  oob <- resolve_oob(oob, default = 'squish')
+  transform <- validate_transform_domain(domain, transform)
+  bins <- resolve_breaks(domain = domain, breaks = bins, transform = transform)
+  bins <- bins[order(as.numeric(bins))]
 
-  if (missing(bins)) {
-    rlang::abort('`bins` must be supplied for binned scales.')
+  if (bins[[1]] > domain[[1]]) {
+    bins <- c(domain[[1]], bins)
   }
 
-  bins <- sort(unique(as.numeric(bins)))
+  if (bins[[length(bins)]] < domain[[2]]) {
+    bins <- c(bins, domain[[2]])
+  }
 
   if (length(bins) < 2) {
     rlang::abort('`bins` must contain at least two boundary values.')
-  }
-
-  if (bins[[1]] > domain[[1]] || bins[[length(bins)]] < domain[[2]]) {
-    rlang::abort('`bins` must span the full `domain`.')
   }
 
   n_intervals <- length(bins) - 1
@@ -251,21 +275,22 @@ build_bins_spec <- function(
   colors <- if (length(palette) == n_intervals) {
     as.character(palette)
   } else {
-    midpoints <- (bins[-1] + bins[-length(bins)]) / 2
+    transformed_domain <- transform_values(domain, transform)
+    transformed_bins <- transform_values(bins, transform)
+    midpoints <- (transformed_bins[-1] + transformed_bins[-length(transformed_bins)]) / 2
     as.character(
       scales::col_numeric(
         palette = palette,
-        domain = domain
+        domain = transformed_domain
       )(midpoints)
     )
   }
 
   bin_labels <- if (is.null(labels)) {
-    label_fn <- scales::label_comma()
     paste0(
-      label_fn(bins[-length(bins)]),
+      default_labels(bins[-length(bins)]),
       ' - ',
-      label_fn(bins[-1])
+      default_labels(bins[-1])
     )
   } else if (is.function(labels)) {
     boundary_labels <- as.character(labels(bins))
@@ -278,16 +303,48 @@ build_bins_spec <- function(
     resolve_labels(seq_len(n_intervals), labels)
   }
 
+  fn <- function(x) {
+    x_num <- as.numeric(x)
+    x_num <- apply_oob(
+      x_num,
+      oob = oob,
+      range = as.numeric(domain),
+      scale_type = 'binned'
+    )
+
+    if (isTRUE(reverse)) {
+      palette_values <- rev(colors)
+    } else {
+      palette_values <- colors
+    }
+
+    bin_ids <- cut(
+      x_num,
+      breaks = as.numeric(bins),
+      labels = FALSE,
+      include.lowest = TRUE,
+      right = right
+    )
+    out <- unname(palette_values[bin_ids])
+    out[is.na(x)] <- na_color
+    out[is.na(bin_ids)] <- na_color
+    out
+  }
+
   new_gtscale_spec(
     scale_type = 'bins',
     color_method = 'bin',
     column = column,
     palette = as.character(palette),
     domain = domain,
+    transform = transform,
+    oob = oob,
     bins = bins,
+    right = right,
     values = colors,
     labels = bin_labels,
     title = title,
+    fn = fn,
     style = list(
       width = width,
       height = height
@@ -300,10 +357,14 @@ build_quantiles_spec <- function(
   column,
   palette,
   quantiles = 4,
+  oob = NULL,
+  right = FALSE,
   labels = NULL,
   title = NULL,
   width = '180px',
-  height = '14px'
+  height = '14px',
+  reverse = FALSE,
+  na_color = '#00000000'
 ) {
   palette <- resolve_palette(palette = palette, n = quantiles)
   breaks <- resolve_quantile_breaks(data = data, column = column, quantiles = quantiles)
@@ -315,10 +376,14 @@ build_quantiles_spec <- function(
     palette = colors,
     domain = range(breaks, finite = TRUE),
     bins = breaks,
+    oob = oob,
+    right = right,
     labels = labels,
     title = title,
     width = width,
-    height = height
+    height = height,
+    reverse = reverse,
+    na_color = na_color
   ) |>
     modify_gtscale_spec(
       scale_type = 'quantiles',
@@ -378,20 +443,18 @@ set_scale_application <- function(
   na_color = NULL,
   alpha = NULL,
   reverse = FALSE,
-  accessibility = c('none', 'warn'),
   autocolor_text = TRUE,
   contrast_algo = c('apca', 'wcag'),
   autocolor_light = '#FFFFFF',
   autocolor_dark = '#000000'
 ) {
-  spec$application <- modifyList(
+  spec$application <- utils::modifyList(
     spec$application,
     list(
       apply_to = match.arg(apply_to),
       na_color = na_color,
       alpha = alpha,
       reverse = reverse,
-      accessibility = match.arg(accessibility),
       autocolor_text = autocolor_text,
       contrast_algo = match.arg(contrast_algo),
       autocolor_light = autocolor_light,
@@ -407,17 +470,25 @@ set_scale_legend <- function(
   output = 'contextual',
   placement = 'source_note',
   layout = c('stack', 'inline'),
+  align = c('left', 'center', 'right'),
+  show_border = TRUE,
+  border_color = '#D0D7DE',
+  border_radius = '8px',
   show_na = FALSE,
   na_label = 'Missing',
   na_color = NULL
 ) {
   validate_gtscale_spec(spec)
-  spec$legend <- modifyList(
+  spec$legend <- utils::modifyList(
     spec$legend,
     list(
       output = output,
       placement = placement,
       layout = match.arg(layout),
+      align = match.arg(align),
+      show_border = show_border,
+      border_color = border_color,
+      border_radius = border_radius,
       show_na = show_na,
       na_label = na_label,
       na_color = na_color
@@ -432,7 +503,7 @@ finalize_spec_metadata <- function(spec) {
     spec$legend$na_color <- '#D9D9D9'
   }
 
-  warn_on_accessibility_risks(spec)
+  spec
 }
 
 finalize_scale_spec <- function(spec, data = NULL) {
@@ -456,6 +527,7 @@ finalize_scale_spec <- function(spec, data = NULL) {
       labels = spec$labels,
       title = spec$title,
       transform = spec$transform,
+      oob = spec$oob,
       direction = spec$style$direction,
       width = spec$style$width,
       height = spec$style$height,
@@ -483,6 +555,7 @@ finalize_scale_spec <- function(spec, data = NULL) {
       labels = spec$labels,
       title = spec$title,
       transform = spec$transform,
+      oob = spec$oob,
       direction = spec$style$direction,
       width = spec$style$width,
       height = spec$style$height,
@@ -508,10 +581,15 @@ finalize_scale_spec <- function(spec, data = NULL) {
       palette = spec$palette,
       domain = spec$domain,
       bins = spec$bins,
+      transform = spec$transform,
+      oob = spec$oob,
+      right = spec$right %||% FALSE,
       labels = spec$labels,
       title = spec$title,
       width = spec$style$width,
-      height = spec$style$height
+      height = spec$style$height,
+      reverse = spec$application$reverse,
+      na_color = spec$application$na_color %||% '#00000000'
     ) |>
       modify_gtscale_spec(
         application = spec$application,
@@ -530,10 +608,14 @@ finalize_scale_spec <- function(spec, data = NULL) {
       column = spec$column,
       palette = spec$palette,
       quantiles = spec$quantiles,
+      oob = spec$oob,
+      right = spec$right %||% FALSE,
       labels = spec$labels,
       title = spec$title,
       width = spec$style$width,
-      height = spec$style$height
+      height = spec$style$height,
+      reverse = spec$application$reverse,
+      na_color = spec$application$na_color %||% '#00000000'
     ) |>
       modify_gtscale_spec(
         application = spec$application,

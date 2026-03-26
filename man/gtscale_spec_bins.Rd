@@ -7,8 +7,11 @@
 gtscale_spec_bins(
   column,
   palette,
-  bins,
+  bins = NULL,
   domain = NULL,
+  transform = NULL,
+  oob = NULL,
+  right = FALSE,
   labels = NULL,
   title = NULL,
   width = "180px",
@@ -19,14 +22,26 @@ gtscale_spec_bins(
 \item{column}{A column to target.}
 
 \item{palette}{A vector of colors or palette endpoints used for the bins.
-A single named palette can also be supplied.}
+A single named palette or palette function can also be supplied.}
 
-\item{bins}{A numeric vector of bin boundaries.}
+\item{bins}{Optional bin boundaries or a break function. When omitted,
+breaks are generated from the \code{domain}, \code{column}, and \code{transform}.}
 
-\item{domain}{Optional numeric limits. If omitted, these can be inferred when
-the spec is applied to a \code{gt} table.}
+\item{domain}{Optional limits. If omitted, these can be inferred when the
+spec is applied to a \code{gt} table.}
 
-\item{labels}{A labeling function or character vector for the legend.}
+\item{transform}{A transformation specification understood by
+\code{\link[scales:new_transform]{scales::as.transform()}}. This is used when generating default bins or
+when interpreting break functions.}
+
+\item{oob}{Out-of-bounds handling function or shortcut. Use a function like
+\code{\link[scales:oob]{scales::oob_squish()}} or a shortcut such as \code{"censor"} or \code{"squish"}.}
+
+\item{right}{Whether intervals should be closed on the right. The default of
+\code{FALSE} yields intervals like \verb{[a, b)}.}
+
+\item{labels}{An optional labeling function or character vector for the
+legend. When omitted, labels are inferred from the bin values.}
 
 \item{title}{Optional legend title.}
 

@@ -11,9 +11,10 @@ gtscale_color_diverging(
   domain = NULL,
   midpoint = 0,
   breaks = NULL,
-  labels = scales::label_comma(),
+  labels = NULL,
   title = NULL,
-  transform = c("identity", "log10", "sqrt"),
+  transform = NULL,
+  oob = NULL,
   direction = "to right",
   width = "160px",
   height = "14px",
@@ -34,13 +35,21 @@ omitted, the limits are inferred from \code{column}.}
 
 \item{midpoint}{Numeric midpoint used to anchor the diverging scale.}
 
-\item{breaks}{Optional numeric break values to display below the gradient.}
+\item{breaks}{Optional break values or a break function to display below the
+gradient.}
 
-\item{labels}{A labeling function or a character vector for the breaks.}
+\item{labels}{An optional labeling function or a character vector for the
+breaks.}
 
 \item{title}{Optional legend title.}
 
-\item{transform}{Transformation used for color mapping and break placement.}
+\item{transform}{A transformation specification understood by
+\code{\link[scales:new_transform]{scales::as.transform()}}. When omitted, an appropriate transform is
+inferred from the data.}
+
+\item{oob}{Out-of-bounds handling function or shortcut. Use a function like
+\code{\link[scales:oob]{scales::oob_squish()}} or a shortcut such as \code{"censor"}, \code{"squish"},
+\code{"keep"}, or \code{"discard"}.}
 
 \item{direction}{CSS gradient direction. Defaults to \code{"to right"}.}
 

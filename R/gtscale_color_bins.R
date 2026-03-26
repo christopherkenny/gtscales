@@ -5,16 +5,24 @@
 #' [gtscale_data_color_bins()].
 #'
 #' @param data A `gt_tbl` created by [gt::gt()].
-#' @param column An optional numeric column in the underlying table used to infer
-#'   `domain`.
-#' @param palette A vector of colors, palette endpoints, or a single named
-#'   palette used to color the bins.
-#' @param domain A numeric vector of length 2 giving the scale limits. When
-#'   omitted, the limits are inferred from `column`.
-#' @param bins A numeric vector of bin boundaries.
-#' @param labels A labeling function or a character vector for the bins. When a
-#'   function is supplied, it is applied to the bin boundaries before interval
-#'   labels are constructed.
+#' @param column An optional numeric, Date, POSIXt, or difftime column in the
+#'   underlying table used to infer `domain`.
+#' @param palette A vector of colors, palette endpoints, a single named
+#'   palette, or a palette function used to color the bins.
+#' @param domain A vector of length 2 giving the scale limits. When omitted,
+#'   the limits are inferred from `column`.
+#' @param bins Optional bin boundaries or a break function. When omitted,
+#'   breaks are generated from `domain`, `column`, and `transform`.
+#' @param transform A transformation specification understood by
+#'   [scales::as.transform()]. This is used when generating default bins or
+#'   when interpreting break functions.
+#' @param labels An optional labeling function or a character vector for the
+#'   bins. When a function is supplied, it is applied to the bin boundaries
+#'   before interval labels are constructed.
+#' @param oob Out-of-bounds handling function or shortcut. Use a function like
+#'   [scales::oob_squish()] or a shortcut such as `"censor"` or `"squish"`.
+#' @param right Whether intervals should be closed on the right. The default of
+#'   `FALSE` yields intervals like `[a, b)`.
 #' @param title Optional legend title.
 #' @param width Width of the legend.
 #' @param height Height of the swatches.
@@ -44,7 +52,10 @@ gtscale_color_bins <- function(
   column = NULL,
   palette,
   domain = NULL,
-  bins,
+  bins = NULL,
+  transform = NULL,
+  oob = NULL,
+  right = FALSE,
   labels = NULL,
   title = NULL,
   width = '180px',
@@ -56,6 +67,9 @@ gtscale_color_bins <- function(
     palette = palette,
     bins = bins,
     domain = domain,
+    transform = transform,
+    oob = oob,
+    right = right,
     labels = labels,
     title = title,
     width = width,

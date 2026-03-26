@@ -64,16 +64,6 @@ test_that('legend helpers validate required inputs', {
       gtscale_color_continuous(),
     'Supply either `palette` or `fn`'
   )
-
-  expect_error(
-    gt::gt(gt::exibble) |>
-      gtscale_color_bins(
-        column = currency,
-        palette = c('#f7fbff', '#08306b'),
-        bins = c(0, 10)
-      ),
-    '`bins` must span the full `domain`'
-  )
 })
 
 test_that('discrete wrappers add legend notes', {

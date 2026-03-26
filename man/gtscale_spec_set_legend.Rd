@@ -9,6 +9,10 @@ gtscale_spec_set_legend(
   output = "contextual",
   placement = "source_note",
   layout = c("stack", "inline"),
+  align = c("left", "center", "right"),
+  show_border = TRUE,
+  border_color = "#D0D7DE",
+  border_radius = "8px",
   show_na = FALSE,
   na_label = "Missing",
   na_color = NULL
@@ -21,11 +25,20 @@ gtscale_spec_set_legend(
 \code{gt}-managed HTML/LaTeX source notes, or choose a specific output like
 \code{"html"}, \code{"latex"}, or \code{"typst"}.}
 
-\item{placement}{Legend placement target. \code{"source_note"} and \code{"subtitle"}
-are currently implemented.}
+\item{placement}{Legend placement target. \code{"source_note"}, \code{"title"}, and
+\code{"subtitle"} are currently implemented.}
 
 \item{layout}{Whether multiple legends in the same heading area should stack
 vertically or sit inline.}
+
+\item{align}{Horizontal alignment for the legend container.}
+
+\item{show_border}{Whether the legend bar, bin frame, and swatches should
+draw borders.}
+
+\item{border_color}{Border color used for legend frames and swatches.}
+
+\item{border_radius}{Border radius used for HTML and Typst legend frames.}
 
 \item{show_na}{Whether to include an explicit missing-value legend entry.}
 
