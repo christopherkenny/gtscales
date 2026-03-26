@@ -1,3 +1,40 @@
 url: https://christophertkenny.com/gtscales/
 template:
   bootstrap: 5
+reference:
+  - title: Color And Legend
+    desc: One-step helpers that color `gt` tables and attach matched legends.
+    contents:
+      - gtscale_data_color_continuous
+      - gtscale_data_color_diverging
+      - gtscale_data_color_bins
+      - gtscale_data_color_quantiles
+      - gtscale_data_color_discrete
+
+  - title: Legend Only
+    desc: Lower-level helpers for attaching legends to tables that are already colored.
+    contents:
+      - gtscale_color_continuous
+      - gtscale_color_diverging
+      - gtscale_color_bins
+      - gtscale_color_quantiles
+      - gtscale_color_discrete
+
+  - title: Scale Specifications
+    desc: Reusable scale definitions and application helpers.
+    contents:
+      - gtscale_spec_continuous
+      - gtscale_spec_diverging
+      - gtscale_spec_bins
+      - gtscale_spec_quantiles
+      - gtscale_spec_discrete
+      - gtscale_spec_set_application
+      - gtscale_spec_set_legend
+      - gtscale_apply
+      - gtscale_legend
+      - gtscale_apply_legend
+
+  - title: Rendering
+    desc: Render legends directly for supported outputs.
+    contents:
+      - gtscale_render_legend
