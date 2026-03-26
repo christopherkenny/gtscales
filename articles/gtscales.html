@@ -62,7 +62,10 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gt.rstudio.com" class="external-link">gt</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://christophertkenny.com/gtscales/">gtscales</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://scales.r-lib.org" class="external-link">scales</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://scales.r-lib.org" class="external-link">scales</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">big_number_labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://scales.r-lib.org/reference/label_number.html" class="external-link">label_number</a></span><span class="op">(</span>scale_cut <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/number.html" class="external-link">cut_short_scale</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">date_labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://scales.r-lib.org/reference/label_date.html" class="external-link">label_date</a></span><span class="op">(</span><span class="st">'%b %d'</span><span class="op">)</span></span></code></pre></div>
 <p><code>gtscales</code> adds matched legends to color-encoded
 <code>gt</code> tables. The package is built around two common
 needs:</p>
@@ -86,8 +89,10 @@ attach a matching legend.</p>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/gtscale_data_color_continuous.html">gtscale_data_color_continuous</a></span><span class="op">(</span></span>
 <span>    column <span class="op">=</span> <span class="va">num</span>,</span>
-<span>    palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#A0442C"</span>, <span class="st">"white"</span>, <span class="st">"#0063B1"</span><span class="op">)</span>,</span>
-<span>    title <span class="op">=</span> <span class="st">"Numeric scale"</span></span>
+<span>    palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'#A0442C'</span>, <span class="st">'white'</span>, <span class="st">'#0063B1'</span><span class="op">)</span>,</span>
+<span>    labels <span class="op">=</span> <span class="va">big_number_labels</span>,</span>
+<span>    width <span class="op">=</span> <span class="st">'220px'</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">'Numeric scale'</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="mwlefoodfi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#mwlefoodfi table {
@@ -641,11 +646,11 @@ attach a matching legend.</p>
 </tr>
 </tbody>
 <tfoot><tr class="gt_sourcenotes">
-<td class="gt_sourcenote" colspan="9"><div style="width:160px; margin-right:auto; text-align:left;">
+<td class="gt_sourcenote" colspan="9"><div style="width:220px; margin-right:auto; text-align:left;">
 <div style="font-weight:600; margin-bottom:4px;">Numeric scale</div>
 <div style="height:14px; border-radius:8px; border:1px solid #D0D7DE; border-radius:8px; background:linear-gradient(to right, #A0442C, white, #0063B1);"></div>
-<div style="position:relative; width:160px; height:20px; margin-top:4px; font-size:11px; color:#57606a;">
-<span style="position:absolute; left:22.52%; transform:translateX(-50%); white-space:nowrap;">2,000,000</span><span style="position:absolute; left:45.05%; transform:translateX(-50%); white-space:nowrap;">4,000,000</span><span style="position:absolute; left:67.57%; transform:translateX(-50%); white-space:nowrap;">6,000,000</span><span style="position:absolute; left:90.09%; transform:translateX(-50%); white-space:nowrap;">8,000,000</span>
+<div style="position:relative; width:220px; height:20px; margin-top:4px; font-size:11px; color:#57606a;">
+<span style="position:absolute; left:22.52%; transform:translateX(-50%); white-space:nowrap;">2M</span><span style="position:absolute; left:45.05%; transform:translateX(-50%); white-space:nowrap;">4M</span><span style="position:absolute; left:67.57%; transform:translateX(-50%); white-space:nowrap;">6M</span><span style="position:absolute; left:90.09%; transform:translateX(-50%); white-space:nowrap;">8M</span>
 </div>
 </div></td>
     </tr></tfoot>
@@ -658,9 +663,9 @@ smooth gradient.</p>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/gtscale_data_color_bins.html">gtscale_data_color_bins</a></span><span class="op">(</span></span>
 <span>    column <span class="op">=</span> <span class="va">currency</span>,</span>
-<span>    palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#f7fbff"</span>, <span class="st">"#08306b"</span><span class="op">)</span>,</span>
+<span>    palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'#f7fbff'</span>, <span class="st">'#08306b'</span><span class="op">)</span>,</span>
 <span>    bins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">100</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fl">70000</span><span class="op">)</span>,</span>
-<span>    title <span class="op">=</span> <span class="st">"Currency bins"</span></span>
+<span>    title <span class="op">=</span> <span class="st">'Currency bins'</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="eexombwkke" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#eexombwkke table {
@@ -1232,9 +1237,11 @@ smooth gradient.</p>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/gtscale_data_color_quantiles.html">gtscale_data_color_quantiles</a></span><span class="op">(</span></span>
 <span>    column <span class="op">=</span> <span class="va">num</span>,</span>
-<span>    palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#fdd49e"</span>, <span class="st">"#fdbb84"</span>, <span class="st">"#ef6548"</span>, <span class="st">"#990000"</span><span class="op">)</span>,</span>
+<span>    palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'#fdd49e'</span>, <span class="st">'#fdbb84'</span>, <span class="st">'#ef6548'</span>, <span class="st">'#990000'</span><span class="op">)</span>,</span>
 <span>    quantiles <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>    title <span class="op">=</span> <span class="st">"Quartiles"</span></span>
+<span>    labels <span class="op">=</span> <span class="va">big_number_labels</span>,</span>
+<span>    width <span class="op">=</span> <span class="st">'220px'</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">'Quartiles'</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="ulbfdpbcyv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#ulbfdpbcyv table {
@@ -1788,13 +1795,13 @@ smooth gradient.</p>
 </tr>
 </tbody>
 <tfoot><tr class="gt_sourcenotes">
-<td class="gt_sourcenote" colspan="9"><div style="width:180px; margin-right:auto; text-align:left;">
+<td class="gt_sourcenote" colspan="9"><div style="width:220px; margin-right:auto; text-align:left;">
 <div style="font-weight:600; margin-bottom:4px;">Quartiles</div>
 <div style="display:flex; width:100%; overflow:hidden; border:1px solid #D0D7DE; border-radius:8px; ">
 <span style="display:inline-block; width:25.0000%; height:14px; background:#fdd49e;"></span><span style="display:inline-block; width:25.0000%; height:14px; background:#fdbb84;"></span><span style="display:inline-block; width:25.0000%; height:14px; background:#ef6548;"></span><span style="display:inline-block; width:25.0000%; height:14px; background:#990000;"></span>
 </div>
 <div style="display:flex; justify-content:space-between; gap:8px; margin-top:4px; font-size:11px; color:#57606a;">
-<span>0 - 18</span><span>18 - 444</span><span>444 - 391,275</span><span>391,275 - 8,880,000</span>
+<span>0 - 18</span><span>18 - 444</span><span>444 - 391K</span><span>391K - 9M</span>
 </div>
 </div></td>
     </tr></tfoot>
@@ -1804,16 +1811,16 @@ smooth gradient.</p>
 ordered values.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  district <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span><span class="op">)</span>,</span>
-<span>  status <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Safe D"</span>, <span class="st">"Toss-up"</span>, <span class="st">"Lean R"</span>, <span class="st">"Safe R"</span><span class="op">)</span>,</span>
+<span>  district <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'A'</span>, <span class="st">'B'</span>, <span class="st">'C'</span>, <span class="st">'D'</span><span class="op">)</span>,</span>
+<span>  status <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Safe D'</span>, <span class="st">'Toss-up'</span>, <span class="st">'Lean R'</span>, <span class="st">'Safe R'</span><span class="op">)</span>,</span>
 <span>  margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">2</span>, <span class="op">-</span><span class="fl">6</span>, <span class="op">-</span><span class="fl">21</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/gtscale_data_color_discrete.html">gtscale_data_color_discrete</a></span><span class="op">(</span></span>
 <span>    column <span class="op">=</span> <span class="va">status</span>,</span>
-<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#2166ac"</span>, <span class="st">"#f7f7f7"</span>, <span class="st">"#ef8a62"</span>, <span class="st">"#b2182b"</span><span class="op">)</span>,</span>
-<span>    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Safe D"</span>, <span class="st">"Toss-up"</span>, <span class="st">"Lean R"</span>, <span class="st">"Safe R"</span><span class="op">)</span>,</span>
-<span>    title <span class="op">=</span> <span class="st">"Race rating"</span></span>
+<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'#2166ac'</span>, <span class="st">'#f7f7f7'</span>, <span class="st">'#ef8a62'</span>, <span class="st">'#b2182b'</span><span class="op">)</span>,</span>
+<span>    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Safe D'</span>, <span class="st">'Toss-up'</span>, <span class="st">'Lean R'</span>, <span class="st">'Safe R'</span><span class="op">)</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">'Race rating'</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="kgufivjubq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#kgufivjubq table {
@@ -2314,13 +2321,13 @@ helpers attach only the legend.</p>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/data_color.html" class="external-link">data_color</a></span><span class="op">(</span></span>
 <span>    columns <span class="op">=</span> <span class="va">num</span>,</span>
-<span>    method <span class="op">=</span> <span class="st">"numeric"</span>,</span>
-<span>    palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#A0442C"</span>, <span class="st">"white"</span>, <span class="st">"#0063B1"</span><span class="op">)</span></span>
+<span>    method <span class="op">=</span> <span class="st">'numeric'</span>,</span>
+<span>    palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'#A0442C'</span>, <span class="st">'white'</span>, <span class="st">'#0063B1'</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/gtscale_color_continuous.html">gtscale_color_continuous</a></span><span class="op">(</span></span>
 <span>    column <span class="op">=</span> <span class="va">num</span>,</span>
-<span>    palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#A0442C"</span>, <span class="st">"white"</span>, <span class="st">"#0063B1"</span><span class="op">)</span>,</span>
-<span>    title <span class="op">=</span> <span class="st">"Numeric scale"</span></span>
+<span>    palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'#A0442C'</span>, <span class="st">'white'</span>, <span class="st">'#0063B1'</span><span class="op">)</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">'Numeric scale'</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="txvafbsnay" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#txvafbsnay table {
@@ -2893,11 +2900,13 @@ scale definition from application and legend placement.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtscale_spec_continuous.html">gtscale_spec_continuous</a></span><span class="op">(</span></span>
 <span>  <span class="va">num</span>,</span>
-<span>  palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#A0442C"</span>, <span class="st">"white"</span>, <span class="st">"#0063B1"</span><span class="op">)</span>,</span>
-<span>  title <span class="op">=</span> <span class="st">"Numeric scale"</span></span>
+<span>  palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'#A0442C'</span>, <span class="st">'white'</span>, <span class="st">'#0063B1'</span><span class="op">)</span>,</span>
+<span>  labels <span class="op">=</span> <span class="va">big_number_labels</span>,</span>
+<span>  width <span class="op">=</span> <span class="st">'220px'</span>,</span>
+<span>  title <span class="op">=</span> <span class="st">'Numeric scale'</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/gtscale_spec_set_application.html">gtscale_spec_set_application</a></span><span class="op">(</span>apply_to <span class="op">=</span> <span class="st">"fill"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/gtscale_spec_set_legend.html">gtscale_spec_set_legend</a></span><span class="op">(</span>placement <span class="op">=</span> <span class="st">"subtitle"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/gtscale_spec_set_application.html">gtscale_spec_set_application</a></span><span class="op">(</span>apply_to <span class="op">=</span> <span class="st">'fill'</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/gtscale_spec_set_legend.html">gtscale_spec_set_legend</a></span><span class="op">(</span>placement <span class="op">=</span> <span class="st">'subtitle'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">exibble</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -3357,11 +3366,11 @@ scale definition from application and legend placement.</p>
 <td colspan="9" class="gt_heading gt_title gt_font_normal" style> </td>
     </tr>
 <tr class="gt_heading">
-<td colspan="9" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style><div style="width:160px; margin-right:auto; text-align:left;">
+<td colspan="9" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style><div style="width:220px; margin-right:auto; text-align:left;">
 <div style="font-weight:600; margin-bottom:4px;">Numeric scale</div>
 <div style="height:14px; border-radius:8px; border:1px solid #D0D7DE; border-radius:8px; background:linear-gradient(to right, #A0442C, white, #0063B1);"></div>
-<div style="position:relative; width:160px; height:20px; margin-top:4px; font-size:11px; color:#57606a;">
-<span style="position:absolute; left:22.52%; transform:translateX(-50%); white-space:nowrap;">2,000,000</span><span style="position:absolute; left:45.05%; transform:translateX(-50%); white-space:nowrap;">4,000,000</span><span style="position:absolute; left:67.57%; transform:translateX(-50%); white-space:nowrap;">6,000,000</span><span style="position:absolute; left:90.09%; transform:translateX(-50%); white-space:nowrap;">8,000,000</span>
+<div style="position:relative; width:220px; height:20px; margin-top:4px; font-size:11px; color:#57606a;">
+<span style="position:absolute; left:22.52%; transform:translateX(-50%); white-space:nowrap;">2M</span><span style="position:absolute; left:45.05%; transform:translateX(-50%); white-space:nowrap;">4M</span><span style="position:absolute; left:67.57%; transform:translateX(-50%); white-space:nowrap;">6M</span><span style="position:absolute; left:90.09%; transform:translateX(-50%); white-space:nowrap;">8M</span>
 </div>
 </div></td>
     </tr>
@@ -3486,10 +3495,10 @@ you would already use in plots.</p>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/gtscale_data_color_bins.html">gtscale_data_color_bins</a></span><span class="op">(</span></span>
 <span>    column <span class="op">=</span> <span class="va">share</span>,</span>
-<span>    palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#f7fbff"</span>, <span class="st">"#08306b"</span><span class="op">)</span>,</span>
+<span>    palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'#f7fbff'</span>, <span class="st">'#08306b'</span><span class="op">)</span>,</span>
 <span>    bins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>    labels <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/label_percent.html" class="external-link">label_percent</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    title <span class="op">=</span> <span class="st">"Share bins"</span></span>
+<span>    title <span class="op">=</span> <span class="st">'Share bins'</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="cbwjcfdjag" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#cbwjcfdjag table {
@@ -3975,10 +3984,10 @@ directly.</p>
 <span>  <span class="fu"><a href="../reference/gtscale_data_color_continuous.html">gtscale_data_color_continuous</a></span><span class="op">(</span></span>
 <span>    column <span class="op">=</span> <span class="va">value</span>,</span>
 <span>    palette <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/pal_viridis.html" class="external-link">pal_viridis</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    transform <span class="op">=</span> <span class="st">"log10"</span>,</span>
+<span>    transform <span class="op">=</span> <span class="st">'log10'</span>,</span>
 <span>    breaks <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/breaks_log.html" class="external-link">breaks_log</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    labels <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/label_number.html" class="external-link">label_number</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    title <span class="op">=</span> <span class="st">"Log scale"</span></span>
+<span>    title <span class="op">=</span> <span class="st">'Log scale'</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="fvsybhaagl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#fvsybhaagl table {
@@ -4459,15 +4468,17 @@ In many cases, <code>gtscales</code> can infer the appropriate transform
 from the column class.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  when <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2024-01-01"</span>, <span class="st">"2024-01-20"</span>, <span class="st">"2024-02-10"</span>, <span class="st">"2024-03-05"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  when <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'2024-01-01'</span>, <span class="st">'2024-01-20'</span>, <span class="st">'2024-02-10'</span>, <span class="st">'2024-03-05'</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">18</span>, <span class="fl">35</span>, <span class="fl">52</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/gtscale_data_color_bins.html">gtscale_data_color_bins</a></span><span class="op">(</span></span>
 <span>    column <span class="op">=</span> <span class="va">when</span>,</span>
 <span>    palette <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/pal_viridis.html" class="external-link">pal_viridis</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    bins <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/breaks_width.html" class="external-link">breaks_width</a></span><span class="op">(</span><span class="st">"1 month"</span><span class="op">)</span>,</span>
-<span>    title <span class="op">=</span> <span class="st">"Monthly bins"</span></span>
+<span>    bins <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/breaks_width.html" class="external-link">breaks_width</a></span><span class="op">(</span><span class="st">'1 month'</span><span class="op">)</span>,</span>
+<span>    labels <span class="op">=</span> <span class="va">date_labels</span>,</span>
+<span>    width <span class="op">=</span> <span class="st">'220px'</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">'Monthly bins'</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="vijbfglzvn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#vijbfglzvn table {
@@ -4942,13 +4953,13 @@ from the column class.</p>
 </tr>
 </tbody>
 <tfoot><tr class="gt_sourcenotes">
-<td class="gt_sourcenote" colspan="2"><div style="width:180px; margin-right:auto; text-align:left;">
+<td class="gt_sourcenote" colspan="2"><div style="width:220px; margin-right:auto; text-align:left;">
 <div style="font-weight:600; margin-bottom:4px;">Monthly bins</div>
 <div style="display:flex; width:100%; overflow:hidden; border:1px solid #D0D7DE; border-radius:8px; ">
 <span style="display:inline-block; width:33.3333%; height:14px; background:#440154FF;"></span><span style="display:inline-block; width:33.3333%; height:14px; background:#21908CFF;"></span><span style="display:inline-block; width:33.3333%; height:14px; background:#FDE725FF;"></span>
 </div>
 <div style="display:flex; justify-content:space-between; gap:8px; margin-top:4px; font-size:11px; color:#57606a;">
-<span>2024-01-01 - 2024-02-01</span><span>2024-02-01 - 2024-03-01</span><span>2024-03-01 - 2024-03-05</span>
+<span>Jan 01 - Feb 01</span><span>Feb 01 - Mar 01</span><span>Mar 01 - Mar 05</span>
 </div>
 </div></td>
     </tr></tfoot>
@@ -4968,10 +4979,12 @@ outputs.</p>
 <span>  <span class="fu"><a href="../reference/gtscale_legend.html">gtscale_legend</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/gtscale_spec_continuous.html">gtscale_spec_continuous</a></span><span class="op">(</span></span>
 <span>      <span class="va">num</span>,</span>
-<span>      palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#A0442C"</span>, <span class="st">"white"</span>, <span class="st">"#0063B1"</span><span class="op">)</span>,</span>
-<span>      title <span class="op">=</span> <span class="st">"Numeric scale"</span></span>
+<span>      palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'#A0442C'</span>, <span class="st">'white'</span>, <span class="st">'#0063B1'</span><span class="op">)</span>,</span>
+<span>      labels <span class="op">=</span> <span class="va">big_number_labels</span>,</span>
+<span>      width <span class="op">=</span> <span class="st">'220px'</span>,</span>
+<span>      title <span class="op">=</span> <span class="st">'Numeric scale'</span></span>
 <span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu"><a href="../reference/gtscale_spec_set_legend.html">gtscale_spec_set_legend</a></span><span class="op">(</span>placement <span class="op">=</span> <span class="st">"source_note"</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="../reference/gtscale_spec_set_legend.html">gtscale_spec_set_legend</a></span><span class="op">(</span>placement <span class="op">=</span> <span class="st">'source_note'</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="egslqeqmfa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#egslqeqmfa table {
@@ -5525,17 +5538,17 @@ outputs.</p>
 </tr>
 </tbody>
 <tfoot><tr class="gt_sourcenotes">
-<td class="gt_sourcenote" colspan="9"><div style="width:160px; margin-right:auto; text-align:left;">
+<td class="gt_sourcenote" colspan="9"><div style="width:220px; margin-right:auto; text-align:left;">
 <div style="font-weight:600; margin-bottom:4px;">Numeric scale</div>
 <div style="height:14px; border-radius:8px; border:1px solid #D0D7DE; border-radius:8px; background:linear-gradient(to right, #A0442C, white, #0063B1);"></div>
-<div style="position:relative; width:160px; height:20px; margin-top:4px; font-size:11px; color:#57606a;">
-<span style="position:absolute; left:22.52%; transform:translateX(-50%); white-space:nowrap;">2,000,000</span><span style="position:absolute; left:45.05%; transform:translateX(-50%); white-space:nowrap;">4,000,000</span><span style="position:absolute; left:67.57%; transform:translateX(-50%); white-space:nowrap;">6,000,000</span><span style="position:absolute; left:90.09%; transform:translateX(-50%); white-space:nowrap;">8,000,000</span>
+<div style="position:relative; width:220px; height:20px; margin-top:4px; font-size:11px; color:#57606a;">
+<span style="position:absolute; left:22.52%; transform:translateX(-50%); white-space:nowrap;">2M</span><span style="position:absolute; left:45.05%; transform:translateX(-50%); white-space:nowrap;">4M</span><span style="position:absolute; left:67.57%; transform:translateX(-50%); white-space:nowrap;">6M</span><span style="position:absolute; left:90.09%; transform:translateX(-50%); white-space:nowrap;">8M</span>
 </div>
 </div></td>
     </tr></tfoot>
 </table>
 </div>
-<p>When you want the legend closer to the table heading, use
+<p>When you want the legend closer to the heading, use
 <code>subtitle</code> or <code>title</code>.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">exibble</span> <span class="op">|&gt;</span></span>
@@ -5543,11 +5556,13 @@ outputs.</p>
 <span>  <span class="fu"><a href="../reference/gtscale_legend.html">gtscale_legend</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/gtscale_spec_quantiles.html">gtscale_spec_quantiles</a></span><span class="op">(</span></span>
 <span>      <span class="va">num</span>,</span>
-<span>      palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#fdd49e"</span>, <span class="st">"#fdbb84"</span>, <span class="st">"#ef6548"</span>, <span class="st">"#990000"</span><span class="op">)</span>,</span>
+<span>      palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'#fdd49e'</span>, <span class="st">'#fdbb84'</span>, <span class="st">'#ef6548'</span>, <span class="st">'#990000'</span><span class="op">)</span>,</span>
 <span>      quantiles <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>      title <span class="op">=</span> <span class="st">"Quartiles"</span></span>
+<span>      labels <span class="op">=</span> <span class="va">big_number_labels</span>,</span>
+<span>      width <span class="op">=</span> <span class="st">'220px'</span>,</span>
+<span>      title <span class="op">=</span> <span class="st">'Quartiles'</span></span>
 <span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu"><a href="../reference/gtscale_spec_set_legend.html">gtscale_spec_set_legend</a></span><span class="op">(</span>placement <span class="op">=</span> <span class="st">"subtitle"</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="../reference/gtscale_spec_set_legend.html">gtscale_spec_set_legend</a></span><span class="op">(</span>placement <span class="op">=</span> <span class="st">'subtitle'</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="amrewkadgw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#amrewkadgw table {
@@ -6004,13 +6019,13 @@ outputs.</p>
 <td colspan="9" class="gt_heading gt_title gt_font_normal" style> </td>
     </tr>
 <tr class="gt_heading">
-<td colspan="9" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style><div style="width:180px; margin-right:auto; text-align:left;">
+<td colspan="9" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style><div style="width:220px; margin-right:auto; text-align:left;">
 <div style="font-weight:600; margin-bottom:4px;">Quartiles</div>
 <div style="display:flex; width:100%; overflow:hidden; border:1px solid #D0D7DE; border-radius:8px; ">
 <span style="display:inline-block; width:25.0000%; height:14px; background:#fdd49e;"></span><span style="display:inline-block; width:25.0000%; height:14px; background:#fdbb84;"></span><span style="display:inline-block; width:25.0000%; height:14px; background:#ef6548;"></span><span style="display:inline-block; width:25.0000%; height:14px; background:#990000;"></span>
 </div>
 <div style="display:flex; justify-content:space-between; gap:8px; margin-top:4px; font-size:11px; color:#57606a;">
-<span>0 - 18</span><span>18 - 444</span><span>444 - 391,275</span><span>391,275 - 8,880,000</span>
+<span>0 - 18</span><span>18 - 444</span><span>444 - 391K</span><span>391K - 9M</span>
 </div>
 </div></td>
     </tr>
@@ -6124,10 +6139,12 @@ outputs.</p>
 <span>  <span class="fu"><a href="../reference/gtscale_legend.html">gtscale_legend</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/gtscale_spec_continuous.html">gtscale_spec_continuous</a></span><span class="op">(</span></span>
 <span>      <span class="va">num</span>,</span>
-<span>      palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#A0442C"</span>, <span class="st">"white"</span>, <span class="st">"#0063B1"</span><span class="op">)</span>,</span>
-<span>      title <span class="op">=</span> <span class="st">"Numeric scale"</span></span>
+<span>      palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'#A0442C'</span>, <span class="st">'white'</span>, <span class="st">'#0063B1'</span><span class="op">)</span>,</span>
+<span>      labels <span class="op">=</span> <span class="va">big_number_labels</span>,</span>
+<span>      width <span class="op">=</span> <span class="st">'220px'</span>,</span>
+<span>      title <span class="op">=</span> <span class="st">'Numeric scale'</span></span>
 <span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu"><a href="../reference/gtscale_spec_set_legend.html">gtscale_spec_set_legend</a></span><span class="op">(</span>placement <span class="op">=</span> <span class="st">"title"</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="../reference/gtscale_spec_set_legend.html">gtscale_spec_set_legend</a></span><span class="op">(</span>placement <span class="op">=</span> <span class="st">'title'</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="xbhisifmmy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#xbhisifmmy table {
@@ -6581,11 +6598,11 @@ outputs.</p>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
 <tr class="gt_heading">
-<td colspan="9" class="gt_heading gt_title gt_font_normal gt_bottom_border" style><div style="width:160px; margin-right:auto; text-align:left;">
+<td colspan="9" class="gt_heading gt_title gt_font_normal gt_bottom_border" style><div style="width:220px; margin-right:auto; text-align:left;">
 <div style="font-weight:600; margin-bottom:4px;">Numeric scale</div>
 <div style="height:14px; border-radius:8px; border:1px solid #D0D7DE; border-radius:8px; background:linear-gradient(to right, #A0442C, white, #0063B1);"></div>
-<div style="position:relative; width:160px; height:20px; margin-top:4px; font-size:11px; color:#57606a;">
-<span style="position:absolute; left:22.52%; transform:translateX(-50%); white-space:nowrap;">2,000,000</span><span style="position:absolute; left:45.05%; transform:translateX(-50%); white-space:nowrap;">4,000,000</span><span style="position:absolute; left:67.57%; transform:translateX(-50%); white-space:nowrap;">6,000,000</span><span style="position:absolute; left:90.09%; transform:translateX(-50%); white-space:nowrap;">8,000,000</span>
+<div style="position:relative; width:220px; height:20px; margin-top:4px; font-size:11px; color:#57606a;">
+<span style="position:absolute; left:22.52%; transform:translateX(-50%); white-space:nowrap;">2M</span><span style="position:absolute; left:45.05%; transform:translateX(-50%); white-space:nowrap;">4M</span><span style="position:absolute; left:67.57%; transform:translateX(-50%); white-space:nowrap;">6M</span><span style="position:absolute; left:90.09%; transform:translateX(-50%); white-space:nowrap;">8M</span>
 </div>
 </div></td>
     </tr>
@@ -6696,14 +6713,23 @@ outputs.</p>
 <p>If you attach multiple legends to the same heading area, use
 <code>layout = "inline"</code> to place them side by side.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, b <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, b <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/gtscale_legend.html">gtscale_legend</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="../reference/gtscale_spec_continuous.html">gtscale_spec_continuous</a></span><span class="op">(</span><span class="va">a</span>, palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#f7fbff"</span>, <span class="st">"#08306b"</span><span class="op">)</span>, title <span class="op">=</span> <span class="st">"A"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu"><a href="../reference/gtscale_spec_set_legend.html">gtscale_spec_set_legend</a></span><span class="op">(</span>placement <span class="op">=</span> <span class="st">"subtitle"</span>, layout <span class="op">=</span> <span class="st">"inline"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="../reference/gtscale_spec_continuous.html">gtscale_spec_continuous</a></span><span class="op">(</span></span>
+<span>      <span class="va">a</span>,</span>
+<span>      palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'#f7fbff'</span>, <span class="st">'#08306b'</span><span class="op">)</span>,</span>
+<span>      title <span class="op">=</span> <span class="st">'A'</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="../reference/gtscale_spec_set_legend.html">gtscale_spec_set_legend</a></span><span class="op">(</span>placement <span class="op">=</span> <span class="st">'subtitle'</span>, layout <span class="op">=</span> <span class="st">'inline'</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/gtscale_legend.html">gtscale_legend</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="../reference/gtscale_spec_continuous.html">gtscale_spec_continuous</a></span><span class="op">(</span><span class="va">b</span>, palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#fff5eb"</span>, <span class="st">"#7f2704"</span><span class="op">)</span>, title <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu"><a href="../reference/gtscale_spec_set_legend.html">gtscale_spec_set_legend</a></span><span class="op">(</span>placement <span class="op">=</span> <span class="st">"subtitle"</span>, layout <span class="op">=</span> <span class="st">"inline"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="../reference/gtscale_spec_continuous.html">gtscale_spec_continuous</a></span><span class="op">(</span></span>
+<span>      <span class="va">b</span>,</span>
+<span>      palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'#fff5eb'</span>, <span class="st">'#7f2704'</span><span class="op">)</span>,</span>
+<span>      title <span class="op">=</span> <span class="st">'B'</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="../reference/gtscale_spec_set_legend.html">gtscale_spec_set_legend</a></span><span class="op">(</span>placement <span class="op">=</span> <span class="st">'subtitle'</span>, layout <span class="op">=</span> <span class="st">'inline'</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="ucmrwtkdbi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#ucmrwtkdbi table {

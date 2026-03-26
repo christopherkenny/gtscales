@@ -4,6 +4,9 @@
 library(gt)
 library(gtscales)
 library(scales)
+
+big_number_labels <- label_number(scale_cut = cut_short_scale())
+date_labels <- label_date('%b %d')
 ```
 
 `gtscales` adds matched legends to color-encoded `gt` tables. The
@@ -30,8 +33,10 @@ exibble |>
   gt() |>
   gtscale_data_color_continuous(
     column = num,
-    palette = c("#A0442C", "white", "#0063B1"),
-    title = "Numeric scale"
+    palette = c('#A0442C', 'white', '#0063B1'),
+    labels = big_number_labels,
+    width = '220px',
+    title = 'Numeric scale'
   )
 ```
 
@@ -45,9 +50,9 @@ exibble |>
   gt() |>
   gtscale_data_color_bins(
     column = currency,
-    palette = c("#f7fbff", "#08306b"),
+    palette = c('#f7fbff', '#08306b'),
     bins = c(0, 10, 100, 1000, 10000, 70000),
-    title = "Currency bins"
+    title = 'Currency bins'
   )
 ```
 
@@ -60,9 +65,11 @@ exibble |>
   gt() |>
   gtscale_data_color_quantiles(
     column = num,
-    palette = c("#fdd49e", "#fdbb84", "#ef6548", "#990000"),
+    palette = c('#fdd49e', '#fdbb84', '#ef6548', '#990000'),
     quantiles = 4,
-    title = "Quartiles"
+    labels = big_number_labels,
+    width = '220px',
+    title = 'Quartiles'
   )
 ```
 
@@ -73,16 +80,16 @@ ordered values.
 
 ``` r
 data.frame(
-  district = c("A", "B", "C", "D"),
-  status = c("Safe D", "Toss-up", "Lean R", "Safe R"),
+  district = c('A', 'B', 'C', 'D'),
+  status = c('Safe D', 'Toss-up', 'Lean R', 'Safe R'),
   margin = c(18, 2, -6, -21)
 ) |>
   gt() |>
   gtscale_data_color_discrete(
     column = status,
-    values = c("#2166ac", "#f7f7f7", "#ef8a62", "#b2182b"),
-    labels = c("Safe D", "Toss-up", "Lean R", "Safe R"),
-    title = "Race rating"
+    values = c('#2166ac', '#f7f7f7', '#ef8a62', '#b2182b'),
+    labels = c('Safe D', 'Toss-up', 'Lean R', 'Safe R'),
+    title = 'Race rating'
   )
 ```
 
@@ -99,13 +106,13 @@ exibble |>
   gt() |>
   gt::data_color(
     columns = num,
-    method = "numeric",
-    palette = c("#A0442C", "white", "#0063B1")
+    method = 'numeric',
+    palette = c('#A0442C', 'white', '#0063B1')
   ) |>
   gtscale_color_continuous(
     column = num,
-    palette = c("#A0442C", "white", "#0063B1"),
-    title = "Numeric scale"
+    palette = c('#A0442C', 'white', '#0063B1'),
+    title = 'Numeric scale'
   )
 ```
 
@@ -119,11 +126,13 @@ from application and legend placement.
 ``` r
 spec <- gtscale_spec_continuous(
   num,
-  palette = c("#A0442C", "white", "#0063B1"),
-  title = "Numeric scale"
+  palette = c('#A0442C', 'white', '#0063B1'),
+  labels = big_number_labels,
+  width = '220px',
+  title = 'Numeric scale'
 ) |>
-  gtscale_spec_set_application(apply_to = "fill") |>
-  gtscale_spec_set_legend(placement = "subtitle")
+  gtscale_spec_set_application(apply_to = 'fill') |>
+  gtscale_spec_set_legend(placement = 'subtitle')
 
 exibble |>
   gt() |>
@@ -149,10 +158,10 @@ data.frame(share = c(0.12, 0.33, 0.57, 0.91)) |>
   gt() |>
   gtscale_data_color_bins(
     column = share,
-    palette = c("#f7fbff", "#08306b"),
+    palette = c('#f7fbff', '#08306b'),
     bins = c(0, 0.25, 0.5, 0.75, 1),
     labels = label_percent(),
-    title = "Share bins"
+    title = 'Share bins'
   )
 ```
 
@@ -168,10 +177,10 @@ data.frame(value = c(1, 10, 100, 1000)) |>
   gtscale_data_color_continuous(
     column = value,
     palette = pal_viridis(),
-    transform = "log10",
+    transform = 'log10',
     breaks = breaks_log(),
     labels = label_number(),
-    title = "Log scale"
+    title = 'Log scale'
   )
 ```
 
@@ -185,15 +194,17 @@ column class.
 
 ``` r
 data.frame(
-  when = as.Date(c("2024-01-01", "2024-01-20", "2024-02-10", "2024-03-05")),
+  when = as.Date(c('2024-01-01', '2024-01-20', '2024-02-10', '2024-03-05')),
   value = c(10, 18, 35, 52)
 ) |>
   gt() |>
   gtscale_data_color_bins(
     column = when,
     palette = pal_viridis(),
-    bins = breaks_width("1 month"),
-    title = "Monthly bins"
+    bins = breaks_width('1 month'),
+    labels = date_labels,
+    width = '220px',
+    title = 'Monthly bins'
   )
 ```
 
@@ -211,16 +222,18 @@ exibble |>
   gtscale_legend(
     gtscale_spec_continuous(
       num,
-      palette = c("#A0442C", "white", "#0063B1"),
-      title = "Numeric scale"
+      palette = c('#A0442C', 'white', '#0063B1'),
+      labels = big_number_labels,
+      width = '220px',
+      title = 'Numeric scale'
     ) |>
-      gtscale_spec_set_legend(placement = "source_note")
+      gtscale_spec_set_legend(placement = 'source_note')
   )
 ```
 
 [TABLE]
 
-When you want the legend closer to the table heading, use `subtitle` or
+When you want the legend closer to the heading, use `subtitle` or
 `title`.
 
 ``` r
@@ -229,11 +242,13 @@ exibble |>
   gtscale_legend(
     gtscale_spec_quantiles(
       num,
-      palette = c("#fdd49e", "#fdbb84", "#ef6548", "#990000"),
+      palette = c('#fdd49e', '#fdbb84', '#ef6548', '#990000'),
       quantiles = 4,
-      title = "Quartiles"
+      labels = big_number_labels,
+      width = '220px',
+      title = 'Quartiles'
     ) |>
-      gtscale_spec_set_legend(placement = "subtitle")
+      gtscale_spec_set_legend(placement = 'subtitle')
   )
 ```
 
@@ -245,10 +260,12 @@ exibble |>
   gtscale_legend(
     gtscale_spec_continuous(
       num,
-      palette = c("#A0442C", "white", "#0063B1"),
-      title = "Numeric scale"
+      palette = c('#A0442C', 'white', '#0063B1'),
+      labels = big_number_labels,
+      width = '220px',
+      title = 'Numeric scale'
     ) |>
-      gtscale_spec_set_legend(placement = "title")
+      gtscale_spec_set_legend(placement = 'title')
   )
 ```
 
@@ -258,14 +275,23 @@ If you attach multiple legends to the same heading area, use
 `layout = "inline"` to place them side by side.
 
 ``` r
-gt(data.frame(a = 1:3, b = 4:6)) |>
+data.frame(a = 1:3, b = 4:6) |>
+  gt() |>
   gtscale_legend(
-    gtscale_spec_continuous(a, palette = c("#f7fbff", "#08306b"), title = "A") |>
-      gtscale_spec_set_legend(placement = "subtitle", layout = "inline")
+    gtscale_spec_continuous(
+      a,
+      palette = c('#f7fbff', '#08306b'),
+      title = 'A'
+    ) |>
+      gtscale_spec_set_legend(placement = 'subtitle', layout = 'inline')
   ) |>
   gtscale_legend(
-    gtscale_spec_continuous(b, palette = c("#fff5eb", "#7f2704"), title = "B") |>
-      gtscale_spec_set_legend(placement = "subtitle", layout = "inline")
+    gtscale_spec_continuous(
+      b,
+      palette = c('#fff5eb', '#7f2704'),
+      title = 'B'
+    ) |>
+      gtscale_spec_set_legend(placement = 'subtitle', layout = 'inline')
   )
 ```
 
