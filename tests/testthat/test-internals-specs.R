@@ -62,6 +62,25 @@ test_that('contextual source-note legends render in word xml', {
   expect_match(word, 'w:drawing', fixed = TRUE)
 })
 
+test_that('contextual source-note legends render in rtf without leaking other contexts', {
+  spec <- gtscale_spec_continuous(
+    num,
+    palette = c('#A0442C', 'white', '#0063B1'),
+    title = 'Value'
+  ) |>
+    gtscale_spec_set_legend(output = 'contextual')
+
+  tbl <- gtscale_legend(gt::gt(gt::exibble), spec)
+  rtf_note <- tbl[['_source_notes']][[1]]$rtf
+  rtf <- gt::as_rtf(tbl)
+
+  expect_s3_class(rtf_note, 'rtf_text')
+  expect_match(rtf, '\\\\pict\\\\pngblip', perl = TRUE)
+  expect_no_match(rtf, '<div style=', fixed = TRUE)
+  expect_no_match(rtf, "'5ctextbf", fixed = TRUE)
+  expect_no_match(rtf, '![](', fixed = TRUE)
+})
+
 test_that('unimplemented html placements fail explicitly', {
   spec <- gtscale_spec_discrete(
     status,

@@ -7,7 +7,7 @@
 gtscale_render_legend(
   spec,
   data = NULL,
-  output = c("contextual", "html", "latex", "typst")
+  output = c("contextual", "html", "latex", "rtf", "word", "typst")
 )
 }
 \arguments{
@@ -16,8 +16,8 @@ gtscale_render_legend(
 \item{data}{An optional \code{gt_tbl} used to finalize specs that infer domains or
 quantile boundaries from table data.}
 
-\item{output}{Output target. Use \code{"html"}, \code{"latex"}, \code{"typst"}, or
-\code{"contextual"}.}
+\item{output}{Output target. Use \code{"html"}, \code{"latex"}, \code{"rtf"}, \code{"word"},
+\code{"typst"}, or \code{"contextual"}.}
 }
 \value{
 Rendered legend content for the requested output target.

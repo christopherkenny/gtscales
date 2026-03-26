@@ -117,18 +117,20 @@ render_scale_legend_contextual <- function(spec) {
   set_legend_layout(list(
     html = gt::html(render_scale_legend_html(spec)),
     latex = gt::latex(render_scale_legend_latex(spec)),
+    rtf = render_scale_legend_rtf(spec),
     word = render_scale_legend_word(spec)
   ), layout = spec$legend$layout)
 }
 
 render_scale_legend <- function(spec, output = NULL) {
   output <- output %||% spec$legend$output
-  output <- match.arg(output, choices = c('contextual', 'html', 'latex', 'word', 'typst'))
+  output <- match.arg(output, choices = c('contextual', 'html', 'latex', 'rtf', 'word', 'typst'))
 
   switch(output,
     contextual = render_scale_legend_contextual(spec),
     html = render_scale_legend_html(spec),
     latex = render_scale_legend_latex(spec),
+    rtf = render_scale_legend_rtf(spec),
     word = render_scale_legend_word(spec),
     typst = render_scale_legend_typst(spec)
   )
@@ -363,6 +365,39 @@ render_na_legend_latex <- function(spec) {
   )
 }
 
+rtf_text <- function(...) {
+  structure(paste0(..., collapse = ''), class = 'rtf_text')
+}
+
+rtf_hex_encode_file <- function(path) {
+  bytes <- readBin(path, what = 'raw', n = file.info(path)$size)
+  paste(sprintf('%02x', as.integer(bytes)), collapse = '')
+}
+
+rtf_image_text <- function(path, width_px, height_px) {
+  rtf_text(
+    '{\\pict\\pngblip',
+    '\\picw', as.integer(width_px),
+    '\\pich', as.integer(height_px),
+    '\\picwgoal', as.integer(width_px * 15),
+    '\\pichgoal', as.integer(height_px * 15),
+    '\n',
+    rtf_hex_encode_file(path),
+    '}'
+  )
+}
+
+render_scale_legend_rtf <- function(spec) {
+  switch(spec$scale_type,
+    continuous = render_continuous_legend_rtf(spec),
+    diverging = render_continuous_legend_rtf(spec),
+    bins = render_bins_legend_rtf(spec),
+    quantiles = render_bins_legend_rtf(spec),
+    discrete = render_discrete_legend_rtf(spec),
+    rlang::abort(paste0('Unsupported scale type `', spec$scale_type, '` for RTF legends.'))
+  )
+}
+
 render_scale_legend_word <- function(spec) {
   switch(spec$scale_type,
     continuous = render_continuous_legend_word(spec),
@@ -379,8 +414,22 @@ word_image_markdown <- function(path) {
   gt::md(paste0('![](', path, ')'))
 }
 
-write_word_legend_image <- function(spec, width = 480, height = 120) {
-  path <- tempfile(pattern = 'gtscales-word-', fileext = '.png')
+legend_image_asset_dir <- function() {
+  dir <- getOption(
+    "gtscales.word_asset_dir",
+    file.path(getwd(), ".gtscales-word-assets")
+  )
+  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
+  normalizePath(dir, winslash = "/", mustWork = TRUE)
+}
+
+write_legend_image <- function(spec, width = 480, height = 120, prefix = 'gtscales-legend-', persistent = FALSE) {
+  path <- if (isTRUE(persistent)) {
+    tempfile(pattern = prefix, tmpdir = legend_image_asset_dir(), fileext = '.png')
+  } else {
+    tempfile(pattern = prefix, fileext = '.png')
+  }
+
   grDevices::png(filename = path, width = width, height = height, bg = 'white')
   on.exit(grDevices::dev.off(), add = TRUE)
 
@@ -398,16 +447,37 @@ write_word_legend_image <- function(spec, width = 480, height = 120) {
   path
 }
 
+render_continuous_legend_rtf <- function(spec) {
+  width <- 520
+  height <- 130
+  path <- write_legend_image(spec, width = width, height = height, prefix = 'gtscales-rtf-')
+  rtf_image_text(path, width_px = width, height_px = height)
+}
+
+render_bins_legend_rtf <- function(spec) {
+  width <- 560
+  height <- 140
+  path <- write_legend_image(spec, width = width, height = height, prefix = 'gtscales-rtf-')
+  rtf_image_text(path, width_px = width, height_px = height)
+}
+
+render_discrete_legend_rtf <- function(spec) {
+  width <- 560
+  height <- 160
+  path <- write_legend_image(spec, width = width, height = height, prefix = 'gtscales-rtf-')
+  rtf_image_text(path, width_px = width, height_px = height)
+}
+
 render_continuous_legend_word <- function(spec) {
-  word_image_markdown(write_word_legend_image(spec, width = 520, height = 130))
+  word_image_markdown(write_legend_image(spec, width = 520, height = 130, prefix = 'gtscales-word-', persistent = TRUE))
 }
 
 render_bins_legend_word <- function(spec) {
-  word_image_markdown(write_word_legend_image(spec, width = 560, height = 140))
+  word_image_markdown(write_legend_image(spec, width = 560, height = 140, prefix = 'gtscales-word-', persistent = TRUE))
 }
 
 render_discrete_legend_word <- function(spec) {
-  word_image_markdown(write_word_legend_image(spec, width = 560, height = 160))
+  word_image_markdown(write_legend_image(spec, width = 560, height = 160, prefix = 'gtscales-word-', persistent = TRUE))
 }
 
 draw_word_legend_title <- function(title) {

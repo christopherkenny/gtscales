@@ -6,6 +6,8 @@
 \alias{gtscales-package}
 \title{gtscales: Color Scale Extensions for 'gt'}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Adds legend helpers for color-encoded 'gt' tables. The primary interface combines 'gt::data_color()' with matched legends for continuous, binned, quantile, and discrete scales, while lower-level helpers support legend-only and reusable scale specification workflows.
 }
 \seealso{

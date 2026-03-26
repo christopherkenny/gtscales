@@ -1,2 +1,6 @@
 *.html
 *.pdf
+*.docx
+*.rtf
+tmp-*
+.gtscales-word-assets/

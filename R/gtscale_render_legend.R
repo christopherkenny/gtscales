@@ -3,8 +3,8 @@
 #' @param spec A `gtscale_spec`.
 #' @param data An optional `gt_tbl` used to finalize specs that infer domains or
 #'   quantile boundaries from table data.
-#' @param output Output target. Use `"html"`, `"latex"`, `"typst"`, or
-#'   `"contextual"`.
+#' @param output Output target. Use `"html"`, `"latex"`, `"rtf"`, `"word"`,
+#'   `"typst"`, or `"contextual"`.
 #'
 #' @return Rendered legend content for the requested output target.
 #' @export
@@ -22,7 +22,7 @@
 #'   data = gt::gt(gt::exibble),
 #'   output = 'latex'
 #' )
-gtscale_render_legend <- function(spec, data = NULL, output = c('contextual', 'html', 'latex', 'typst')) {
+gtscale_render_legend <- function(spec, data = NULL, output = c('contextual', 'html', 'latex', 'rtf', 'word', 'typst')) {
   output <- match.arg(output)
   spec <- finalize_scale_spec(spec = spec, data = data)
   render_scale_legend(spec = spec, output = output)

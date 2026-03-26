@@ -1,0 +1,43 @@
+---
+title: "gtscales DOCX Example"
+format:
+  docx: default
+---
+
+```{r}
+devtools::load_all(".")
+library(gt)
+library(scales)
+```
+
+This example shows the DOCX workflow for `gtscales`.
+
+`gtscale_postprocess_docx()` is available as a fallback repair helper, but the
+goal is for this example to work without it.
+
+```{r}
+gt::exibble |>
+  gt() |>
+  gtscale_data_color_continuous(
+    column = num,
+    palette = c("#A0442C", "white", "#0063B1"),
+    labels = label_number(scale_cut = cut_short_scale()),
+    width = "220px",
+    title = "Numeric scale"
+  )
+```
+
+```{r}
+data.frame(
+  district = c("A", "B", "C", "D"),
+  status = c("Safe D", "Toss-up", "Lean R", "Safe R"),
+  margin = c(18, 2, -6, -21)
+) |>
+  gt() |>
+  gtscale_data_color_discrete(
+    column = status,
+    values = c("#2166AC", "#F7F7F7", "#F4A3B4", "#B2182B"),
+    labels = c("Safe D", "Toss-up", "Lean R", "Safe R"),
+    title = "Race rating"
+  )
+```
