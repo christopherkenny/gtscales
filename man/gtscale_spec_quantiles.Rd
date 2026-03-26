@@ -18,7 +18,7 @@ gtscale_spec_quantiles(
 \item{column}{A column to target.}
 
 \item{palette}{A vector of colors or palette endpoints used for the quantile
-groups.}
+groups. A single named palette can also be supplied.}
 
 \item{quantiles}{The number of quantile groups.}
 

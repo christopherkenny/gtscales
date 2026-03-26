@@ -5,6 +5,7 @@ new_gtscale_spec <- function(
   palette = NULL,
   domain = NULL,
   midpoint = NULL,
+  transform = 'identity',
   bins = NULL,
   quantiles = NULL,
   breaks = NULL,
@@ -24,6 +25,7 @@ new_gtscale_spec <- function(
       palette = palette,
       domain = domain,
       midpoint = midpoint,
+      transform = transform,
       bins = bins,
       quantiles = quantiles,
       breaks = breaks,
@@ -50,6 +52,7 @@ new_gtscale_spec <- function(
         list(
           output = 'contextual',
           placement = 'source_note',
+          layout = 'stack',
           show_na = FALSE,
           na_label = 'Missing',
           na_color = NULL
@@ -69,16 +72,22 @@ build_continuous_spec <- function(
   breaks = NULL,
   labels = scales::label_comma(),
   title = NULL,
+  transform = 'identity',
   direction = 'to right',
   width = '160px',
   height = '14px',
   fn = NULL
 ) {
-  palette <- resolve_palette(palette = palette, fn = fn)
+  if (!identical(transform, 'identity') && !is.null(fn)) {
+    rlang::abort('`transform` and `fn` cannot be supplied together.')
+  }
+
+  palette <- resolve_palette(palette = palette, fn = fn, n = 7)
   domain <- resolve_domain(data = data, column = column, domain = domain)
+  validate_transform_domain(domain, transform)
 
   if (is.null(breaks)) {
-    breaks <- default_breaks(domain)
+    breaks <- default_breaks(domain, transform = transform)
   }
 
   breaks <- sort(unique(as.numeric(breaks)))
@@ -88,12 +97,26 @@ build_continuous_spec <- function(
     breaks <- domain
   }
 
+  if (is.null(fn) && !identical(transform, 'identity')) {
+    transformed_domain <- transform_values(domain, transform)
+
+    fn <- function(x) {
+      out <- scales::col_numeric(
+        palette = palette,
+        domain = transformed_domain
+      )(transform_values(x, transform))
+      out[is.na(x)] <- '#00000000'
+      out
+    }
+  }
+
   new_gtscale_spec(
     scale_type = 'continuous',
     color_method = 'numeric',
     column = column,
     palette = palette,
     domain = domain,
+    transform = transform,
     breaks = breaks,
     labels = resolve_labels(breaks, labels),
     title = title,
@@ -115,6 +138,7 @@ build_diverging_spec <- function(
   breaks = NULL,
   labels = scales::label_comma(),
   title = NULL,
+  transform = 'identity',
   direction = 'to right',
   width = '160px',
   height = '14px',
@@ -123,6 +147,7 @@ build_diverging_spec <- function(
   na_color = '#00000000'
 ) {
   domain <- resolve_domain(data = data, column = column, domain = domain)
+  validate_transform_domain(domain, transform)
 
   if (!is.numeric(midpoint) || length(midpoint) != 1 || is.na(midpoint)) {
     rlang::abort('`midpoint` must be a single finite number.')
@@ -132,7 +157,7 @@ build_diverging_spec <- function(
     rlang::abort('`midpoint` must fall inside the scale `domain`.')
   }
 
-  palette <- as.character(palette)
+  palette <- resolve_palette(palette = palette, n = 3)
 
   if (length(palette) == 2) {
     palette <- c(palette[[1]], mid_color, palette[[2]])
@@ -157,13 +182,17 @@ build_diverging_spec <- function(
   }
 
   values <- scales::rescale(
-    c(domain[[1]], midpoint, domain[[2]]),
+    transform_values(c(domain[[1]], midpoint, domain[[2]]), transform),
     to = c(0, 1),
-    from = domain
+    from = transform_values(domain, transform)
   )
   fn <- function(x) {
     out <- scales::gradient_n_pal(colours = palette, values = values)(
-      scales::rescale(x, to = c(0, 1), from = domain)
+      scales::rescale(
+        transform_values(x, transform),
+        to = c(0, 1),
+        from = transform_values(domain, transform)
+      )
     )
     out[is.na(x)] <- na_color
     out
@@ -176,6 +205,7 @@ build_diverging_spec <- function(
     palette = palette,
     domain = domain,
     midpoint = midpoint,
+    transform = transform,
     breaks = breaks,
     labels = resolve_labels(breaks, labels),
     title = title,
@@ -216,6 +246,7 @@ build_bins_spec <- function(
   }
 
   n_intervals <- length(bins) - 1
+  palette <- resolve_palette(palette = palette, n = n_intervals)
 
   colors <- if (length(palette) == n_intervals) {
     as.character(palette)
@@ -274,6 +305,7 @@ build_quantiles_spec <- function(
   width = '180px',
   height = '14px'
 ) {
+  palette <- resolve_palette(palette = palette, n = quantiles)
   breaks <- resolve_quantile_breaks(data = data, column = column, quantiles = quantiles)
   colors <- resolve_quantile_colors(palette = palette, n_intervals = length(breaks) - 1)
 
@@ -291,7 +323,7 @@ build_quantiles_spec <- function(
     modify_gtscale_spec(
       scale_type = 'quantiles',
       color_method = 'quantile',
-      palette = as.character(palette),
+      palette = palette,
       quantiles = quantiles
     )
 }
@@ -309,7 +341,7 @@ build_discrete_spec <- function(
     rlang::abort('`values` must contain at least one color.')
   }
 
-  values <- as.character(values)
+  values <- resolve_palette(palette = values, n = length(labels), discrete = TRUE)
 
   new_gtscale_spec(
     scale_type = 'discrete',
@@ -374,6 +406,7 @@ set_scale_legend <- function(
   spec,
   output = 'contextual',
   placement = 'source_note',
+  layout = c('stack', 'inline'),
   show_na = FALSE,
   na_label = 'Missing',
   na_color = NULL
@@ -384,6 +417,7 @@ set_scale_legend <- function(
     list(
       output = output,
       placement = placement,
+      layout = match.arg(layout),
       show_na = show_na,
       na_label = na_label,
       na_color = na_color
@@ -421,6 +455,7 @@ finalize_scale_spec <- function(spec, data = NULL) {
       breaks = spec$breaks,
       labels = spec$labels,
       title = spec$title,
+      transform = spec$transform,
       direction = spec$style$direction,
       width = spec$style$width,
       height = spec$style$height,
@@ -447,6 +482,7 @@ finalize_scale_spec <- function(spec, data = NULL) {
       breaks = spec$breaks,
       labels = spec$labels,
       title = spec$title,
+      transform = spec$transform,
       direction = spec$style$direction,
       width = spec$style$width,
       height = spec$style$height,

@@ -18,7 +18,8 @@ gtscale_spec_bins(
 \arguments{
 \item{column}{A column to target.}
 
-\item{palette}{A vector of colors or palette endpoints used for the bins.}
+\item{palette}{A vector of colors or palette endpoints used for the bins.
+A single named palette can also be supplied.}
 
 \item{bins}{A numeric vector of bin boundaries.}
 

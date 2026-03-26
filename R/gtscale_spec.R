@@ -2,11 +2,14 @@
 #'
 #' @param column A column to target.
 #' @param palette A vector of colors used in the scale.
+#'   A single named palette such as `"viridis"` or `"Blues 3"` can also be
+#'   supplied.
 #' @param domain Optional numeric limits. If omitted, these can be inferred when
 #'   the spec is applied to a `gt` table.
 #' @param breaks Optional numeric break values for the legend.
 #' @param labels A labeling function or character vector for the legend.
 #' @param title Optional legend title.
+#' @param transform Transformation used for color mapping and break placement.
 #' @param direction CSS gradient direction. Defaults to `"to right"`.
 #' @param width Width of the legend bar.
 #' @param height Height of the legend bar.
@@ -21,11 +24,13 @@ gtscale_spec_continuous <- function(
   breaks = NULL,
   labels = scales::label_comma(),
   title = NULL,
+  transform = c('identity', 'log10', 'sqrt'),
   direction = 'to right',
   width = '160px',
   height = '14px',
   fn = NULL
 ) {
+  transform <- match.arg(transform)
   column <- capture_spec_column(substitute(column), parent.frame())
 
   new_gtscale_spec(
@@ -34,6 +39,7 @@ gtscale_spec_continuous <- function(
     column = column,
     palette = palette,
     domain = domain,
+    transform = transform,
     breaks = breaks,
     labels = labels,
     title = title,
@@ -50,12 +56,15 @@ gtscale_spec_continuous <- function(
 #'
 #' @param column A column or shared set of columns to target.
 #' @param palette Two endpoint colors or three diverging colors.
+#'   A single named palette such as `"Blue-Red 3"` or `"viridis"` can also be
+#'   supplied.
 #' @param domain Optional numeric limits. If omitted, these can be inferred when
 #'   the spec is applied to a `gt` table.
 #' @param midpoint Numeric midpoint used to anchor the diverging scale.
 #' @param breaks Optional numeric break values for the legend.
 #' @param labels A labeling function or character vector for the legend.
 #' @param title Optional legend title.
+#' @param transform Transformation used for color mapping and break placement.
 #' @param direction CSS gradient direction. Defaults to `"to right"`.
 #' @param width Width of the legend bar.
 #' @param height Height of the legend bar.
@@ -72,11 +81,13 @@ gtscale_spec_diverging <- function(
   breaks = NULL,
   labels = scales::label_comma(),
   title = NULL,
+  transform = c('identity', 'log10', 'sqrt'),
   direction = 'to right',
   width = '160px',
   height = '14px',
   mid_color = '#FFFFFF'
 ) {
+  transform <- match.arg(transform)
   column <- capture_spec_column(substitute(column), parent.frame())
 
   new_gtscale_spec(
@@ -86,6 +97,7 @@ gtscale_spec_diverging <- function(
     palette = palette,
     domain = domain,
     midpoint = midpoint,
+    transform = transform,
     breaks = breaks,
     labels = labels,
     title = title,
@@ -102,6 +114,7 @@ gtscale_spec_diverging <- function(
 #'
 #' @param column A column to target.
 #' @param palette A vector of colors or palette endpoints used for the bins.
+#'   A single named palette can also be supplied.
 #' @param bins A numeric vector of bin boundaries.
 #' @param domain Optional numeric limits. If omitted, these can be inferred when
 #'   the spec is applied to a `gt` table.
@@ -144,7 +157,7 @@ gtscale_spec_bins <- function(
 #'
 #' @param column A column to target.
 #' @param palette A vector of colors or palette endpoints used for the quantile
-#'   groups.
+#'   groups. A single named palette can also be supplied.
 #' @param quantiles The number of quantile groups.
 #' @param labels A labeling function or character vector for the legend.
 #' @param title Optional legend title.
@@ -182,7 +195,7 @@ gtscale_spec_quantiles <- function(
 #' Create a discrete `gtscales` spec
 #'
 #' @param column A column to target.
-#' @param values A vector of color values.
+#' @param values A vector of color values or a single named discrete palette.
 #' @param labels Labels for each legend swatch. Defaults to `values`.
 #' @param title Optional legend title.
 #' @param swatch_size Size of each discrete color swatch.
@@ -260,6 +273,8 @@ gtscale_spec_set_application <- function(
 #'   `"html"`, `"latex"`, or `"typst"`.
 #' @param placement Legend placement target. `"source_note"` and `"subtitle"`
 #'   are currently implemented.
+#' @param layout Whether multiple legends in the same heading area should stack
+#'   vertically or sit inline.
 #' @param show_na Whether to include an explicit missing-value legend entry.
 #' @param na_label Label to use for missing values in the legend.
 #' @param na_color Optional legend swatch color for missing values. When
@@ -269,16 +284,19 @@ gtscale_spec_set_application <- function(
 #' @export
 gtscale_spec_set_legend <- function(
   spec,
-  output = 'html',
+  output = 'contextual',
   placement = 'source_note',
+  layout = c('stack', 'inline'),
   show_na = FALSE,
   na_label = 'Missing',
   na_color = NULL
 ) {
+  layout <- match.arg(layout)
   set_scale_legend(
     spec = spec,
     output = output,
     placement = placement,
+    layout = layout,
     show_na = show_na,
     na_label = na_label,
     na_color = na_color

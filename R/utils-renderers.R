@@ -47,11 +47,11 @@ typst_escape_text <- function(text) {
 }
 
 render_scale_legend_contextual <- function(spec) {
-  list(
+  set_legend_layout(list(
     html = gt::html(render_scale_legend_html(spec)),
     latex = gt::latex(render_scale_legend_latex(spec)),
     word = render_scale_legend_word(spec)
-  )
+  ), layout = spec$legend$layout)
 }
 
 render_scale_legend <- function(spec, output = NULL) {
@@ -79,7 +79,12 @@ render_scale_legend_html <- function(spec) {
 }
 
 render_continuous_legend_html <- function(spec) {
-  break_positions <- scales::rescale(spec$breaks, to = c(0, 100), from = spec$domain)
+  break_positions <- rescale_break_positions(
+    breaks = spec$breaks,
+    domain = spec$domain,
+    transform = spec$transform,
+    to = c(0, 100)
+  )
   na_entry <- render_na_legend_html(spec)
 
   paste0(
@@ -371,7 +376,12 @@ draw_continuous_legend_word <- function(spec) {
     gp = grid::gpar(fill = NA, col = '#BDBDBD', lwd = 1)
   )
 
-  break_positions <- scales::rescale(spec$breaks, to = c(bar_left, bar_right), from = spec$domain)
+  break_positions <- rescale_break_positions(
+    breaks = spec$breaks,
+    domain = spec$domain,
+    transform = spec$transform,
+    to = c(bar_left, bar_right)
+  )
 
   for (i in seq_along(spec$labels)) {
     xpos <- break_positions[[i]]
@@ -577,13 +587,14 @@ attach_scale_legend <- function(data, spec, output = NULL, placement = NULL) {
   output <- output %||% spec$legend$output
   placement <- placement %||% spec$legend$placement
   rendered <- render_scale_legend(spec = spec, output = output)
+  heading_rendered <- if (is.list(rendered) && 'word' %in% names(rendered)) rendered[setdiff(names(rendered), 'word')] else rendered
 
   if (identical(placement, 'source_note')) {
     return(attach_legend_note(data, rendered))
   }
 
   if (identical(placement, 'subtitle')) {
-    return(attach_legend_subtitle(data, rendered))
+    return(attach_legend_subtitle(data, heading_rendered))
   }
 
   rlang::abort(paste0('Legend placement `', placement, '` is not implemented yet.'))
@@ -612,9 +623,12 @@ apply_scale_color <- function(data, spec) {
       }
 
       if (identical(spec$color_method, 'numeric')) {
-        data_color_args$palette <- spec$palette
-        data_color_args$domain <- spec$domain
-        data_color_args$fn <- spec$fn
+        if (is.null(spec$fn)) {
+          data_color_args$palette <- spec$palette
+          data_color_args$domain <- spec$domain
+        } else {
+          data_color_args$fn <- spec$fn
+        }
       } else if (identical(spec$color_method, 'bin')) {
         data_color_args$palette <- spec$palette
         data_color_args$domain <- spec$domain

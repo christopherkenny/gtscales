@@ -7,12 +7,14 @@
 #' @param data A `gt_tbl` created by [gt::gt()].
 #' @param column An optional numeric column in the underlying table used to infer
 #'   `domain`.
-#' @param palette A vector of colors used in the legend gradient.
+#' @param palette A vector of colors used in the legend gradient. A single named
+#'   palette can also be supplied.
 #' @param domain A numeric vector of length 2 giving the scale limits. When
 #'   omitted, the limits are inferred from `column`.
 #' @param breaks Optional numeric break values to display below the gradient.
 #' @param labels A labeling function or a character vector for the breaks.
 #' @param title Optional legend title.
+#' @param transform Transformation used for color mapping and break placement.
 #' @param direction CSS gradient direction. Defaults to `"to right"`.
 #' @param width Width of the legend bar.
 #' @param height Height of the legend bar.
@@ -45,11 +47,13 @@ gtscale_color_continuous <- function(
   breaks = NULL,
   labels = scales::label_comma(),
   title = NULL,
+  transform = c('identity', 'log10', 'sqrt'),
   direction = 'to right',
   width = '160px',
   height = '14px',
   fn = NULL
 ) {
+  transform <- match.arg(transform)
   column <- substitute(column)
   spec <- gtscale_spec_continuous(
     column = column,
@@ -58,6 +62,7 @@ gtscale_color_continuous <- function(
     breaks = breaks,
     labels = labels,
     title = title,
+    transform = transform,
     direction = direction,
     width = width,
     height = height,

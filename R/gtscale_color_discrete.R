@@ -5,7 +5,7 @@
 #' [gtscale_data_color_discrete()].
 #'
 #' @param data A `gt_tbl` created by [gt::gt()].
-#' @param values A vector of color values.
+#' @param values A vector of color values or a single named discrete palette.
 #' @param labels Labels for each color swatch. Defaults to `values`.
 #' @param title Optional legend title.
 #' @param swatch_size Size of each discrete color swatch.

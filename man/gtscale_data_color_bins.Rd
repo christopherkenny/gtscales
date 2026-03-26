@@ -30,7 +30,8 @@ gtscale_data_color_bins(
 
 \item{column}{A numeric column to color and legendize.}
 
-\item{palette}{A vector of colors or palette endpoints used for the bins.}
+\item{palette}{A vector of colors, palette endpoints, or a single named
+palette used for the bins.}
 
 \item{bins}{A numeric vector of bin boundaries.}
 

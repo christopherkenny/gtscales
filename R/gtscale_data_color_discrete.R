@@ -4,7 +4,8 @@
 #'
 #' @param data A `gt_tbl` created by [gt::gt()].
 #' @param column A categorical column to color and legendize.
-#' @param values A vector of color values used in the table and legend.
+#' @param values A vector of color values or a single named discrete palette
+#'   used in the table and legend.
 #' @param labels Labels for each color swatch. Defaults to `values`.
 #' @param title Optional legend title.
 #' @param swatch_size Size of each discrete color swatch.

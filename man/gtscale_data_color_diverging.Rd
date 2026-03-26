@@ -13,6 +13,7 @@ gtscale_data_color_diverging(
   breaks = NULL,
   labels = scales::label_comma(),
   title = NULL,
+  transform = c("identity", "log10", "sqrt"),
   direction = "to right",
   width = "160px",
   height = "14px",
@@ -34,7 +35,8 @@ gtscale_data_color_diverging(
 \item{column}{A numeric column or shared set of numeric columns to color and
 legendize.}
 
-\item{palette}{Two endpoint colors or three diverging colors.}
+\item{palette}{Two endpoint colors, three diverging colors, or a single named
+palette.}
 
 \item{domain}{A numeric vector of length 2 giving the scale limits. When
 omitted, the limits are inferred from \code{column}.}
@@ -46,6 +48,8 @@ omitted, the limits are inferred from \code{column}.}
 \item{labels}{A labeling function or a character vector for the breaks.}
 
 \item{title}{Optional legend title.}
+
+\item{transform}{Transformation used for color mapping and break placement.}
 
 \item{direction}{CSS gradient direction. Defaults to \code{"to right"}.}
 

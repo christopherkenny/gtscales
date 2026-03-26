@@ -32,12 +32,99 @@ resolve_domain <- function(data, column, domain = NULL) {
   domain
 }
 
+resolve_transform <- function(transform = c('identity', 'log10', 'sqrt')) {
+  transform <- match.arg(transform)
+
+  switch(transform,
+    identity = list(
+      name = 'identity',
+      forward = function(x) x,
+      inverse = function(x) x
+    ),
+    log10 = list(
+      name = 'log10',
+      forward = function(x) log10(x),
+      inverse = function(x) 10^x
+    ),
+    sqrt = list(
+      name = 'sqrt',
+      forward = function(x) sqrt(x),
+      inverse = function(x) x^2
+    )
+  )
+}
+
+validate_transform_domain <- function(domain, transform) {
+  if (identical(transform, 'log10') && any(domain <= 0)) {
+    rlang::abort('`log10` scales require a strictly positive `domain`.')
+  }
+
+  if (identical(transform, 'sqrt') && any(domain < 0)) {
+    rlang::abort('`sqrt` scales require a non-negative `domain`.')
+  }
+
+  domain
+}
+
+transform_values <- function(values, transform) {
+  transform_spec <- resolve_transform(transform)
+  transform_spec$forward(values)
+}
+
+inverse_transform_values <- function(values, transform) {
+  transform_spec <- resolve_transform(transform)
+  transform_spec$inverse(values)
+}
+
+rescale_break_positions <- function(breaks, domain, transform = 'identity', to = c(0, 100)) {
+  validate_transform_domain(domain, transform)
+
+  transformed_domain <- transform_values(domain, transform)
+  transformed_breaks <- transform_values(breaks, transform)
+
+  scales::rescale(transformed_breaks, to = to, from = transformed_domain)
+}
+
 resolve_na_legend_color <- function(spec, default = '#D9D9D9') {
   spec$legend$na_color %||% spec$application$na_color %||% default
 }
 
-resolve_palette <- function(palette = NULL, fn = NULL) {
+resolve_palette_name <- function(palette_name, n, discrete = FALSE) {
+  palette_pals <- grDevices::palette.pals()
+  hcl_pals <- grDevices::hcl.pals()
+
+  palette_match <- palette_pals[tolower(palette_pals) == tolower(palette_name)]
+  hcl_match <- hcl_pals[tolower(hcl_pals) == tolower(palette_name)]
+
+  if (discrete && length(palette_match) > 0) {
+    return(unname(grDevices::palette.colors(n, palette = palette_match[[1]], recycle = FALSE)))
+  }
+
+  if (length(hcl_match) > 0) {
+    return(unname(grDevices::hcl.colors(n, palette = hcl_match[[1]])))
+  }
+
+  if (!discrete && length(palette_match) > 0) {
+    return(unname(grDevices::palette.colors(n, palette = palette_match[[1]], recycle = TRUE)))
+  }
+
+  NULL
+}
+
+resolve_palette <- function(palette = NULL, fn = NULL, n = NULL, discrete = FALSE) {
   if (!is.null(palette)) {
+    if (is.character(palette) && length(palette) == 1) {
+      palette_from_name <- resolve_palette_name(
+        palette_name = palette,
+        n = n %||% if (discrete) 8 else 7,
+        discrete = discrete
+      )
+
+      if (!is.null(palette_from_name)) {
+        return(as.character(palette_from_name))
+      }
+    }
+
     return(as.character(palette))
   }
 
@@ -71,15 +158,24 @@ resolve_labels <- function(values, labels) {
   as.character(labels)
 }
 
-default_breaks <- function(domain, n = 3) {
-  breaks <- pretty(domain, n = n)
-  breaks <- breaks[breaks >= domain[[1]] & breaks <= domain[[2]]]
+default_breaks <- function(domain, n = 3, transform = 'identity') {
+  validate_transform_domain(domain, transform)
+
+  transformed_domain <- transform_values(domain, transform)
+  breaks <- pretty(transformed_domain, n = n)
+  breaks <- breaks[breaks >= transformed_domain[[1]] & breaks <= transformed_domain[[2]]]
+
+  if (!identical(transform, 'identity')) {
+    breaks <- inverse_transform_values(breaks, transform)
+    breaks <- breaks[is.finite(breaks)]
+    breaks <- breaks[breaks >= domain[[1]] & breaks <= domain[[2]]]
+  }
 
   if (length(breaks) < 2) {
     breaks <- domain
   }
 
-  breaks
+  sort(unique(as.numeric(breaks)))
 }
 
 resolve_quantile_breaks <- function(data, column, quantiles) {
@@ -102,6 +198,8 @@ resolve_quantile_breaks <- function(data, column, quantiles) {
 }
 
 resolve_quantile_colors <- function(palette, n_intervals) {
+  palette <- resolve_palette(palette = palette, n = n_intervals)
+
   if (length(palette) == n_intervals) {
     return(as.character(palette))
   }

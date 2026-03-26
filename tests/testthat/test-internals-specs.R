@@ -87,6 +87,22 @@ test_that('subtitle placement stores contextual legend content in table heading'
   expect_match(tbl[['_heading']]$subtitle$latex, 'Legend')
 })
 
+test_that('subtitle placement can compose legends inline', {
+  tbl <- gt::gt(data.frame(a = 1:3, b = 4:6)) |>
+    gtscale_legend(
+      gtscale_spec_continuous(a, palette = c('#f7fbff', '#08306b'), title = 'A') |>
+        gtscale_spec_set_legend(placement = 'subtitle', layout = 'inline')
+    ) |>
+    gtscale_legend(
+      gtscale_spec_continuous(b, palette = c('#fff5eb', '#7f2704'), title = 'B') |>
+        gtscale_spec_set_legend(placement = 'subtitle', layout = 'inline')
+    )
+
+  expect_type(tbl[['_heading']]$subtitle, 'list')
+  expect_match(tbl[['_heading']]$subtitle$html, 'A')
+  expect_match(tbl[['_heading']]$subtitle$html, 'B')
+})
+
 test_that('public spec workflow can color and legendize a table', {
   spec <- gtscale_spec_bins(
     currency,
@@ -125,6 +141,26 @@ test_that('diverging specs apply midpoint-aware legends', {
   expect_match(note$html, '>0<', perl = TRUE)
 })
 
+test_that('continuous specs support transformed scales', {
+  spec <- gtscale_spec_continuous(
+    value,
+    palette = c('#f7fbff', '#08306b'),
+    domain = c(1, 1000),
+    transform = 'log10',
+    breaks = c(1, 10, 100, 1000),
+    title = 'Log scale'
+  )
+
+  tbl <- gt::gt(data.frame(value = c(1, 10, 100, 1000))) |>
+    gtscale_apply_legend(spec)
+
+  note <- tbl[['_source_notes']][[1]]
+
+  expect_match(note$html, '>1<', perl = TRUE)
+  expect_match(note$html, '>1,000<', perl = TRUE)
+  expect_match(gt::as_raw_html(tbl), '#08306b', ignore.case = TRUE)
+})
+
 test_that('shared-column specs infer domains across multiple columns', {
   spec <- gtscale_spec_continuous(
     c(a, b),
@@ -139,6 +175,28 @@ test_that('shared-column specs infer domains across multiple columns', {
 
   expect_match(note$html, '>0<', perl = TRUE)
   expect_match(note$html, '>15<', perl = TRUE)
+})
+
+test_that('named palettes can be resolved for numeric and discrete specs', {
+  continuous_spec <- gtscale_spec_continuous(
+    value,
+    palette = 'viridis',
+    domain = c(0, 1),
+    title = 'Named palette'
+  )
+  discrete_spec <- gtscale_spec_discrete(
+    status,
+    values = 'Okabe-Ito',
+    labels = c('A', 'B', 'C'),
+    title = 'Discrete palette'
+  )
+
+  continuous_final <- finalize_scale_spec(continuous_spec, gt::gt(data.frame(value = c(0, 1))))
+  discrete_final <- finalize_scale_spec(discrete_spec, gt::gt(data.frame(status = c('A', 'B', 'C'))))
+
+  expect_gt(length(continuous_final$palette), 1)
+  expect_equal(length(discrete_final$values), 3)
+  expect_false(anyNA(discrete_final$values))
 })
 
 test_that('legend specs can show explicit missing-value entries', {

@@ -12,6 +12,7 @@ gtscale_color_continuous(
   breaks = NULL,
   labels = scales::label_comma(),
   title = NULL,
+  transform = c("identity", "log10", "sqrt"),
   direction = "to right",
   width = "160px",
   height = "14px",
@@ -24,7 +25,8 @@ gtscale_color_continuous(
 \item{column}{An optional numeric column in the underlying table used to infer
 \code{domain}.}
 
-\item{palette}{A vector of colors used in the legend gradient.}
+\item{palette}{A vector of colors used in the legend gradient. A single named
+palette can also be supplied.}
 
 \item{domain}{A numeric vector of length 2 giving the scale limits. When
 omitted, the limits are inferred from \code{column}.}
@@ -34,6 +36,8 @@ omitted, the limits are inferred from \code{column}.}
 \item{labels}{A labeling function or a character vector for the breaks.}
 
 \item{title}{Optional legend title.}
+
+\item{transform}{Transformation used for color mapping and break placement.}
 
 \item{direction}{CSS gradient direction. Defaults to \code{"to right"}.}
 

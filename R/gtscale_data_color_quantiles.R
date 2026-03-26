@@ -4,8 +4,8 @@
 #'
 #' @param data A `gt_tbl` created by [gt::gt()].
 #' @param column A numeric column to color and legendize.
-#' @param palette A vector of colors or palette endpoints used for the quantile
-#'   groups.
+#' @param palette A vector of colors, palette endpoints, or a single named
+#'   palette used for the quantile groups.
 #' @param quantiles The number of quantile groups.
 #' @param labels A labeling function or a character vector for the quantile
 #'   ranges. When a function is supplied, it is applied to the quantile

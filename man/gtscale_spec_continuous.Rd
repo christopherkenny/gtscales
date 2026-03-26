@@ -11,6 +11,7 @@ gtscale_spec_continuous(
   breaks = NULL,
   labels = scales::label_comma(),
   title = NULL,
+  transform = c("identity", "log10", "sqrt"),
   direction = "to right",
   width = "160px",
   height = "14px",
@@ -20,7 +21,9 @@ gtscale_spec_continuous(
 \arguments{
 \item{column}{A column to target.}
 
-\item{palette}{A vector of colors used in the scale.}
+\item{palette}{A vector of colors used in the scale.
+A single named palette such as \code{"viridis"} or \code{"Blues 3"} can also be
+supplied.}
 
 \item{domain}{Optional numeric limits. If omitted, these can be inferred when
 the spec is applied to a \code{gt} table.}
@@ -30,6 +33,8 @@ the spec is applied to a \code{gt} table.}
 \item{labels}{A labeling function or character vector for the legend.}
 
 \item{title}{Optional legend title.}
+
+\item{transform}{Transformation used for color mapping and break placement.}
 
 \item{direction}{CSS gradient direction. Defaults to \code{"to right"}.}
 

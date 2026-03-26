@@ -4,7 +4,8 @@
 #'
 #' @param data A `gt_tbl` created by [gt::gt()].
 #' @param column A numeric column to color and legendize.
-#' @param palette A vector of colors or palette endpoints used for the bins.
+#' @param palette A vector of colors, palette endpoints, or a single named
+#'   palette used for the bins.
 #' @param bins A numeric vector of bin boundaries.
 #' @param domain A numeric vector of length 2 giving the scale limits. When
 #'   omitted, the limits are inferred from `column`.

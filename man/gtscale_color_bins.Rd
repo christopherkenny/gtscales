@@ -22,7 +22,8 @@ gtscale_color_bins(
 \item{column}{An optional numeric column in the underlying table used to infer
 \code{domain}.}
 
-\item{palette}{A vector of colors or palette endpoints used to color the bins.}
+\item{palette}{A vector of colors, palette endpoints, or a single named
+palette used to color the bins.}
 
 \item{domain}{A numeric vector of length 2 giving the scale limits. When
 omitted, the limits are inferred from \code{column}.}

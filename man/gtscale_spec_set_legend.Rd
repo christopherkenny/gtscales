@@ -6,8 +6,9 @@
 \usage{
 gtscale_spec_set_legend(
   spec,
-  output = "html",
+  output = "contextual",
   placement = "source_note",
+  layout = c("stack", "inline"),
   show_na = FALSE,
   na_label = "Missing",
   na_color = NULL
@@ -22,6 +23,9 @@ gtscale_spec_set_legend(
 
 \item{placement}{Legend placement target. \code{"source_note"} and \code{"subtitle"}
 are currently implemented.}
+
+\item{layout}{Whether multiple legends in the same heading area should stack
+vertically or sit inline.}
 
 \item{show_na}{Whether to include an explicit missing-value legend entry.}
 

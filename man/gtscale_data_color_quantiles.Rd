@@ -29,8 +29,8 @@ gtscale_data_color_quantiles(
 
 \item{column}{A numeric column to color and legendize.}
 
-\item{palette}{A vector of colors or palette endpoints used for the quantile
-groups.}
+\item{palette}{A vector of colors, palette endpoints, or a single named
+palette used for the quantile groups.}
 
 \item{quantiles}{The number of quantile groups.}
 

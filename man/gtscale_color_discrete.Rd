@@ -15,7 +15,7 @@ gtscale_color_discrete(
 \arguments{
 \item{data}{A \code{gt_tbl} created by \code{\link[gt:gt]{gt::gt()}}.}
 
-\item{values}{A vector of color values.}
+\item{values}{A vector of color values or a single named discrete palette.}
 
 \item{labels}{Labels for each color swatch. Defaults to \code{values}.}
 

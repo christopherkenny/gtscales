@@ -7,8 +7,8 @@
 #' @param data A `gt_tbl` created by [gt::gt()].
 #' @param column A numeric column in the underlying table used to infer quantile
 #'   boundaries.
-#' @param palette A vector of colors or palette endpoints used to color the
-#'   quantile bins.
+#' @param palette A vector of colors, palette endpoints, or a single named
+#'   palette used to color the quantile bins.
 #' @param quantiles The number of quantile groups.
 #' @param labels A labeling function or a character vector for the quantile
 #'   ranges. When a function is supplied, it is applied to the quantile

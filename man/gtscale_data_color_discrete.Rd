@@ -29,7 +29,8 @@ gtscale_data_color_discrete(
 
 \item{column}{A categorical column to color and legendize.}
 
-\item{values}{A vector of color values used in the table and legend.}
+\item{values}{A vector of color values or a single named discrete palette
+used in the table and legend.}
 
 \item{labels}{Labels for each color swatch. Defaults to \code{values}.}
 

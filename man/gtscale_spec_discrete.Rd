@@ -17,7 +17,7 @@ gtscale_spec_discrete(
 \arguments{
 \item{column}{A column to target.}
 
-\item{values}{A vector of color values.}
+\item{values}{A vector of color values or a single named discrete palette.}
 
 \item{labels}{Labels for each legend swatch. Defaults to \code{values}.}
 

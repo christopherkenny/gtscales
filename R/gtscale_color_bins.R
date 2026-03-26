@@ -7,7 +7,8 @@
 #' @param data A `gt_tbl` created by [gt::gt()].
 #' @param column An optional numeric column in the underlying table used to infer
 #'   `domain`.
-#' @param palette A vector of colors or palette endpoints used to color the bins.
+#' @param palette A vector of colors, palette endpoints, or a single named
+#'   palette used to color the bins.
 #' @param domain A numeric vector of length 2 giving the scale limits. When
 #'   omitted, the limits are inferred from `column`.
 #' @param bins A numeric vector of bin boundaries.

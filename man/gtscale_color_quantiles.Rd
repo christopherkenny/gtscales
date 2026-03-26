@@ -21,8 +21,8 @@ gtscale_color_quantiles(
 \item{column}{A numeric column in the underlying table used to infer quantile
 boundaries.}
 
-\item{palette}{A vector of colors or palette endpoints used to color the
-quantile bins.}
+\item{palette}{A vector of colors, palette endpoints, or a single named
+palette used to color the quantile bins.}
 
 \item{quantiles}{The number of quantile groups.}
 

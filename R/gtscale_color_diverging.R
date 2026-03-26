@@ -7,13 +7,15 @@
 #' @param data A `gt_tbl` created by [gt::gt()].
 #' @param column An optional numeric column or shared set of numeric columns in
 #'   the underlying table used to infer `domain`.
-#' @param palette Two endpoint colors or three diverging colors.
+#' @param palette Two endpoint colors, three diverging colors, or a single named
+#'   palette.
 #' @param domain A numeric vector of length 2 giving the scale limits. When
 #'   omitted, the limits are inferred from `column`.
 #' @param midpoint Numeric midpoint used to anchor the diverging scale.
 #' @param breaks Optional numeric break values to display below the gradient.
 #' @param labels A labeling function or a character vector for the breaks.
 #' @param title Optional legend title.
+#' @param transform Transformation used for color mapping and break placement.
 #' @param direction CSS gradient direction. Defaults to `"to right"`.
 #' @param width Width of the legend bar.
 #' @param height Height of the legend bar.
@@ -31,11 +33,13 @@ gtscale_color_diverging <- function(
   breaks = NULL,
   labels = scales::label_comma(),
   title = NULL,
+  transform = c('identity', 'log10', 'sqrt'),
   direction = 'to right',
   width = '160px',
   height = '14px',
   mid_color = '#FFFFFF'
 ) {
+  transform <- match.arg(transform)
   column <- substitute(column)
   spec <- gtscale_spec_diverging(
     column = column,
@@ -45,6 +49,7 @@ gtscale_color_diverging <- function(
     breaks = breaks,
     labels = labels,
     title = title,
+    transform = transform,
     direction = direction,
     width = width,
     height = height,
