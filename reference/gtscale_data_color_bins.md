@@ -40,7 +40,8 @@ gtscale_data_color_bins(
 
 - palette:
 
-  A vector of colors or palette endpoints used for the bins.
+  A vector of colors, palette endpoints, or a single named palette used
+  for the bins.
 
 - bins:
 

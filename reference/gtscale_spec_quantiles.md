@@ -25,6 +25,7 @@ gtscale_spec_quantiles(
 - palette:
 
   A vector of colors or palette endpoints used for the quantile groups.
+  A single named palette can also be supplied.
 
 - quantiles:
 

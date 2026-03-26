@@ -39,7 +39,8 @@ gtscale_data_color_quantiles(
 
 - palette:
 
-  A vector of colors or palette endpoints used for the quantile groups.
+  A vector of colors, palette endpoints, or a single named palette used
+  for the quantile groups.
 
 - quantiles:
 

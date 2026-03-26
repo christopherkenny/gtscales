@@ -12,6 +12,7 @@ gtscale_spec_continuous(
   breaks = NULL,
   labels = scales::label_comma(),
   title = NULL,
+  transform = c("identity", "log10", "sqrt"),
   direction = "to right",
   width = "160px",
   height = "14px",
@@ -27,7 +28,8 @@ gtscale_spec_continuous(
 
 - palette:
 
-  A vector of colors used in the scale.
+  A vector of colors used in the scale. A single named palette such as
+  `"viridis"` or `"Blues 3"` can also be supplied.
 
 - domain:
 
@@ -45,6 +47,10 @@ gtscale_spec_continuous(
 - title:
 
   Optional legend title.
+
+- transform:
+
+  Transformation used for color mapping and break placement.
 
 - direction:
 

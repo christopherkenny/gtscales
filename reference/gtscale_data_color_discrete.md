@@ -39,7 +39,8 @@ gtscale_data_color_discrete(
 
 - values:
 
-  A vector of color values used in the table and legend.
+  A vector of color values or a single named discrete palette used in
+  the table and legend.
 
 - labels:
 

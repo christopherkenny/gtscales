@@ -7,8 +7,9 @@ Set how a `gtscales` legend should be rendered
 ``` r
 gtscale_spec_set_legend(
   spec,
-  output = "html",
+  output = "contextual",
   placement = "source_note",
+  layout = c("stack", "inline"),
   show_na = FALSE,
   na_label = "Missing",
   na_color = NULL
@@ -31,6 +32,11 @@ gtscale_spec_set_legend(
 
   Legend placement target. `"source_note"` and `"subtitle"` are
   currently implemented.
+
+- layout:
+
+  Whether multiple legends in the same heading area should stack
+  vertically or sit inline.
 
 - show_na:
 

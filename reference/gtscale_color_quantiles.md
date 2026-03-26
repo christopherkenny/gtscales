@@ -33,8 +33,8 @@ gtscale_color_quantiles(
 
 - palette:
 
-  A vector of colors or palette endpoints used to color the quantile
-  bins.
+  A vector of colors, palette endpoints, or a single named palette used
+  to color the quantile bins.
 
 - quantiles:
 

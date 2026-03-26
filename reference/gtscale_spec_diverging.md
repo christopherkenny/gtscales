@@ -13,6 +13,7 @@ gtscale_spec_diverging(
   breaks = NULL,
   labels = scales::label_comma(),
   title = NULL,
+  transform = c("identity", "log10", "sqrt"),
   direction = "to right",
   width = "160px",
   height = "14px",
@@ -28,7 +29,8 @@ gtscale_spec_diverging(
 
 - palette:
 
-  Two endpoint colors or three diverging colors.
+  Two endpoint colors or three diverging colors. A single named palette
+  such as `"Blue-Red 3"` or `"viridis"` can also be supplied.
 
 - domain:
 
@@ -50,6 +52,10 @@ gtscale_spec_diverging(
 - title:
 
   Optional legend title.
+
+- transform:
+
+  Transformation used for color mapping and break placement.
 
 - direction:
 

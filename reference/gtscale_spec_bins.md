@@ -25,7 +25,8 @@ gtscale_spec_bins(
 
 - palette:
 
-  A vector of colors or palette endpoints used for the bins.
+  A vector of colors or palette endpoints used for the bins. A single
+  named palette can also be supplied.
 
 - bins:
 

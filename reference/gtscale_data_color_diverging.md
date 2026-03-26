@@ -15,6 +15,7 @@ gtscale_data_color_diverging(
   breaks = NULL,
   labels = scales::label_comma(),
   title = NULL,
+  transform = c("identity", "log10", "sqrt"),
   direction = "to right",
   width = "160px",
   height = "14px",
@@ -45,7 +46,8 @@ gtscale_data_color_diverging(
 
 - palette:
 
-  Two endpoint colors or three diverging colors.
+  Two endpoint colors, three diverging colors, or a single named
+  palette.
 
 - domain:
 
@@ -67,6 +69,10 @@ gtscale_data_color_diverging(
 - title:
 
   Optional legend title.
+
+- transform:
+
+  Transformation used for color mapping and break placement.
 
 - direction:
 

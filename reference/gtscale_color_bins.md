@@ -34,7 +34,8 @@ gtscale_color_bins(
 
 - palette:
 
-  A vector of colors or palette endpoints used to color the bins.
+  A vector of colors, palette endpoints, or a single named palette used
+  to color the bins.
 
 - domain:
 

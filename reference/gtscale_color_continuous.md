@@ -15,6 +15,7 @@ gtscale_color_continuous(
   breaks = NULL,
   labels = scales::label_comma(),
   title = NULL,
+  transform = c("identity", "log10", "sqrt"),
   direction = "to right",
   width = "160px",
   height = "14px",
@@ -36,7 +37,8 @@ gtscale_color_continuous(
 
 - palette:
 
-  A vector of colors used in the legend gradient.
+  A vector of colors used in the legend gradient. A single named palette
+  can also be supplied.
 
 - domain:
 
@@ -54,6 +56,10 @@ gtscale_color_continuous(
 - title:
 
   Optional legend title.
+
+- transform:
+
+  Transformation used for color mapping and break placement.
 
 - direction:
 
