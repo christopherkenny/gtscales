@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtscales</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,7 +15,8 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/gtscales.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -43,6 +44,10 @@
 <span>  output <span class="op">=</span> <span class="st">"contextual"</span>,</span>
 <span>  placement <span class="op">=</span> <span class="st">"source_note"</span>,</span>
 <span>  layout <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"stack"</span>, <span class="st">"inline"</span><span class="op">)</span>,</span>
+<span>  align <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"left"</span>, <span class="st">"center"</span>, <span class="st">"right"</span><span class="op">)</span>,</span>
+<span>  show_border <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  border_color <span class="op">=</span> <span class="st">"#D0D7DE"</span>,</span>
+<span>  border_radius <span class="op">=</span> <span class="st">"8px"</span>,</span>
 <span>  show_na <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  na_label <span class="op">=</span> <span class="st">"Missing"</span>,</span>
 <span>  na_color <span class="op">=</span> <span class="cn">NULL</span></span>
@@ -64,13 +69,30 @@
 
 
 <dt id="arg-placement">placement<a class="anchor" aria-label="anchor" href="#arg-placement"></a></dt>
-<dd><p>Legend placement target. <code>"source_note"</code> and <code>"subtitle"</code>
-are currently implemented.</p></dd>
+<dd><p>Legend placement target. <code>"source_note"</code>, <code>"title"</code>, and
+<code>"subtitle"</code> are currently implemented.</p></dd>
 
 
 <dt id="arg-layout">layout<a class="anchor" aria-label="anchor" href="#arg-layout"></a></dt>
 <dd><p>Whether multiple legends in the same heading area should stack
 vertically or sit inline.</p></dd>
+
+
+<dt id="arg-align">align<a class="anchor" aria-label="anchor" href="#arg-align"></a></dt>
+<dd><p>Horizontal alignment for the legend container.</p></dd>
+
+
+<dt id="arg-show-border">show_border<a class="anchor" aria-label="anchor" href="#arg-show-border"></a></dt>
+<dd><p>Whether the legend bar, bin frame, and swatches should
+draw borders.</p></dd>
+
+
+<dt id="arg-border-color">border_color<a class="anchor" aria-label="anchor" href="#arg-border-color"></a></dt>
+<dd><p>Border color used for legend frames and swatches.</p></dd>
+
+
+<dt id="arg-border-radius">border_radius<a class="anchor" aria-label="anchor" href="#arg-border-radius"></a></dt>
+<dd><p>Border radius used for HTML and Typst legend frames.</p></dd>
 
 
 <dt id="arg-show-na">show_na<a class="anchor" aria-label="anchor" href="#arg-show-na"></a></dt>

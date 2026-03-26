@@ -24,7 +24,8 @@ gtscale_spec_discrete(
 
 - values:
 
-  A vector of color values or a single named discrete palette.
+  A vector of color values, a single named discrete palette, or a
+  discrete palette function.
 
 - labels:
 

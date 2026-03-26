@@ -14,9 +14,10 @@ gtscale_color_diverging(
   domain = NULL,
   midpoint = 0,
   breaks = NULL,
-  labels = scales::label_comma(),
+  labels = NULL,
   title = NULL,
-  transform = c("identity", "log10", "sqrt"),
+  transform = NULL,
+  oob = NULL,
   direction = "to right",
   width = "160px",
   height = "14px",
@@ -52,11 +53,12 @@ gtscale_color_diverging(
 
 - breaks:
 
-  Optional numeric break values to display below the gradient.
+  Optional break values or a break function to display below the
+  gradient.
 
 - labels:
 
-  A labeling function or a character vector for the breaks.
+  An optional labeling function or a character vector for the breaks.
 
 - title:
 
@@ -64,7 +66,16 @@ gtscale_color_diverging(
 
 - transform:
 
-  Transformation used for color mapping and break placement.
+  A transformation specification understood by
+  [`scales::as.transform()`](https://scales.r-lib.org/reference/new_transform.html).
+  When omitted, an appropriate transform is inferred from the data.
+
+- oob:
+
+  Out-of-bounds handling function or shortcut. Use a function like
+  [`scales::oob_squish()`](https://scales.r-lib.org/reference/oob.html)
+  or a shortcut such as `"censor"`, `"squish"`, `"keep"`, or
+  `"discard"`.
 
 - direction:
 

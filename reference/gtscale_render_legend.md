@@ -46,5 +46,5 @@ gtscale_render_legend(
   data = gt::gt(gt::exibble),
   output = 'latex'
 )
-#> [1] "\\textbf{Quartiles}\\\\\\textcolor[HTML]{FDD49E}{\\rule{1.4em}{0.9ex}}\\ 0 - 18\\quad \\textcolor[HTML]{FDBB84}{\\rule{1.4em}{0.9ex}}\\ 18 - 444\\quad \\textcolor[HTML]{EF6548}{\\rule{1.4em}{0.9ex}}\\ 444 - 391,275\\quad \\textcolor[HTML]{990000}{\\rule{1.4em}{0.9ex}}\\ 391,275 - 8,880,000"
+#> [1] "{\\raggedright \\textbf{Quartiles}\\\\\\textcolor[HTML]{FDD49E}{\\rule{1.4em}{0.9ex}}\\ 0 - 18\\quad \\textcolor[HTML]{FDBB84}{\\rule{1.4em}{0.9ex}}\\ 18 - 444\\quad \\textcolor[HTML]{EF6548}{\\rule{1.4em}{0.9ex}}\\ 444 - 391,275\\quad \\textcolor[HTML]{990000}{\\rule{1.4em}{0.9ex}}\\ 391,275 - 8,880,000}"
 ```

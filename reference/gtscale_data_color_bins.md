@@ -9,8 +9,11 @@ gtscale_data_color_bins(
   data,
   column,
   palette,
-  bins,
+  bins = NULL,
   domain = NULL,
+  transform = NULL,
+  oob = NULL,
+  right = FALSE,
   labels = NULL,
   title = NULL,
   width = "180px",
@@ -19,7 +22,6 @@ gtscale_data_color_bins(
   na_color = NULL,
   alpha = NULL,
   reverse = FALSE,
-  accessibility = c("none", "warn"),
   autocolor_text = TRUE,
   contrast_algo = c("apca", "wcag"),
   autocolor_light = "#FFFFFF",
@@ -36,26 +38,45 @@ gtscale_data_color_bins(
 
 - column:
 
-  A numeric column to color and legendize.
+  A numeric, Date, POSIXt, or difftime column to color and legendize.
 
 - palette:
 
-  A vector of colors, palette endpoints, or a single named palette used
-  for the bins.
+  A vector of colors, palette endpoints, a single named palette, or a
+  palette function used for the bins.
 
 - bins:
 
-  A numeric vector of bin boundaries.
+  Optional bin boundaries or a break function. When omitted, breaks are
+  generated from `domain`, `column`, and `transform`.
 
 - domain:
 
-  A numeric vector of length 2 giving the scale limits. When omitted,
-  the limits are inferred from `column`.
+  A vector of length 2 giving the scale limits. When omitted, the limits
+  are inferred from `column`.
+
+- transform:
+
+  A transformation specification understood by
+  [`scales::as.transform()`](https://scales.r-lib.org/reference/new_transform.html).
+  This is used when generating default bins or when interpreting break
+  functions.
+
+- oob:
+
+  Out-of-bounds handling function or shortcut. Use a function like
+  [`scales::oob_squish()`](https://scales.r-lib.org/reference/oob.html)
+  or a shortcut such as `"censor"` or `"squish"`.
+
+- right:
+
+  Whether intervals should be closed on the right. The default of
+  `FALSE` yields intervals like `[a, b)`.
 
 - labels:
 
-  A labeling function or a character vector for the bins. When a
-  function is supplied, it is applied to the bin boundaries before
+  An optional labeling function or a character vector for the bins. When
+  a function is supplied, it is applied to the bin boundaries before
   interval labels are constructed.
 
 - title:
@@ -86,10 +107,6 @@ gtscale_data_color_bins(
 - reverse:
 
   Whether to reverse the color mapping.
-
-- accessibility:
-
-  Whether to warn about low-contrast adjacent legend colors.
 
 - autocolor_text:
 
@@ -296,4 +313,4 @@ grp_b
 
 Currency bins
 
-0 - 1010 - 100100 - 1,0001,000 - 10,00010,000 - 70,000
+0.4 - 1010.0 - 100100.0 - 1,0001,000.0 - 10,00010,000.0 - 65,100

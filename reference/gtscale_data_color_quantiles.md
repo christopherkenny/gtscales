@@ -10,6 +10,8 @@ gtscale_data_color_quantiles(
   column,
   palette,
   quantiles = 4,
+  oob = NULL,
+  right = FALSE,
   labels = NULL,
   title = NULL,
   width = "180px",
@@ -18,7 +20,6 @@ gtscale_data_color_quantiles(
   na_color = NULL,
   alpha = NULL,
   reverse = FALSE,
-  accessibility = c("none", "warn"),
   autocolor_text = TRUE,
   contrast_algo = c("apca", "wcag"),
   autocolor_light = "#FFFFFF",
@@ -35,22 +36,33 @@ gtscale_data_color_quantiles(
 
 - column:
 
-  A numeric column to color and legendize.
+  A numeric, Date, POSIXt, or difftime column to color and legendize.
 
 - palette:
 
-  A vector of colors, palette endpoints, or a single named palette used
-  for the quantile groups.
+  A vector of colors, palette endpoints, a single named palette, or a
+  palette function used for the quantile groups.
 
 - quantiles:
 
   The number of quantile groups.
 
+- oob:
+
+  Out-of-bounds handling function or shortcut. Use a function like
+  [`scales::oob_squish()`](https://scales.r-lib.org/reference/oob.html)
+  or a shortcut such as `"censor"` or `"squish"`.
+
+- right:
+
+  Whether intervals should be closed on the right. The default of
+  `FALSE` yields intervals like `[a, b)`.
+
 - labels:
 
-  A labeling function or a character vector for the quantile ranges.
-  When a function is supplied, it is applied to the quantile boundaries
-  before interval labels are constructed.
+  An optional labeling function or a character vector for the quantile
+  ranges. When a function is supplied, it is applied to the quantile
+  boundaries before interval labels are constructed.
 
 - title:
 
@@ -80,10 +92,6 @@ gtscale_data_color_quantiles(
 - reverse:
 
   Whether to reverse the color mapping.
-
-- accessibility:
-
-  Whether to warn about low-contrast adjacent legend colors.
 
 - autocolor_text:
 

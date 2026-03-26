@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtscales</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,7 +15,8 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/gtscales.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -41,8 +42,11 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gtscale_spec_bins</span><span class="op">(</span></span>
 <span>  <span class="va">column</span>,</span>
 <span>  <span class="va">palette</span>,</span>
-<span>  <span class="va">bins</span>,</span>
+<span>  bins <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  domain <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  oob <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  right <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  width <span class="op">=</span> <span class="st">"180px"</span>,</span>
@@ -60,20 +64,38 @@
 
 <dt id="arg-palette">palette<a class="anchor" aria-label="anchor" href="#arg-palette"></a></dt>
 <dd><p>A vector of colors or palette endpoints used for the bins.
-A single named palette can also be supplied.</p></dd>
+A single named palette or palette function can also be supplied.</p></dd>
 
 
 <dt id="arg-bins">bins<a class="anchor" aria-label="anchor" href="#arg-bins"></a></dt>
-<dd><p>A numeric vector of bin boundaries.</p></dd>
+<dd><p>Optional bin boundaries or a break function. When omitted,
+breaks are generated from the <code>domain</code>, <code>column</code>, and <code>transform</code>.</p></dd>
 
 
 <dt id="arg-domain">domain<a class="anchor" aria-label="anchor" href="#arg-domain"></a></dt>
-<dd><p>Optional numeric limits. If omitted, these can be inferred when
-the spec is applied to a <code>gt</code> table.</p></dd>
+<dd><p>Optional limits. If omitted, these can be inferred when the
+spec is applied to a <code>gt</code> table.</p></dd>
+
+
+<dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
+<dd><p>A transformation specification understood by
+<code><a href="https://scales.r-lib.org/reference/new_transform.html" class="external-link">scales::as.transform()</a></code>. This is used when generating default bins or
+when interpreting break functions.</p></dd>
+
+
+<dt id="arg-oob">oob<a class="anchor" aria-label="anchor" href="#arg-oob"></a></dt>
+<dd><p>Out-of-bounds handling function or shortcut. Use a function like
+<code><a href="https://scales.r-lib.org/reference/oob.html" class="external-link">scales::oob_squish()</a></code> or a shortcut such as <code>"censor"</code> or <code>"squish"</code>.</p></dd>
+
+
+<dt id="arg-right">right<a class="anchor" aria-label="anchor" href="#arg-right"></a></dt>
+<dd><p>Whether intervals should be closed on the right. The default of
+<code>FALSE</code> yields intervals like <code>[a, b)</code>.</p></dd>
 
 
 <dt id="arg-labels">labels<a class="anchor" aria-label="anchor" href="#arg-labels"></a></dt>
-<dd><p>A labeling function or character vector for the legend.</p></dd>
+<dd><p>An optional labeling function or character vector for the
+legend. When omitted, labels are inferred from the bin values.</p></dd>
 
 
 <dt id="arg-title">title<a class="anchor" aria-label="anchor" href="#arg-title"></a></dt>

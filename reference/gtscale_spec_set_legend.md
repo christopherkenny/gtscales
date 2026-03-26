@@ -10,6 +10,10 @@ gtscale_spec_set_legend(
   output = "contextual",
   placement = "source_note",
   layout = c("stack", "inline"),
+  align = c("left", "center", "right"),
+  show_border = TRUE,
+  border_color = "#D0D7DE",
+  border_radius = "8px",
   show_na = FALSE,
   na_label = "Missing",
   na_color = NULL
@@ -30,13 +34,29 @@ gtscale_spec_set_legend(
 
 - placement:
 
-  Legend placement target. `"source_note"` and `"subtitle"` are
-  currently implemented.
+  Legend placement target. `"source_note"`, `"title"`, and `"subtitle"`
+  are currently implemented.
 
 - layout:
 
   Whether multiple legends in the same heading area should stack
   vertically or sit inline.
+
+- align:
+
+  Horizontal alignment for the legend container.
+
+- show_border:
+
+  Whether the legend bar, bin frame, and swatches should draw borders.
+
+- border_color:
+
+  Border color used for legend frames and swatches.
+
+- border_radius:
+
+  Border radius used for HTML and Typst legend frames.
 
 - show_na:
 

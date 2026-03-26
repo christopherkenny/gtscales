@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtscales</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,7 +15,8 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/gtscales.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -31,6 +32,16 @@
 
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.1" id="gtscales-001">gtscales 0.0.1<a class="anchor" aria-label="anchor" href="#gtscales-001"></a></h2>
+<ul><li>Initial development release of <code>gtscales</code>, focused on matched legends for color-encoded <code>gt</code> tables.</li>
+<li>
+<code>gtscale_data_color_*()</code> and <code>gtscale_color_*()</code> support continuous, binned, quantile, discrete, and diverging or midpoint-aware scales.</li>
+<li>
+<code>gtscale_spec_*()</code>, <code><a href="../reference/gtscale_apply.html">gtscale_apply()</a></code>, <code><a href="../reference/gtscale_legend.html">gtscale_legend()</a></code>, and <code><a href="../reference/gtscale_apply_legend.html">gtscale_apply_legend()</a></code> support reusable scale definitions, shared scales across multiple columns, and custom legend workflows.</li>
+<li>Named palette shortcuts are recognized automatically from <code><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">grDevices::hcl.colors()</a></code> and <code><a href="https://rdrr.io/r/grDevices/palette.html" class="external-link">grDevices::palette.colors()</a></code>, including palettes such as <code>"viridis"</code>, <code>"Blues 3"</code>, and <code>"Okabe-Ito"</code>.</li>
+<li>Legends can be placed in source notes or subtitles and can include explicit missing-value entries.</li>
+</ul></div>
   </main></div>
 
 

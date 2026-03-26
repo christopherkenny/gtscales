@@ -10,9 +10,10 @@ gtscale_spec_continuous(
   palette = NULL,
   domain = NULL,
   breaks = NULL,
-  labels = scales::label_comma(),
+  labels = NULL,
   title = NULL,
-  transform = c("identity", "log10", "sqrt"),
+  transform = NULL,
+  oob = NULL,
   direction = "to right",
   width = "160px",
   height = "14px",
@@ -29,7 +30,8 @@ gtscale_spec_continuous(
 - palette:
 
   A vector of colors used in the scale. A single named palette such as
-  `"viridis"` or `"Blues 3"` can also be supplied.
+  `"viridis"` or `"Blues 3"`, or a palette function, can also be
+  supplied.
 
 - domain:
 
@@ -38,11 +40,12 @@ gtscale_spec_continuous(
 
 - breaks:
 
-  Optional numeric break values for the legend.
+  Optional break values or a break function for the legend.
 
 - labels:
 
-  A labeling function or character vector for the legend.
+  An optional labeling function or character vector for the legend. When
+  omitted, labels are inferred from the data or transform.
 
 - title:
 
@@ -50,7 +53,18 @@ gtscale_spec_continuous(
 
 - transform:
 
-  Transformation used for color mapping and break placement.
+  A transformation specification understood by
+  [`scales::as.transform()`](https://scales.r-lib.org/reference/new_transform.html).
+  When omitted, an appropriate identity, date, time, or timespan
+  transform is inferred from the data.
+
+- oob:
+
+  Out-of-bounds handling function or shortcut passed through to the
+  internal color mapper. Use a function like
+  [`scales::oob_squish()`](https://scales.r-lib.org/reference/oob.html)
+  or a shortcut such as `"censor"`, `"squish"`, `"keep"`, or
+  `"discard"`.
 
 - direction:
 

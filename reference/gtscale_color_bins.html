@@ -11,7 +11,7 @@ gtscale_data_color_bins().'><!-- dependencies from examples --></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">gtscales</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,7 +19,8 @@ gtscale_data_color_bins().'><!-- dependencies from examples --></head><body>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/gtscales.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -49,7 +50,10 @@ handled elsewhere. For the usual "color and legendize" workflow, prefer
 <span>  column <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">palette</span>,</span>
 <span>  domain <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">bins</span>,</span>
+<span>  bins <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  oob <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  right <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  width <span class="op">=</span> <span class="st">"180px"</span>,</span>
@@ -66,28 +70,45 @@ handled elsewhere. For the usual "color and legendize" workflow, prefer
 
 
 <dt id="arg-column">column<a class="anchor" aria-label="anchor" href="#arg-column"></a></dt>
-<dd><p>An optional numeric column in the underlying table used to infer
-<code>domain</code>.</p></dd>
+<dd><p>An optional numeric, Date, POSIXt, or difftime column in the
+underlying table used to infer <code>domain</code>.</p></dd>
 
 
 <dt id="arg-palette">palette<a class="anchor" aria-label="anchor" href="#arg-palette"></a></dt>
-<dd><p>A vector of colors, palette endpoints, or a single named
-palette used to color the bins.</p></dd>
+<dd><p>A vector of colors, palette endpoints, a single named
+palette, or a palette function used to color the bins.</p></dd>
 
 
 <dt id="arg-domain">domain<a class="anchor" aria-label="anchor" href="#arg-domain"></a></dt>
-<dd><p>A numeric vector of length 2 giving the scale limits. When
-omitted, the limits are inferred from <code>column</code>.</p></dd>
+<dd><p>A vector of length 2 giving the scale limits. When omitted,
+the limits are inferred from <code>column</code>.</p></dd>
 
 
 <dt id="arg-bins">bins<a class="anchor" aria-label="anchor" href="#arg-bins"></a></dt>
-<dd><p>A numeric vector of bin boundaries.</p></dd>
+<dd><p>Optional bin boundaries or a break function. When omitted,
+breaks are generated from <code>domain</code>, <code>column</code>, and <code>transform</code>.</p></dd>
+
+
+<dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
+<dd><p>A transformation specification understood by
+<code><a href="https://scales.r-lib.org/reference/new_transform.html" class="external-link">scales::as.transform()</a></code>. This is used when generating default bins or
+when interpreting break functions.</p></dd>
+
+
+<dt id="arg-oob">oob<a class="anchor" aria-label="anchor" href="#arg-oob"></a></dt>
+<dd><p>Out-of-bounds handling function or shortcut. Use a function like
+<code><a href="https://scales.r-lib.org/reference/oob.html" class="external-link">scales::oob_squish()</a></code> or a shortcut such as <code>"censor"</code> or <code>"squish"</code>.</p></dd>
+
+
+<dt id="arg-right">right<a class="anchor" aria-label="anchor" href="#arg-right"></a></dt>
+<dd><p>Whether intervals should be closed on the right. The default of
+<code>FALSE</code> yields intervals like <code>[a, b)</code>.</p></dd>
 
 
 <dt id="arg-labels">labels<a class="anchor" aria-label="anchor" href="#arg-labels"></a></dt>
-<dd><p>A labeling function or a character vector for the bins. When a
-function is supplied, it is applied to the bin boundaries before interval
-labels are constructed.</p></dd>
+<dd><p>An optional labeling function or a character vector for the
+bins. When a function is supplied, it is applied to the bin boundaries
+before interval labels are constructed.</p></dd>
 
 
 <dt id="arg-title">title<a class="anchor" aria-label="anchor" href="#arg-title"></a></dt>
@@ -125,7 +146,6 @@ labels are constructed.</p></dd>
 <span class="r-in"><span>    bins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">100</span>, <span class="fl">1000</span>, <span class="fl">10000000</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    title <span class="op">=</span> <span class="st">'Binned values'</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Some values were outside the color scale and will be treated as NA</span>
 <div class="gt-table"><div id="eexombwkke" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 
   <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false" style="-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; display: table; border-collapse: collapse; line-height: normal; margin-left: auto; margin-right: auto; color: #333333; font-size: 16px; font-weight: normal; font-style: normal; background-color: #FFFFFF; width: auto; border-top-style: solid; border-top-width: 2px; border-top-color: #A8A8A8; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #A8A8A8; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3;" bgcolor="#FFFFFF"><thead style="border-style: none;"><tr class="gt_col_headings" style="border-style: none; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3;"><th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="num" style="border-style: none; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 6px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" bgcolor="#FFFFFF" valign="bottom" align="right">num</th>
@@ -201,7 +221,7 @@ labels are constructed.</p></dd>
 <td headers="datetime" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">NA</td>
 <td headers="currency" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums; background-color: #F7FBFF; color: #000000;" bgcolor="#F7FBFF" valign="middle" align="right">0.440</td>
 <td headers="row" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">row_8</td>
-<td headers="group" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">grp_b</td></tr></tbody><tfoot style="border-style: none;"><tr class="gt_sourcenotes" style="border-style: none; color: #333333; background-color: #FFFFFF; border-bottom-style: none; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3;" bgcolor="#FFFFFF"><td class="gt_sourcenote" colspan="9" style="border-style: none; font-size: 90%; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px;"><div style="width:180px;"><div style="font-weight:600; margin-bottom:4px;">Binned values</div><div style="display:flex; width:100%; overflow:hidden; border:1px solid #d0d7de; border-radius:8px;"><span style="display:inline-block; width:25.0000%; height:14px; background:#F7FBFF;"></span><span style="display:inline-block; width:25.0000%; height:14px; background:#F7FBFF;"></span><span style="display:inline-block; width:25.0000%; height:14px; background:#F5F9FE;"></span><span style="display:inline-block; width:25.0000%; height:14px; background:#808080;"></span></div><div style="display:flex; justify-content:space-between; gap:8px; margin-top:4px; font-size:11px; color:#57606a;"><span>0 - 10</span><span>10 - 100</span><span>100 - 1,000</span><span>1,000 - 10,000,000</span></div></div></td>
+<td headers="group" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">grp_b</td></tr></tbody><tfoot style="border-style: none;"><tr class="gt_sourcenotes" style="border-style: none; color: #333333; background-color: #FFFFFF; border-bottom-style: none; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3;" bgcolor="#FFFFFF"><td class="gt_sourcenote" colspan="9" style="border-style: none; font-size: 90%; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px;"><div style="width:180px; margin-right:auto; text-align:left;"><div style="font-weight:600; margin-bottom:4px;">Binned values</div><div style="display:flex; width:100%; overflow:hidden; border:1px solid #D0D7DE; border-radius:8px; "><span style="display:inline-block; width:25.0000%; height:14px; background:#F7FBFF;"></span><span style="display:inline-block; width:25.0000%; height:14px; background:#F7FBFF;"></span><span style="display:inline-block; width:25.0000%; height:14px; background:#F5F9FE;"></span><span style="display:inline-block; width:25.0000%; height:14px; background:#858DB2;"></span></div><div style="display:flex; justify-content:space-between; gap:8px; margin-top:4px; font-size:11px; color:#57606a;"><span>0.4 - 10</span><span>10.0 - 100</span><span>100.0 - 1,000</span><span>1,000.0 - 65,100</span></div></div></td>
     </tr></tfoot></table></div></div></code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
