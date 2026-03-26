@@ -1817,7 +1817,7 @@ ordered values.</p>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/gtscale_data_color_discrete.html">gtscale_data_color_discrete</a></span><span class="op">(</span></span>
 <span>    column <span class="op">=</span> <span class="va">status</span>,</span>
-<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'#2166ac'</span>, <span class="st">'#f7f7f7'</span>, <span class="st">'#ef8a62'</span>, <span class="st">'#b2182b'</span><span class="op">)</span>,</span>
+<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'#2166ac'</span>, <span class="st">'#f7f7f7'</span>, <span class="st">'#f4a3b4'</span>, <span class="st">'#b2182b'</span><span class="op">)</span>,</span>
 <span>    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Safe D'</span>, <span class="st">'Toss-up'</span>, <span class="st">'Lean R'</span>, <span class="st">'Safe R'</span><span class="op">)</span>,</span>
 <span>    title <span class="op">=</span> <span class="st">'Race rating'</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
@@ -2294,7 +2294,7 @@ ordered values.</p>
 </tr>
 <tr>
 <td headers="district" class="gt_row gt_left">D</td>
-<td headers="status" class="gt_row gt_left" style="background-color: #EF8A62; color: #000000;">Safe R</td>
+<td headers="status" class="gt_row gt_left" style="background-color: #F4A3B4; color: #000000;">Safe R</td>
 <td headers="margin" class="gt_row gt_right">-21</td>
 </tr>
 </tbody>
@@ -2302,7 +2302,7 @@ ordered values.</p>
 <td class="gt_sourcenote" colspan="3"><div style="width:auto; margin-right:auto; text-align:left;">
 <div style="font-weight:600; margin-bottom:4px;">Race rating</div>
 <div style="display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center;">
-<span style="display:inline-flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:3px; border:1px solid #D0D7DE; background:#2166ac;"></span><span>Safe D</span></span><span style="display:inline-flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:3px; border:1px solid #D0D7DE; background:#f7f7f7;"></span><span>Toss-up</span></span><span style="display:inline-flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:3px; border:1px solid #D0D7DE; background:#ef8a62;"></span><span>Lean R</span></span><span style="display:inline-flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:3px; border:1px solid #D0D7DE; background:#b2182b;"></span><span>Safe R</span></span>
+<span style="display:inline-flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:3px; border:1px solid #D0D7DE; background:#2166ac;"></span><span>Safe D</span></span><span style="display:inline-flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:3px; border:1px solid #D0D7DE; background:#f7f7f7;"></span><span>Toss-up</span></span><span style="display:inline-flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:3px; border:1px solid #D0D7DE; background:#f4a3b4;"></span><span>Lean R</span></span><span style="display:inline-flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:3px; border:1px solid #D0D7DE; background:#b2182b;"></span><span>Safe R</span></span>
 </div>
 </div></td>
     </tr></tfoot>
@@ -7227,20 +7227,19 @@ outputs.</p>
 <div class="section level2">
 <h2 id="output-support">Output support<a class="anchor" aria-label="anchor" href="#output-support"></a>
 </h2>
-<p>The most mature output path is still <code>gt</code> HTML. The
-package also has validated workflows for LaTeX/PDF and Typst through the
-example files in <code>inst/examples</code>.</p>
-<p>Current boundaries:</p>
+<p>Validated example workflows live in <code>inst/examples</code>
+for:</p>
 <ul>
-<li>HTML through <code>gt</code> is supported.</li>
-<li>LaTeX and Quarto PDF are supported through contextual legends.</li>
-<li>Typst is supported through the render-only workflow and example
-files.</li>
-<li>Word is not currently supported.</li>
+<li>HTML</li>
+<li>PDF/LaTeX</li>
+<li>Typst</li>
+<li>DOCX</li>
+<li>RTF</li>
 </ul>
-<p>That means the safest general recommendation is to use source-note
-placement when you want the most consistent behavior across outputs, and
-then use heading placement when you control the rendering path more
+<p>The <code>gt</code> integration is strongest when legends are
+attached as source notes, since that path now works across HTML, LaTeX,
+DOCX, and RTF. Heading placement is still useful, but it is best
+reserved for workflows where you control the output path more
 tightly.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

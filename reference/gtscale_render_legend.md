@@ -8,7 +8,7 @@ Render a legend from a `gtscale_spec`
 gtscale_render_legend(
   spec,
   data = NULL,
-  output = c("contextual", "html", "latex", "typst")
+  output = c("contextual", "html", "latex", "rtf", "word", "typst")
 )
 ```
 
@@ -25,7 +25,8 @@ gtscale_render_legend(
 
 - output:
 
-  Output target. Use `"html"`, `"latex"`, `"typst"`, or `"contextual"`.
+  Output target. Use `"html"`, `"latex"`, `"rtf"`, `"word"`, `"typst"`,
+  or `"contextual"`.
 
 ## Value
 

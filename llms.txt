@@ -131,6 +131,16 @@ data.frame(value = c(1, 10, 100, 1000)) |>
   )
 ```
 
+## Output Examples
+
+Validated example documents live in `inst/examples` for:
+
+- HTML
+- PDF/LaTeX
+- Typst
+- DOCX
+- RTF
+
 # Package index
 
 ## Color And Legend

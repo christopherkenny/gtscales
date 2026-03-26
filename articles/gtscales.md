@@ -87,7 +87,7 @@ data.frame(
   gt() |>
   gtscale_data_color_discrete(
     column = status,
-    values = c('#2166ac', '#f7f7f7', '#ef8a62', '#b2182b'),
+    values = c('#2166ac', '#f7f7f7', '#f4a3b4', '#b2182b'),
     labels = c('Safe D', 'Toss-up', 'Lean R', 'Safe R'),
     title = 'Race rating'
   )
@@ -299,18 +299,15 @@ data.frame(a = 1:3, b = 4:6) |>
 
 ## Output support
 
-The most mature output path is still `gt` HTML. The package also has
-validated workflows for LaTeX/PDF and Typst through the example files in
-`inst/examples`.
+Validated example workflows live in `inst/examples` for:
 
-Current boundaries:
+- HTML
+- PDF/LaTeX
+- Typst
+- DOCX
+- RTF
 
-- HTML through `gt` is supported.
-- LaTeX and Quarto PDF are supported through contextual legends.
-- Typst is supported through the render-only workflow and example files.
-- Word is not currently supported.
-
-That means the safest general recommendation is to use source-note
-placement when you want the most consistent behavior across outputs, and
-then use heading placement when you control the rendering path more
-tightly.
+The `gt` integration is strongest when legends are attached as source
+notes, since that path now works across HTML, LaTeX, DOCX, and RTF.
+Heading placement is still useful, but it is best reserved for workflows
+where you control the output path more tightly.

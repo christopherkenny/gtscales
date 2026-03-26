@@ -130,3 +130,13 @@ data.frame(value = c(1, 10, 100, 1000)) |>
     width = '220px'
   )
 ```
+
+## Output Examples
+
+Validated example documents live in `inst/examples` for:
+
+- HTML
+- PDF/LaTeX
+- Typst
+- DOCX
+- RTF
