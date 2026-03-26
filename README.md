@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# gtscales
+# gtscales <a href="https://christophertkenny.com/gtscales/"><img src="man/figures/logo.png" align="right" height="125" alt="gtscales website" /></a>
 
 <!-- badges: start -->
 
