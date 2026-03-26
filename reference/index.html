@@ -31,9 +31,9 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="color-and-legend">Color And Legend<a class="anchor" aria-label="anchor" href="#color-and-legend"></a></h2>
 
-
+      <div class="section-desc"><p>One-step helpers that color <code>gt</code> tables and attach matched legends.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -42,73 +42,10 @@
 
       <dl><dt>
 
-          <code><a href="gtscale_apply.html">gtscale_apply()</a></code>
-
-        </dt>
-        <dd>Apply only the color component of a <code>gtscales</code> spec</dd>
-
-        <dt>
-
-          <code><a href="gtscale_apply_legend.html">gtscale_apply_legend()</a></code>
-
-        </dt>
-        <dd>Apply a <code>gtscales</code> spec and attach its legend</dd>
-
-        <dt>
-
-          <code><a href="gtscale_color_bins.html">gtscale_color_bins()</a></code>
-
-        </dt>
-        <dd>Add only a binned color legend to a <code>gt</code> table</dd>
-
-        <dt>
-
-          <code><a href="gtscale_color_continuous.html">gtscale_color_continuous()</a></code>
-
-        </dt>
-        <dd>Add only a continuous color legend to a <code>gt</code> table</dd>
-
-        <dt>
-
-          <code><a href="gtscale_color_discrete.html">gtscale_color_discrete()</a></code>
-
-        </dt>
-        <dd>Add only a discrete color legend to a <code>gt</code> table</dd>
-
-        <dt>
-
-          <code><a href="gtscale_color_diverging.html">gtscale_color_diverging()</a></code>
-
-        </dt>
-        <dd>Add only a diverging color legend to a <code>gt</code> table</dd>
-
-        <dt>
-
-          <code><a href="gtscale_color_quantiles.html">gtscale_color_quantiles()</a></code>
-
-        </dt>
-        <dd>Add only a quantile color legend to a <code>gt</code> table</dd>
-
-        <dt>
-
-          <code><a href="gtscale_data_color_bins.html">gtscale_data_color_bins()</a></code>
-
-        </dt>
-        <dd>Color a numeric <code>gt</code> column and add a matching binned legend</dd>
-
-        <dt>
-
           <code><a href="gtscale_data_color_continuous.html">gtscale_data_color_continuous()</a></code>
 
         </dt>
         <dd>Color a numeric <code>gt</code> column and add a matching continuous legend</dd>
-
-        <dt>
-
-          <code><a href="gtscale_data_color_discrete.html">gtscale_data_color_discrete()</a></code>
-
-        </dt>
-        <dd>Color a categorical <code>gt</code> column and add a matching discrete legend</dd>
 
         <dt>
 
@@ -119,6 +56,13 @@
 
         <dt>
 
+          <code><a href="gtscale_data_color_bins.html">gtscale_data_color_bins()</a></code>
+
+        </dt>
+        <dd>Color a numeric <code>gt</code> column and add a matching binned legend</dd>
+
+        <dt>
+
           <code><a href="gtscale_data_color_quantiles.html">gtscale_data_color_quantiles()</a></code>
 
         </dt>
@@ -126,38 +70,70 @@
 
         <dt>
 
-          <code><a href="gtscale_legend.html">gtscale_legend()</a></code>
+          <code><a href="gtscale_data_color_discrete.html">gtscale_data_color_discrete()</a></code>
 
         </dt>
-        <dd>Attach only the legend component of a <code>gtscales</code> spec</dd>
+        <dd>Color a categorical <code>gt</code> column and add a matching discrete legend</dd>
+      </dl></div><div class="section level2">
+      <h2 id="legend-only">Legend Only<a class="anchor" aria-label="anchor" href="#legend-only"></a></h2>
+
+      <div class="section-desc"><p>Lower-level helpers for attaching legends to tables that are already colored.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="gtscale_color_continuous.html">gtscale_color_continuous()</a></code>
+
+        </dt>
+        <dd>Add only a continuous color legend to a <code>gt</code> table</dd>
 
         <dt>
 
-          <code><a href="gtscale_render_legend.html">gtscale_render_legend()</a></code>
+          <code><a href="gtscale_color_diverging.html">gtscale_color_diverging()</a></code>
 
         </dt>
-        <dd>Render a legend from a <code>gtscale_spec</code></dd>
+        <dd>Add only a diverging color legend to a <code>gt</code> table</dd>
 
         <dt>
 
-          <code><a href="gtscale_spec_bins.html">gtscale_spec_bins()</a></code>
+          <code><a href="gtscale_color_bins.html">gtscale_color_bins()</a></code>
 
         </dt>
-        <dd>Create a binned <code>gtscales</code> spec</dd>
+        <dd>Add only a binned color legend to a <code>gt</code> table</dd>
 
         <dt>
+
+          <code><a href="gtscale_color_quantiles.html">gtscale_color_quantiles()</a></code>
+
+        </dt>
+        <dd>Add only a quantile color legend to a <code>gt</code> table</dd>
+
+        <dt>
+
+          <code><a href="gtscale_color_discrete.html">gtscale_color_discrete()</a></code>
+
+        </dt>
+        <dd>Add only a discrete color legend to a <code>gt</code> table</dd>
+      </dl></div><div class="section level2">
+      <h2 id="scale-specifications">Scale Specifications<a class="anchor" aria-label="anchor" href="#scale-specifications"></a></h2>
+
+      <div class="section-desc"><p>Reusable scale definitions and application helpers.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="gtscale_spec_continuous.html">gtscale_spec_continuous()</a></code>
 
         </dt>
         <dd>Create a continuous <code>gtscales</code> spec</dd>
-
-        <dt>
-
-          <code><a href="gtscale_spec_discrete.html">gtscale_spec_discrete()</a></code>
-
-        </dt>
-        <dd>Create a discrete <code>gtscales</code> spec</dd>
 
         <dt>
 
@@ -168,10 +144,24 @@
 
         <dt>
 
+          <code><a href="gtscale_spec_bins.html">gtscale_spec_bins()</a></code>
+
+        </dt>
+        <dd>Create a binned <code>gtscales</code> spec</dd>
+
+        <dt>
+
           <code><a href="gtscale_spec_quantiles.html">gtscale_spec_quantiles()</a></code>
 
         </dt>
         <dd>Create a quantile <code>gtscales</code> spec</dd>
+
+        <dt>
+
+          <code><a href="gtscale_spec_discrete.html">gtscale_spec_discrete()</a></code>
+
+        </dt>
+        <dd>Create a discrete <code>gtscales</code> spec</dd>
 
         <dt>
 
@@ -186,8 +176,46 @@
 
         </dt>
         <dd>Set how a <code>gtscales</code> legend should be rendered</dd>
+
+        <dt>
+
+          <code><a href="gtscale_apply.html">gtscale_apply()</a></code>
+
+        </dt>
+        <dd>Apply only the color component of a <code>gtscales</code> spec</dd>
+
+        <dt>
+
+          <code><a href="gtscale_legend.html">gtscale_legend()</a></code>
+
+        </dt>
+        <dd>Attach only the legend component of a <code>gtscales</code> spec</dd>
+
+        <dt>
+
+          <code><a href="gtscale_apply_legend.html">gtscale_apply_legend()</a></code>
+
+        </dt>
+        <dd>Apply a <code>gtscales</code> spec and attach its legend</dd>
+      </dl></div><div class="section level2">
+      <h2 id="rendering">Rendering<a class="anchor" aria-label="anchor" href="#rendering"></a></h2>
+
+      <div class="section-desc"><p>Render legends directly for supported outputs.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="gtscale_render_legend.html">gtscale_render_legend()</a></code>
+
+        </dt>
+        <dd>Render a legend from a <code>gtscale_spec</code></dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
