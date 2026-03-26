@@ -12,8 +12,7 @@ legend_title_html <- function(title) {
 
 legend_container_style_html <- function(spec, width = NULL) {
   width <- width %||% spec$style$width %||% 'auto'
-  alignment <- switch(
-    spec$legend$align,
+  alignment <- switch(spec$legend$align,
     left = 'margin-right:auto; text-align:left;',
     center = 'margin-left:auto; margin-right:auto; text-align:center;',
     right = 'margin-left:auto; text-align:right;'
@@ -58,8 +57,7 @@ latex_color_box <- function(color, width = '1.4em', height = '0.9ex') {
 }
 
 latex_alignment_prefix <- function(spec) {
-  switch(
-    spec$legend$align,
+  switch(spec$legend$align,
     left = '\\raggedright ',
     center = '\\centering ',
     right = '\\raggedleft '

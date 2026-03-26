@@ -14,7 +14,7 @@
 #'
 #' @name gtscales-package
 #' @keywords internal
-"_PACKAGE"
+'_PACKAGE'
 
 ## usethis namespace: start
 ## usethis namespace: end
