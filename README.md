@@ -6,6 +6,7 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/christopherkenny/gtscales/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/christopherkenny/gtscales/actions/workflows/R-CMD-check.yaml)
+[![gtscales status badge](https://christopherkenny.r-universe.dev/badges/gtscales)](https://christopherkenny.r-universe.dev/gtscales)
 [![Codecov test
 coverage](https://codecov.io/gh/christopherkenny/gtscales/graph/badge.svg)](https://app.codecov.io/gh/christopherkenny/gtscales)
 <!-- badges: end -->
