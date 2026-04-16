@@ -1,6 +1,7 @@
 url: https://christophertkenny.com/gtscales/
 template:
   bootstrap: 5
+  package: christopherkenny/ctktemplate
 reference:
   - title: Color And Legend
     desc: One-step helpers that color `gt` tables and attach matched legends.
